@@ -1,311 +1,489 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Technical reference for building progressive island-based websites with Eleventy 4.0, Vite 7, and Svelte 5.
 
-# TinyBuild Homepage - Progressive is-land + Svelte Setup
+## Architecture Overview
 
-## Overview
-
-This project demonstrates a progressive loading architecture using @11ty/is-land with Eleventy and Vite. The goal is to load **only the JavaScript needed** based on page complexity:
-
+Progressive loading system that loads JavaScript only when needed:
 - **Static pages**: Zero JavaScript
-- **Simple interactions**: Vanilla JS components only
-- **Complex UI**: Svelte components with shared runtime
+- **Interactive elements**: Vanilla JS components on-demand
+- **Complex UI**: Svelte 5 components with shared runtime
+- **State management**: Svelte 5 runes with cross-tab sync
 
-## Architecture Strategy
+## Technology Stack
 
-### Progressive Loading Levels
-
-1. **Level 0**: Static HTML - No JS loaded
-2. **Level 1**: Vanilla JS components - Minimal JS on interaction
-3. **Level 2**: First Svelte component - Svelte runtime loads once
-4. **Level 3**: Multiple Svelte components - Reuse cached runtime + shared state
-
-### Technology Stack
-
-- **Static Site Generator**: Eleventy 4.0 (alpha)
+- **Static Site Generator**: Eleventy 4.0 (alpha) with VentoJS templates
 - **Build Tool**: Vite 7+ with @11ty/eleventy-plugin-vite
-- **Island Architecture**: @11ty/is-land for lazy loading
-- **Framework**: Svelte 5 with runes (when needed)
-- **State Management**: Svelte runes-based global state
-- **Template Engine**: VentoJS (default in Eleventy 4.0)
+- **Island Architecture**: @11ty/is-land v5 (beta)
+- **Component Framework**: Svelte 5 with runes
 - **Package Manager**: Bun
 - **Code Formatting**: Biome
 
-## Project Structure
+## Configuration
 
-```
-src/
-├── assets/
-│   ├── main.js              # is-land core + loaders
-│   └── styles/tokens.css    # Global styles
-├── components/              # Vanilla JS components
-│   ├── mobile-menu.js
-│   └── search-toggle.js
-├── islands/                 # Svelte components
-│   ├── Counter.js          # Dynamic loader
-│   ├── Counter.svelte      # Svelte component
-│   ├── Greeting.js
-│   └── Greeting.svelte
-├── state/
-│   └── app-state.svelte.js  # Shared state
-└── pages/
-    ├── index.html           # Level 0: No JS
-    ├── simple.html          # Level 1: Vanilla JS only
-    ├── interactive.html     # Level 2: First Svelte
-    └── complex.html         # Level 3: Multiple Svelte
-```
-
-## Key Architecture Notes
-
-### Component Registration System
-Components must be registered in `src/assets/main.js` to be available:
+### Eleventy Configuration (`eleventy.config.js`)
 
 ```js
+import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
+import { eleventyVitePluginConfig } from "./src/_utilities/eleventyVitePluginConfig.js";
+
+export default async function (eleventyConfig) {
+  // Server Configuration
+  eleventyConfig.setServerOptions({
+    domDiff: true,
+    port: 4321,
+    watch: [],
+    showAllHosts: false,
+  });
+
+  // Vite Plugin Configuration
+  eleventyConfig.addPlugin(EleventyVitePlugin, {
+    viteOptions: eleventyVitePluginConfig(),
+  });
+
+  // CRITICAL: Static files must be passed through for /assets/ URLs to work
+  eleventyConfig.addPassthroughCopy("src/assets");
+  eleventyConfig.addPassthroughCopy("src/islands");
+
+  eleventyConfig.setServerPassthroughCopyBehavior("copy");
+
+  return {
+    dir: {
+      input: "src",
+      includes: "_includes",
+      data: "_data",
+      output: "_site",
+    },
+  };
+}
+```
+
+### Vite Configuration (`src/_utilities/eleventyVitePluginConfig.js`)
+
+```js
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import path from "node:path";
+import { fileURLToPath } from "url";
+
+export function eleventyVitePluginConfig() {
+  return {
+    clearScreen: false,
+    appType: "mpa",
+    plugins: [svelte()],
+
+    resolve: {
+      alias: {
+        '/src': path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../')
+      }
+    },
+
+    server: {
+      middlewareMode: true,
+    },
+
+    build: {
+      emptyOutDir: true,
+      rollupOptions: {
+        input: {
+          main: "src/assets/main.js"
+        },
+        output: {
+          manualChunks: {
+            svelte: ['svelte']  // Shared Svelte runtime chunk
+          }
+        },
+      }
+    },
+
+    optimizeDeps: {
+      include: ['svelte']
+    },
+  };
+}
+```
+
+## Island Loading System
+
+### Main Entry Point (`src/assets/main.js`)
+
+```js
+import "./styles/tokens.css";
+import "@11ty/is-land/is-land.js";
+
+// Component registries
 const vanillaComponents = {
   'mobile-menu': () => import('/src/components/mobile-menu.js'),
   'search-toggle': () => import('/src/components/search-toggle.js')
 };
 
 const svelteComponents = {
-  'counter': () => import('/src/islands/Counter.js'),
-  'greeting': () => import('/src/islands/Greeting.js'),
-  'statedemo': () => import('/src/islands/StateDemo.js')
+  'counter': () => import('/src/islands/Counter.svelte'),
+  'greeting': () => import('/src/islands/Greeting.svelte'),
+  'statedemo': () => import('/src/islands/StateDemo.svelte')
 };
-```
 
-### Build Configuration
-Vite builds only the main entry point (`src/assets/main.js`) with Svelte runtime as a shared chunk. Components are loaded dynamically via ES modules, not pre-bundled.
-
-### Component Loading Strategy
-1. **Vanilla JS**: Loaded on-demand when `<is-land>` triggers
-2. **Svelte**: Runtime loaded once, cached for subsequent components
-3. **Shared State**: Available across all Svelte components via `app-state.svelte.js`
-
-## Component Patterns
-
-### Vanilla JS Component Pattern
-```js
-// src/components/mobile-menu.js
-export default function(target, props = {}) {
-  const button = target.querySelector('button');
-  const menu = document.querySelector('.mobile-menu');
-  
-  button.addEventListener('click', () => {
-    menu.classList.toggle('open');
-    button.setAttribute('aria-expanded', 
-      menu.classList.contains('open')
-    );
-  });
-  
-  // Return cleanup function
-  return () => {
-    button.removeEventListener('click', toggleMenu);
-  };
-}
-```
-
-### Svelte Component Pattern
-```js
-// src/islands/Counter.js - Dynamic loader
-export default async function() {
-  const [{ mount }, { default: Counter }] = await Promise.all([
-    import('svelte'),              // Cached after first load
-    import('./Counter.svelte')     // Component code
-  ]);
-  
-  return (target, props = {}) => {
-    return mount(Counter, { target, props });
-  };
-}
-```
-
-```svelte
-<!-- src/islands/Counter.svelte -->
-<script>
-  import { appState } from '../state/app-state.svelte.js';
-  
-  let { initialCount = 0 } = $props();
-  let count = $state(initialCount);
-  
-  // Sync with global state
-  $effect(() => {
-    appState.counters = (appState.counters || 0) + 1;
-  });
-</script>
-
-<div class="counter">
-  <h3>Counter Component</h3>
-  <p>Count: {count}</p>
-  <button onclick={() => count++}>Increment</button>
-  <button onclick={() => count--}>Decrement</button>
-</div>
-```
-
-### Shared State Pattern
-```js
-// src/state/app-state.svelte.js
-export const appState = $state({
-  user: null,
-  theme: localStorage.getItem('theme') || 'light',
-  counters: 0,
-  cart: []
-});
-
-// Auto-sync to localStorage
-$effect(() => {
-  localStorage.setItem('theme', appState.theme);
-});
-
-export function updateTheme(newTheme) {
-  appState.theme = newTheme;
-}
-```
-
-## is-land Integration
-
-### Main Entry Point
-```js
-// src/assets/main.js
-import "./styles/tokens.css";
-import "@11ty/is-land/is-land.js";
+// Wait for is-land custom element
+await customElements.whenDefined('is-land');
 
 // Vanilla JS loader
 Island.addInitType("vanilla", async (island) => {
   const componentName = island.getAttribute("component");
   const props = JSON.parse(island.getAttribute("props") || "{}");
   
-  const loader = await import(`/components/${componentName}.js`);
-  island.innerHTML = ''; // Clear placeholder
+  const importFn = vanillaComponents[componentName];
+  if (!importFn) throw new Error(`Unknown vanilla component: ${componentName}`);
+  
+  const loader = await importFn();
+  island.innerHTML = '';
   return loader.default(island, props);
 });
 
-// Svelte component loader
+// Svelte loader with runtime caching
+let svelteRuntimePromise = null;
+
 Island.addInitType("svelte", async (island) => {
   const componentName = island.getAttribute("component");
   const props = JSON.parse(island.getAttribute("props") || "{}");
   
-  const loader = await import(`/islands/${componentName}.js`);
-  const mountComponent = await loader.default();
+  // Cache Svelte runtime across all components
+  if (!svelteRuntimePromise) {
+    svelteRuntimePromise = import('svelte');
+  }
   
-  island.innerHTML = ''; // Clear placeholder
-  return mountComponent(island, props);
+  const [svelte, componentModule] = await Promise.all([
+    svelteRuntimePromise,
+    svelteComponents[componentName]()
+  ]);
+  
+  island.innerHTML = '';
+  return svelte.mount(componentModule.default, { target: island, props });
 });
 ```
 
-### HTML Usage
+## Component Patterns
+
+### Vanilla JS Components
+
+```js
+// src/components/ComponentName.js
+export default function(target, props = {}) {
+  const element = target.querySelector('selector');
+  
+  function handleEvent() {
+    // Component logic
+  }
+  
+  element.addEventListener('event', handleEvent);
+  
+  // Return cleanup function
+  return () => {
+    element.removeEventListener('event', handleEvent);
+  };
+}
+```
+
+### Svelte 5 Components
+
+```svelte
+<!-- src/islands/ComponentName.svelte -->
+<script>
+  import { appState } from './app-state.svelte.js';
+  import { onMount, onDestroy } from 'svelte';
+  
+  let { propName = defaultValue } = $props();
+  let localState = $state(initialValue);
+  
+  // Lifecycle management
+  onMount(() => {
+    appState.counters++;
+  });
+  
+  onDestroy(() => {
+    appState.counters--;
+  });
+  
+  // Reactive effects
+  $effect(() => {
+    // Side effects based on state changes
+  });
+</script>
+
+<div class="component">
+  <!-- Component template -->
+</div>
+
+<style>
+  /* Component styles */
+</style>
+```
+
+## Svelte 5 State Management
+
+### Global State (`src/islands/app-state.svelte.js`)
+
+```js
+// Svelte 5 runes-based global state
+export const appState = $state({
+  user: null,
+  theme: (typeof localStorage !== 'undefined' ? localStorage.getItem('theme') : null) || 'light',
+  counters: 0,
+  totalClicks: parseInt(localStorage.getItem('totalClicks') || '0'),
+  pageVisits: JSON.parse(localStorage.getItem('pageVisits') || '[]'),
+  lastActivity: localStorage.getItem('lastActivity') || null
+});
+
+// Cross-tab synchronization
+let broadcastChannel;
+if (typeof window !== 'undefined') {
+  broadcastChannel = new BroadcastChannel('app-state-sync');
+  
+  broadcastChannel.addEventListener('message', (event) => {
+    if (event.data.type === 'STATE_UPDATE') {
+      Object.assign(appState, event.data.data);
+    }
+  });
+}
+
+// State mutation functions
+export function updateTheme(newTheme) {
+  appState.theme = newTheme;
+  syncToStorage();
+}
+
+function syncToStorage() {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('theme', appState.theme);
+    localStorage.setItem('totalClicks', appState.totalClicks.toString());
+    document.documentElement.setAttribute('data-theme', appState.theme);
+    
+    broadcastChannel?.postMessage({
+      type: 'STATE_UPDATE',
+      data: { theme: appState.theme, totalClicks: appState.totalClicks }
+    });
+  }
+}
+```
+
+### Component State Patterns
+
+```svelte
+<script>
+  import { appState } from './app-state.svelte.js';
+  
+  // Props (immutable from parent)
+  let { initialValue = 0 } = $props();
+  
+  // Local state with runes
+  let count = $state(initialValue);
+  
+  // Persistent state with localStorage
+  let persistentValue = $state(
+    typeof localStorage !== 'undefined' 
+      ? parseInt(localStorage.getItem('key') || '0') 
+      : 0
+  );
+  
+  // Cross-tab sync for specific values
+  let channel;
+  let isReceivingUpdate = false;
+  
+  onMount(() => {
+    channel = new BroadcastChannel('component-sync');
+    channel.addEventListener('message', (event) => {
+      if (event.data.type === 'VALUE_UPDATE' && !isReceivingUpdate) {
+        isReceivingUpdate = true;
+        persistentValue = event.data.value;
+        isReceivingUpdate = false;
+      }
+    });
+  });
+  
+  onDestroy(() => {
+    channel?.close();
+  });
+  
+  // Reactive persistence
+  $effect(() => {
+    if (typeof localStorage !== 'undefined' && !isReceivingUpdate) {
+      localStorage.setItem('key', persistentValue.toString());
+      channel?.postMessage({ type: 'VALUE_UPDATE', value: persistentValue });
+    }
+  });
+</script>
+```
+
+## HTML Integration
+
+### Page Structure
+
 ```html
-<!-- Vanilla JS component -->
-<is-land on:interaction type="vanilla" component="mobile-menu">
-  <button>☰ Menu</button>
-</is-land>
-
-<!-- Svelte component -->
-<is-land on:visible type="svelte" component="counter" props='{"initialCount": 5}'>
-  <div>Loading counter...</div>
-</is-land>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="/assets/main.js"></script>
+  <title>Page Title</title>
+</head>
+<body>
+  <!-- Static content works without JavaScript -->
+  
+  <!-- Vanilla JS islands -->
+  <is-land on:interaction type="vanilla" component="mobile-menu">
+    <button>☰ Menu</button>
+  </is-land>
+  
+  <!-- Svelte islands -->
+  <is-land on:visible type="svelte" component="counter" props='{"initialCount": 5}'>
+    <div>Loading counter...</div>
+  </is-land>
+</body>
+</html>
 ```
 
-## Test Pages Structure
+### Island Triggers
 
-### Level 0: Static Homepage (index.html)
-- **JavaScript Loaded**: None
-- **Purpose**: Baseline performance measurement
-- **Content**: Static HTML only
+- `on:visible` - Load when element enters viewport
+- `on:interaction` - Load on first user interaction
+- `on:media` - Load based on media query
+- `on:idle` - Load when browser is idle
+- `on:save-data` - Respect user's data preferences
 
-### Level 1: Simple Interactions (simple.html)  
-- **JavaScript Loaded**: main.js + vanilla components on demand
-- **Components**: Mobile menu, search toggle
-- **Bundle Size**: ~5KB total
+## Development Commands
 
-### Level 2: First Svelte Component (interactive.html)
-- **JavaScript Loaded**: main.js + svelte.js + one component
-- **Components**: One counter component
-- **Bundle Size**: ~25KB total (includes Svelte runtime)
-
-### Level 3: Multiple Svelte Components (complex.html)
-- **JavaScript Loaded**: main.js + svelte.js (cached) + multiple components
-- **Components**: Counter, greeting, shared state demo
-- **Bundle Size**: ~30KB total (runtime cached, only component code loads)
-
-## Common Development Commands
-
-### Development Server
 ```bash
+# Development server with hot reload
 bun run dev
-```
-Starts Eleventy with live reload, incremental building, and Vite integration on port 4321.
 
-### Production Build
-```bash
+# Production build
 bun run build
-```
-Creates optimized production build in `_site/` directory.
 
-### Preview Production Build
-```bash
+# Preview production build
 bun run preview
-```
-Serves the production build on port 4173 for testing.
 
-### Clean Build Directory
-```bash
+# Clean build directory
 bun run clean
-```
-Removes the `_site/` build directory.
 
-### Code Formatting (Biome)
-```bash
+# Code formatting
 bunx @biomejs/biome format --write .
 bunx @biomejs/biome check --write .
 ```
 
-### Creating New Svelte Component
-```bash
-bun scripts/new-component.js ComponentName
+## Project Structure
+
 ```
-Generates both `.svelte` and `.js` loader files in `src/islands/` with proper templates.
-
-## Performance Expectations
-
-| Page Level | Initial JS | Additional JS | Total JS |
-|------------|------------|---------------|----------|
-| Static     | 0 KB       | 0 KB          | 0 KB     |
-| Simple     | 3 KB       | 2 KB          | 5 KB     |
-| Interactive| 3 KB       | 22 KB         | 25 KB    |
-| Complex    | 3 KB       | 5 KB          | 30 KB*   |
-
-*Svelte runtime cached from previous page
-
-## Key Benefits
-
-1. **Zero JavaScript** on static pages
-2. **Minimal JavaScript** for simple interactions
-3. **Shared runtime** across Svelte components
-4. **Progressive enhancement** - works without JS
-5. **Optimal caching** - components cached individually
-6. **Shared state** across all Svelte islands
-
-## Browser Support
-
-- **Modern Browsers**: Full support with ES modules
-- **Older Browsers**: Graceful degradation (static content works)
-- **No JavaScript**: All content accessible without JS
+src/
+├── assets/
+│   ├── main.js              # Island loader entry point
+│   └── styles/tokens.css    # Global CSS
+├── components/              # Vanilla JS components
+│   ├── mobile-menu.js
+│   └── search-toggle.js
+├── islands/                 # Svelte components
+│   ├── Counter.svelte       # Component
+│   ├── Counter.js          # Loader (legacy, can be removed)
+│   └── app-state.svelte.js  # Global state
+├── _utilities/
+│   └── eleventyVitePluginConfig.js  # Vite configuration
+├── _data/                   # Eleventy data files
+├── _includes/               # Eleventy templates
+└── *.html                   # Page templates
+```
 
 ## Adding New Components
 
-### For Vanilla JS Components:
-1. Create component file in `src/components/ComponentName.js`
-2. Register in `src/assets/main.js` vanillaComponents object
-3. Use in HTML: `<is-land on:interaction type="vanilla" component="component-name">`
+### Vanilla JS Component
 
-### For Svelte Components:
-1. Use script: `bun scripts/new-component.js ComponentName`
-2. Register in `src/assets/main.js` svelteComponents object  
-3. Use in HTML: `<is-land on:visible type="svelte" component="componentname">`
+1. Create `src/components/ComponentName.js`:
+```js
+export default function(target, props = {}) {
+  // Component logic
+  return () => {
+    // Cleanup function
+  };
+}
+```
 
-### Important Notes:
-- Component names in HTML use kebab-case for vanilla, lowercase for Svelte
-- All new Svelte components automatically get access to shared state via `app-state.svelte.js`
-- Svelte runtime is cached after first component load
-- Components are loaded only when their `<is-land>` trigger condition is met
+2. Register in `src/assets/main.js`:
+```js
+const vanillaComponents = {
+  'component-name': () => import('/src/components/ComponentName.js'),
+};
+```
+
+3. Use in HTML:
+```html
+<is-land on:interaction type="vanilla" component="component-name">
+  <button>Click me</button>
+</is-land>
+```
+
+### Svelte Component
+
+1. Create `src/islands/ComponentName.svelte`:
+```svelte
+<script>
+  import { appState } from './app-state.svelte.js';
+  let { prop = defaultValue } = $props();
+  let state = $state(initialValue);
+</script>
+
+<div>Component template</div>
+```
+
+2. Register in `src/assets/main.js`:
+```js
+const svelteComponents = {
+  'componentname': () => import('/src/islands/ComponentName.svelte'),
+};
+```
+
+3. Use in HTML:
+```html
+<is-land on:visible type="svelte" component="componentname" props='{"prop": "value"}'>
+  <div>Loading...</div>
+</is-land>
+```
+
+## Performance Characteristics
+
+| Page Type | Initial JS | Framework JS | Component JS | Total JS |
+|-----------|------------|--------------|--------------|----------|
+| Static    | 0 KB       | 0 KB         | 0 KB         | 0 KB     |
+| Vanilla   | 3 KB       | 0 KB         | 2 KB         | 5 KB     |
+| First Svelte | 3 KB    | 22 KB        | 3 KB         | 28 KB    |
+| Additional Svelte | 3 KB | 0 KB (cached) | 3 KB      | 6 KB     |
+
+## Key Implementation Details
+
+### Critical Configuration Points
+
+1. **Passthrough Copy**: `addPassthroughCopy("src/assets")` required for `/assets/` URLs
+2. **Svelte Plugin**: Must be configured in Vite, not Eleventy
+3. **Module Resolution**: `/src` alias enables absolute imports
+4. **Runtime Caching**: Single Svelte import cached across all components
+5. **Manual Chunks**: Svelte runtime split into separate chunk for optimal caching
+
+### Svelte 5 Specifics
+
+- **Runes**: Use `$state()`, `$props()`, `$effect()` for reactivity
+- **Mount API**: Use `svelte.mount(Component, { target, props })` for island mounting
+- **Lifecycle**: `onMount`/`onDestroy` instead of old lifecycle functions
+- **State Management**: Global `$state()` objects for shared state
+
+### Island Loading Sequence
+
+1. HTML loads with placeholder content
+2. `is-land` triggers based on condition (`on:visible`, `on:interaction`, etc.)
+3. Component loader imports and initializes component
+4. Placeholder content replaced with active component
+5. Cleanup function returned for proper unmounting
+
+### Build Optimization
+
+- **Development**: All modules loaded via ES imports
+- **Production**: Svelte runtime chunked separately for caching
+- **Code Splitting**: Each component loads independently
+- **Tree Shaking**: Unused components never loaded
+
+This setup provides optimal performance scaling from static content to complex interactive applications while maintaining excellent developer experience and build performance.

@@ -16,7 +16,9 @@ export default async function (eleventyConfig) {
 	});
 
 	// Static files to pass through
-	// eleventyConfig.addPassthroughCopy("src/assets");
+	eleventyConfig.addPassthroughCopy("src/assets");
+	eleventyConfig.addPassthroughCopy("src/islands");
+
 
 	eleventyConfig.setServerPassthroughCopyBehavior("copy");
 
