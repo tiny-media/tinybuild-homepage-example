@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="/assets/main.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <h1>Minimal Example 1</h1>
+  <is-land>This is an island.</is-land>
+
+  <script type="module" src="/islands/Counter.js"></script>
+
+
+ <is-land on:visible type="component" component="counter" props='{"initialCount": 
+  5}'>
+    <div>Loading counter starting at 5...</div>
+  </is-land>
+
+  <is-land on:visible type="component" component="greeting" props='{"name": 
+  "Developer", "showTime": true}'>
+    <div style="padding: 1.5rem; border: 2px dashed #ccc; border-radius: 12px;">
+      Loading greeting component...
+    </div>
+  </is-land>
+
+
+
+</body>
+</html>
