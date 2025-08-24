@@ -1,5 +1,7 @@
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import path from "path";
+import { fileURLToPath } from "url";
 
 export default async function (eleventyConfig) {
 	eleventyConfig.setServerOptions({
@@ -25,12 +27,29 @@ export default async function (eleventyConfig) {
 			appType: "mpa",
 			plugins: [svelte()],
 
+			resolve: {
+				alias: {
+					'/src': path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src')
+				}
+			},
+
 			server: {
 				middlewareMode: true,
 			},
 
 			build: {
 				emptyOutDir: true,
+				rollupOptions: {
+					input: {
+						main: "src/assets/main.js"
+					},
+					output: {
+						manualChunks: {
+							// Shared Svelte runtime chunk
+							svelte: ['svelte']
+						}
+					}
+				}
 			},
 		},
 	});

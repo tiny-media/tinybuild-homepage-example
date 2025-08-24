@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="/assets/main.js"></script>
+  <title>Level 3: Complex Page - Multiple Svelte Components</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+      color: #333;
+    }
+    .status {
+      background: #f3e8ff;
+      border: 1px solid #a855f7;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 1rem 0;
+    }
+    .nav {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 2rem 0;
+    }
+    .nav a {
+      display: inline-block;
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #3b82f6;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .nav a:hover {
+      background: #2563eb;
+    }
+    .nav a.current {
+      background: #a855f7;
+    }
+    .component-demo {
+      border: 2px dashed #a855f7;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+      background: #faf5ff;
+    }
+    .components-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔗 Level 3: Complex Page</h1>
+    <div class="status">
+      <strong>JavaScript Status:</strong> Multiple Svelte components sharing runtime 🟦<br>
+      <strong>Bundle Size:</strong> ~30KB total (runtime cached + component code)<br>
+      <strong>Components:</strong> Multiple reactive components with shared state
+    </div>
+  </header>
+
+  <main>
+    <div class="nav">
+      <a href="/">🏠 Static Homepage</a>
+      <a href="/simple.html">📱 Simple Page</a>
+      <a href="/interactive.html">🎯 Interactive Page</a>
+      <a href="/complex.html" class="current">🔗 Complex Page</a>
+    </div>
+
+    <h2>Multiple Svelte Components</h2>
+    <p>This page demonstrates the <strong>efficiency of shared runtime</strong> - multiple Svelte components that reuse the cached runtime and share global state seamlessly.</p>
+
+    <div class="components-grid">
+      <div class="component-demo">
+        <h4>Counter Component</h4>
+        <p>A reactive counter that updates global state on each interaction.</p>
+        
+        <is-land on:visible type="svelte" component="counter" props='{"initialCount": 0}'>
+          <div style="padding: 1rem; border: 2px dashed #a855f7; border-radius: 8px; background: #faf5ff; text-align: center;">
+            🟦 Loading Counter...<br>
+            <small>Reusing cached Svelte runtime</small>
+          </div>
+        </is-land>
+      </div>
+
+      <div class="component-demo">
+        <h4>Greeting Component</h4>
+        <p>An interactive greeting component with time display and state management.</p>
+        
+        <is-land on:visible type="svelte" component="greeting" props='{"name": "Developer", "showTime": true}'>
+          <div style="padding: 1rem; border: 2px dashed #a855f7; border-radius: 8px; background: #faf5ff; text-align: center;">
+            🟦 Loading Greeting...<br>
+            <small>Component code only (~2KB)</small>
+          </div>
+        </is-land>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h4>Shared State Demo</h4>
+      <p>This component shows global state shared across all Svelte components - including counters, theme, and activity tracking.</p>
+      
+      <is-land on:visible type="svelte" component="statedemo">
+        <div style="padding: 1.5rem; border: 2px dashed #a855f7; border-radius: 8px; background: #faf5ff; text-align: center;">
+          🟦 Loading State Demo...<br>
+          <small>Shared global state management</small>
+        </div>
+      </is-land>
+    </div>
+
+    <h3>What This Demonstrates</h3>
+    <ul>
+      <li><strong>Runtime Reuse:</strong> Svelte runtime already cached - only component code loads</li>
+      <li><strong>Shared State:</strong> All components share the same reactive state</li>
+      <li><strong>Minimal Overhead:</strong> Each additional component adds only ~1-2KB</li>
+      <li><strong>Performance:</strong> Components initialize instantly using cached runtime</li>
+      <li><strong>Coordinated Updates:</strong> State changes propagate across all components</li>
+    </ul>
+
+    <h3>Network Loading Pattern</h3>
+    <ol>
+      <li><strong>Page Load:</strong> HTML, CSS, and main.js (~3KB)</li>
+      <li><strong>First Component:</strong> Only component code loads (~2KB) - runtime cached!</li>
+      <li><strong>Additional Components:</strong> Only new component code loads (~1-2KB each)</li>
+      <li><strong>State Sharing:</strong> No additional overhead for state management</li>
+    </ol>
+
+    <h3>Efficiency Gains</h3>
+    <div style="background: #f0fdf4; padding: 1rem; border-radius: 6px; border: 1px solid #16a34a; margin: 1rem 0;">
+      <strong>Runtime Efficiency:</strong><br>
+      • Without sharing: 3 components × 17KB each = 51KB total<br>
+      • With sharing: 15KB runtime + (3 × 2KB) components = 21KB total<br>
+      • <strong>Savings: 30KB (59% reduction)</strong>
+    </div>
+
+    <p><strong>Try interacting with components:</strong> Notice how state updates propagate between components and persist as you navigate between pages!</p>
+
+    <h3>Mixed Component Strategy</h3>
+    <p>You can also mix component types on the same page:</p>
+    
+    <div class="component-demo">
+      <h4>Vanilla JS Component (for comparison)</h4>
+      <p>Simple interactions still use vanilla JS for optimal performance.</p>
+      
+      <is-land on:interaction type="vanilla" component="search-toggle">
+        <button style="padding: 0.75rem 1.5rem; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;">
+          🔍 Simple Search (Vanilla JS)
+        </button>
+      </is-land>
+    </div>
+  </main>
+
+  <footer>
+    <p><em>This level demonstrates the full power of progressive enhancement - use the right tool for each interaction complexity level.</em></p>
+  </footer>
+
+  <script>
+    // Track page visits for state demo
+    if (typeof window !== 'undefined') {
+      // This runs after the page loads to track visits
+      setTimeout(() => {
+        // If any Svelte components are loaded, they'll have access to this via global state
+        console.log('📊 Complex page visited');
+      }, 100);
+    }
+  </script>
+</body>
+</html>

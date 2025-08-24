@@ -3,29 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="module" src="/assets/main.js"></script>
-  <title>Document</title>
+  <title>Level 0: Static Homepage - No JavaScript</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+      color: #333;
+    }
+    .status {
+      background: #f0f9ff;
+      border: 1px solid #0ea5e9;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 1rem 0;
+    }
+    .nav {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 2rem 0;
+    }
+    .nav a {
+      display: inline-block;
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #3b82f6;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .nav a:hover {
+      background: #2563eb;
+    }
+  </style>
 </head>
 <body>
-  <h1>Minimal Example 1</h1>
-  <is-land>This is an island.</is-land>
-
-  <script type="module" src="/islands/Counter.js"></script>
-
-
- <is-land on:visible type="component" component="counter" props='{"initialCount": 
-  5}'>
-    <div>Loading counter starting at 5...</div>
-  </is-land>
-
-  <is-land on:visible type="component" component="greeting" props='{"name": 
-  "Developer", "showTime": true}'>
-    <div style="padding: 1.5rem; border: 2px dashed #ccc; border-radius: 12px;">
-      Loading greeting component...
+  <header>
+    <h1>🏠 Level 0: Static Homepage</h1>
+    <div class="status">
+      <strong>JavaScript Status:</strong> None loaded ✨<br>
+      <strong>Bundle Size:</strong> 0 KB<br>
+      <strong>Performance:</strong> Optimal - Static HTML only
     </div>
-  </is-land>
+  </header>
 
+  <main>
+    <h2>Progressive is-land Loading Demo</h2>
+    <p>This homepage demonstrates <strong>zero JavaScript loading</strong> - the fastest possible web experience. No frameworks, no bundlers, no components - just pure HTML and CSS.</p>
+    
+    <p>Navigate through the test pages to see how JavaScript loads progressively based on the complexity needed:</p>
+    
+    <div class="nav">
+      <a href="/simple/">📱 Simple Page (Vanilla JS)</a>
+      <a href="/interactive/">🎯 Interactive Page (First Svelte)</a>
+      <a href="/complex/">🔗 Complex Page (Multiple Svelte)</a>
+    </div>
 
+    <h3>What This Demonstrates</h3>
+    <ul>
+      <li><strong>Zero JavaScript:</strong> No JS files are requested from the server</li>
+      <li><strong>Maximum Performance:</strong> Instant loading with no parsing overhead</li>
+      <li><strong>SEO Friendly:</strong> All content is immediately available to crawlers</li>
+      <li><strong>Accessibility:</strong> Works perfectly without JavaScript</li>
+      <li><strong>Network Efficiency:</strong> Minimal bandwidth usage</li>
+    </ul>
 
+    <h3>Technical Details</h3>
+    <p>This page intentionally does <strong>not</strong> include:</p>
+    <ul>
+      <li>No <code>&lt;script&gt;</code> tags</li>
+      <li>No <code>&lt;is-land&gt;</code> components</li>
+      <li>No JavaScript frameworks or libraries</li>
+      <li>No dynamic imports or module loading</li>
+    </ul>
+
+    <p>Open your browser's Network tab to verify that zero JavaScript files are downloaded when loading this page.</p>
+  </main>
+
+  <footer>
+    <p><em>This is the baseline for progressive enhancement. Every bit of JavaScript added to subsequent pages serves a specific purpose.</em></p>
+  </footer>
 </body>
 </html>

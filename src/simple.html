@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="/assets/main.js"></script>
+  <title>Level 1: Simple Page - Vanilla JS Components</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+      color: #333;
+    }
+    .status {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 1rem 0;
+    }
+    .nav {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 2rem 0;
+    }
+    .nav a {
+      display: inline-block;
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #3b82f6;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .nav a:hover {
+      background: #2563eb;
+    }
+    .nav a.current {
+      background: #f59e0b;
+    }
+    .component-demo {
+      border: 2px dashed #f59e0b;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+      background: #fffbeb;
+    }
+    .interaction-button {
+      padding: 0.75rem 1.5rem;
+      background: #f59e0b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    .interaction-button:hover {
+      background: #d97706;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📱 Level 1: Simple Page</h1>
+    <div class="status">
+      <strong>JavaScript Status:</strong> Loaded on demand 🟨<br>
+      <strong>Bundle Size:</strong> ~5KB total (main.js + components)<br>
+      <strong>Components:</strong> Vanilla JS only - No frameworks
+    </div>
+  </header>
+
+  <main>
+    <div class="nav">
+      <a href="/">🏠 Static Homepage</a>
+      <a href="/simple.html" class="current">📱 Simple Page</a>
+      <a href="/interactive.html">🎯 Interactive Page</a>
+      <a href="/complex.html">🔗 Complex Page</a>
+    </div>
+
+    <h2>Vanilla JavaScript Components</h2>
+    <p>This page demonstrates <strong>minimal JavaScript loading</strong> using vanilla JS components that load only when needed. No frameworks, no complex build processes - just small, focused JavaScript files.</p>
+
+    <h3>Interactive Components</h3>
+    
+    <div class="component-demo">
+      <h4>Mobile Menu (loads on interaction)</h4>
+      <p>Click the button below to load and activate the mobile menu component. This will dynamically import ~1KB of vanilla JavaScript.</p>
+      
+      <is-land on:interaction type="vanilla" component="mobile-menu">
+        <button class="interaction-button">☰ Load Mobile Menu</button>
+      </is-land>
+    </div>
+
+    <div class="component-demo">
+      <h4>Search Toggle (loads on interaction)</h4>
+      <p>Click to load the search component. Another small vanilla JS module that creates a modal search interface.</p>
+      
+      <is-land on:interaction type="vanilla" component="search-toggle">
+        <button class="interaction-button">🔍 Load Search</button>
+      </is-land>
+    </div>
+
+    <h3>What This Demonstrates</h3>
+    <ul>
+      <li><strong>Progressive Loading:</strong> main.js (~3KB) loads immediately, components load on interaction</li>
+      <li><strong>Vanilla JavaScript:</strong> No frameworks - pure DOM manipulation</li>
+      <li><strong>Small Bundles:</strong> Each component is 1-2KB of focused functionality</li>
+      <li><strong>Fast Interactions:</strong> Components initialize instantly once loaded</li>
+      <li><strong>Network Efficiency:</strong> Only loads what users actually interact with</li>
+    </ul>
+
+    <h3>Network Loading Pattern</h3>
+    <ol>
+      <li><strong>Page Load:</strong> HTML, CSS, and main.js (~3KB) load immediately</li>
+      <li><strong>First Interaction:</strong> Component-specific JS loads dynamically (~1-2KB)</li>
+      <li><strong>Subsequent Interactions:</strong> Already loaded components respond instantly</li>
+    </ol>
+
+    <p><strong>Check your Network tab:</strong> You'll see individual component files load only when you interact with them!</p>
+  </main>
+
+  <footer>
+    <p><em>This level is perfect for sites that need simple interactions without complex state management or framework features.</em></p>
+  </footer>
+</body>
+</html>

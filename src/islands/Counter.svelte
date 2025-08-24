@@ -1,14 +1,34 @@
 <script>
-  let { initialCount = 0 } = $props();
+  import { appState, incrementCounter } from './app-state.svelte.js';
   
+  let { initialCount = 0 } = $props();
   let count = $state(initialCount);
+  
+  // Track when this component mounts
+  $effect(() => {
+    appState.update(state => ({
+      ...state,
+      counters: state.counters + 1
+    }));
+    console.log('🟦 Svelte: Counter component mounted');
+    
+    return () => {
+      appState.update(state => ({
+        ...state,
+        counters: state.counters - 1
+      }));
+      console.log('🟦 Svelte: Counter component unmounted');
+    };
+  });
   
   function increment() {
     count++;
+    incrementCounter(); // Update global state
   }
   
   function decrement() {
     count--;
+    incrementCounter(); // Update global state
   }
 </script>
 

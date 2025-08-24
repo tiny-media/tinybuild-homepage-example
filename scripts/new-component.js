@@ -27,15 +27,21 @@ const svelteTemplate = `<script>
     }
   </style>`;
 
-const jsTemplate = `import { mount } from 'svelte';
-  import ${componentName} from './${componentName}.svelte';
-
-  export default function(target, props = {}) {
-    return mount(${componentName}, {
-      target,
-      props
-    });
-  }`;
+const jsTemplate = `// Dynamic loader for ${componentName} Svelte component
+export default async function() {
+  console.log('🟦 Loading Svelte runtime for ${componentName} component...');
+  
+  const [{ mount }, { default: ${componentName} }] = await Promise.all([
+    import('svelte'),              // Cached after first Svelte component load
+    import('./${componentName}.svelte')    // Component code
+  ]);
+  
+  console.log('🟦 Svelte runtime loaded, mounting ${componentName} component');
+  
+  return (target, props = {}) => {
+    return mount(${componentName}, { target, props });
+  };
+}`;
 
 // Write files using Bun's native file system API
 await Bun.write(`src/islands/${componentName}.svelte`, svelteTemplate);
@@ -51,7 +57,7 @@ console.log(`\n2. Register in the component registry:`);
 console.log(
 	`   ${componentName.toLowerCase()}: ${componentName.toLowerCase()}Init,`,
 );
-console.log(`\n3. Use in HTML:`);
-console.log(
-	`   <is-land on:visible type="component" component="${componentName.toLowerCase()}">...</is-land>`,
-);
+console.log(`\n3. Add to eleventy.config.js viteOptions.build.rollupOptions.input:`);
+console.log(`   "${componentName.toLowerCase()}": "src/islands/${componentName}.js",`);
+console.log(`\n4. Use in HTML:`);
+console.log(`   <is-land on:visible type="svelte" component="${componentName.toLowerCase()}">...</is-land>`);
