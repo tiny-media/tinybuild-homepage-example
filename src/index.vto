@@ -1,0 +1,51 @@
+{{ layout "layouts/base.vto" {
+  title: "Level 0: Static Homepage - No JavaScript",
+  statusBg: "#f0f9ff",
+  statusBorder: "#0ea5e9",
+  navigation: [
+    { url: "/", label: "🏠 Static Homepage", current: true },
+    { url: "/simple/", label: "📱 Simple Page" },
+    { url: "/interactive/", label: "🎯 Interactive Page" },
+    { url: "/complex/", label: "🔗 Complex Page" }
+  ]
+} }}
+
+<header>
+  <h1>🏠 Level 0: Static Homepage</h1>
+  <div class="status">
+    <strong>JavaScript Status:</strong> None loaded ✨<br>
+    <strong>Bundle Size:</strong> 0 KB<br>
+    <strong>Performance:</strong> Optimal - Static HTML only
+  </div>
+</header>
+
+<h2>Progressive is-land Loading Demo</h2>
+<p>This homepage demonstrates <strong>zero JavaScript loading</strong> - the fastest possible web experience. No frameworks, no bundlers, no components - just pure HTML and CSS.</p>
+
+<p>Navigate through the test pages to see how JavaScript loads progressively based on the complexity needed:</p>
+
+<h3>What This Demonstrates</h3>
+<ul>
+  <li><strong>Zero JavaScript:</strong> No JS files are requested from the server</li>
+  <li><strong>Maximum Performance:</strong> Instant loading with no parsing overhead</li>
+  <li><strong>SEO Friendly:</strong> All content is immediately available to crawlers</li>
+  <li><strong>Accessibility:</strong> Works perfectly without JavaScript</li>
+  <li><strong>Network Efficiency:</strong> Minimal bandwidth usage</li>
+</ul>
+
+<h3>Technical Details</h3>
+<p>This page intentionally does <strong>not</strong> include:</p>
+<ul>
+  <li>No <code>&lt;script&gt;</code> tags</li>
+  <li>No <code>&lt;is-land&gt;</code> components</li>
+  <li>No JavaScript frameworks or libraries</li>
+  <li>No dynamic imports or module loading</li>
+</ul>
+
+<p>Open your browser's Network tab to verify that zero JavaScript files are downloaded when loading this page.</p>
+
+<footer>
+  <p><em>This is the baseline for progressive enhancement. Every bit of JavaScript added to subsequent pages serves a specific purpose.</em></p>
+</footer>
+
+{{ /layout }}

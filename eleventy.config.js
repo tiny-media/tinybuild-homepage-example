@@ -1,4 +1,5 @@
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
+import { VentoPlugin } from "eleventy-plugin-vento";
 import { eleventyVitePluginConfig } from "./src/_utilities/eleventyVitePluginConfig.js";
 
 export default async function (eleventyConfig) {
@@ -8,6 +9,17 @@ export default async function (eleventyConfig) {
 		port: 4321,
 		watch: [],
 		showAllHosts: false,
+	});
+
+	// VentoJS Plugin Configuration
+	eleventyConfig.addPlugin(VentoPlugin, {
+		shortcodes: true,
+		pairedShortcodes: true,
+		filters: true,
+		autotrim: false,
+		ventoOptions: {
+			includes: "src/_includes",
+		},
 	});
 
 	// Vite Plugin Configuration

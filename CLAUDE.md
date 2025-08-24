@@ -25,6 +25,7 @@ Progressive loading system that loads JavaScript only when needed:
 
 ```js
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
+import { VentoPlugin } from "eleventy-plugin-vento";
 import { eleventyVitePluginConfig } from "./src/_utilities/eleventyVitePluginConfig.js";
 
 export default async function (eleventyConfig) {
@@ -34,6 +35,17 @@ export default async function (eleventyConfig) {
     port: 4321,
     watch: [],
     showAllHosts: false,
+  });
+
+  // VentoJS Plugin Configuration (must be loaded before Vite)
+  eleventyConfig.addPlugin(VentoPlugin, {
+    shortcodes: true,
+    pairedShortcodes: true,
+    filters: true,
+    autotrim: false,
+    ventoOptions: {
+      includes: "src/_includes",
+    },
   });
 
   // Vite Plugin Configuration
@@ -383,11 +395,13 @@ src/
 │   ├── Counter.svelte       # Component
 │   ├── Counter.js          # Loader (legacy, can be removed)
 │   └── app-state.svelte.js  # Global state
+├── _includes/
+│   └── layouts/
+│       └── base.vto         # VentoJS layout template
 ├── _utilities/
 │   └── eleventyVitePluginConfig.js  # Vite configuration
 ├── _data/                   # Eleventy data files
-├── _includes/               # Eleventy templates
-└── *.html                   # Page templates
+└── *.vto                    # VentoJS page templates
 ```
 
 ## Adding New Components
@@ -486,4 +500,90 @@ const svelteComponents = {
 - **Code Splitting**: Each component loads independently
 - **Tree Shaking**: Unused components never loaded
 
-This setup provides optimal performance scaling from static content to complex interactive applications while maintaining excellent developer experience and build performance.
+## VentoJS Template System
+
+### Core Syntax
+VentoJS uses unified `{{ }}` syntax for all operations:
+
+```vento
+{{ title }}                          # Variables
+{{ user.name || "Anonymous" }}       # JavaScript expressions  
+{{ await api.getData() }}            # Async operations
+{{ value |> toUpperCase }}           # Pipes (filters)
+{{ "<em>text</em>" |> safe }}        # Trusted HTML
+```
+
+### Layouts and Data Passing
+```vento
+{{ layout "layouts/base.vto" {
+  title: "Page Title",
+  loadJS: true,
+  navigation: [
+    { url: "/", label: "Home", current: true }
+  ]
+} }}
+
+Page content goes here
+
+{{ /layout }}
+```
+
+### Layout Template (`src/_includes/layouts/base.vto`)
+```vento
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {{ if loadJS }}
+  <script type="module" src="/assets/main.js"></script>
+  {{ /if }}
+  <title>{{ title || "Default Title" }}</title>
+</head>
+<body>
+  <div class="nav">
+    {{ for navItem of navigation }}
+      <a href="{{ navItem.url }}"{{ if navItem.current }} class="current"{{ /if }}>
+        {{ navItem.label }}
+      </a>
+    {{ /for }}
+  </div>
+  
+  {{ content }}
+</body>
+</html>
+```
+
+### Conditionals and Loops
+```vento
+{{ if condition }}
+  Content when true
+{{ else }}
+  Alternative content
+{{ /if }}
+
+{{ for item of items }}
+  <li>{{ item.name }}</li>
+{{ /for }}
+
+{{ for key, value of object }}
+  {{ key }}: {{ value }}
+{{ /for }}
+```
+
+### Template Features
+- **File Extension**: Use `.vto` for VentoJS templates
+- **Data Access**: Default `it` variable or custom data variable
+- **JavaScript Integration**: Full JS expressions and async/await support
+- **Pipe Filters**: Transform data with `|>` operator
+- **Automatic Escaping**: Disabled by default, use `|> safe` for trusted HTML
+- **Whitespace Control**: `{{- }}` and `{{ -}}` for trimming
+
+### Plugin Integration Benefits
+- Eleventy filters automatically available in VentoJS templates
+- Shortcodes and paired shortcodes work seamlessly
+- Template inheritance and partial includes
+- Hot reload support in development
+- Production build optimization
+
+This setup provides optimal performance scaling from static content to complex interactive applications while maintaining excellent developer experience and modern templating capabilities.

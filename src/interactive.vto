@@ -1,0 +1,71 @@
+{{ layout "layouts/base.vto" {
+  title: "Level 2: Interactive Page - First Svelte Component",
+  loadJS: true,
+  statusBg: "#dcfce7",
+  statusBorder: "#16a34a",
+  navigation: [
+    { url: "/", label: "🏠 Static Homepage" },
+    { url: "/simple/", label: "📱 Simple Page" },
+    { url: "/interactive/", label: "🎯 Interactive Page", current: true },
+    { url: "/complex/", label: "🔗 Complex Page" }
+  ]
+} }}
+
+<header>
+  <h1>🎯 Level 2: Interactive Page</h1>
+  <div class="status">
+    <strong>JavaScript Status:</strong> Svelte runtime loaded on first component 🟦<br>
+    <strong>Bundle Size:</strong> ~25KB total (includes Svelte runtime)<br>
+    <strong>Components:</strong> First Svelte component + shared state
+  </div>
+</header>
+
+<h2>First Svelte Component</h2>
+<p>This page demonstrates loading the <strong>first Svelte component</strong>, which triggers loading the Svelte runtime (~15KB). This is the "runtime cost" that subsequent Svelte components get for free.</p>
+
+<h3>Interactive Svelte Component</h3>
+
+<div class="component-demo" style="border: 2px dashed #16a34a; padding: 1rem; margin: 1rem 0; border-radius: 6px; background: #f0fdf4;">
+  <h4>Counter Component (loads when visible)</h4>
+  <p>This counter component will automatically load when it becomes visible. It includes reactive state, event handlers, and connects to shared global state.</p>
+  
+  <is-land on:visible type="svelte" component="counter" props='{"initialCount": 10}'>
+    <div style="padding: 1.5rem; border: 2px dashed #16a34a; border-radius: 8px; background: #f0fdf4; text-align: center;">
+      🟦 Loading Svelte Counter component...<br>
+      <small>Svelte runtime loading for the first time</small>
+    </div>
+  </is-land>
+</div>
+
+<h3>What This Demonstrates</h3>
+<ul>
+  <li><strong>Runtime Loading:</strong> Svelte runtime (~15KB) loads once for all components</li>
+  <li><strong>Component Reactivity:</strong> Full reactive state management with Svelte 5 runes</li>
+  <li><strong>Global State:</strong> Component connects to shared application state</li>
+  <li><strong>Dynamic Imports:</strong> Component code loads separately from runtime</li>
+  <li><strong>Caching Strategy:</strong> Runtime cached for future Svelte components</li>
+</ul>
+
+<h3>Network Loading Pattern</h3>
+<ol>
+  <li><strong>Page Load:</strong> HTML, CSS, and main.js (~3KB)</li>
+  <li><strong>Component Visible:</strong> Svelte runtime (~15KB) + Counter component (~2KB)</li>
+  <li><strong>Runtime Cached:</strong> Future Svelte components only load component code</li>
+</ol>
+
+<h3>Performance Investment</h3>
+<p>This page pays the "Svelte runtime cost" once. After this:</p>
+<ul>
+  <li>✅ Svelte runtime is cached by the browser</li>
+  <li>✅ Global state management is available</li>
+  <li>✅ Component reactivity system is active</li>
+  <li>✅ Future Svelte components load much faster</li>
+</ul>
+
+<p><strong>Check your Network tab:</strong> You'll see svelte.js load once, then get cached for reuse!</p>
+
+<footer>
+  <p><em>This level introduces reactive components and shared state - perfect for interactive applications that need more than vanilla JS.</em></p>
+</footer>
+
+{{ /layout }}
