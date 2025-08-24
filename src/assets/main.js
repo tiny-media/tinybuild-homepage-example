@@ -11,10 +11,13 @@ const vanillaComponents = {
 };
 
 const svelteComponents = {
-	'counter': () => import('/src/islands/Counter.js'),
-	'greeting': () => import('/src/islands/Greeting.js'),
-	'statedemo': () => import('/src/islands/StateDemo.js')
+	'counter': () => import('/src/islands/Counter.svelte'),
+	'greeting': () => import('/src/islands/Greeting.svelte'),
+	'statedemo': () => import('/src/islands/StateDemo.svelte')
 };
+
+// Ensure is-land is loaded before registering loaders
+await customElements.whenDefined('is-land');
 
 // Vanilla JS component loader
 Island.addInitType("vanilla", async (island) => {
@@ -37,6 +40,9 @@ Island.addInitType("vanilla", async (island) => {
 	}
 });
 
+// Shared Svelte runtime cache
+let svelteRuntimePromise = null;
+
 // Svelte component loader  
 Island.addInitType("svelte", async (island) => {
 	const componentName = island.getAttribute("component");
@@ -46,17 +52,43 @@ Island.addInitType("svelte", async (island) => {
 	console.log(`🟦 Loading Svelte component: ${componentName}`);
 	
 	try {
+		// Load Svelte runtime once and cache it
+		if (!svelteRuntimePromise) {
+			console.log('🟦 Loading Svelte runtime for first time...');
+			svelteRuntimePromise = import('svelte');
+		} else {
+			console.log('🟦 Using cached Svelte runtime');
+		}
+		
 		const importFn = svelteComponents[componentName];
 		if (!importFn) {
 			throw new Error(`Unknown Svelte component: ${componentName}`);
 		}
-		const loader = await importFn();
-		const mountComponent = await loader.default();
+		
+		// Load Svelte runtime once and cache it
+		const svelte = await svelteRuntimePromise;
+		console.log('🟦 Svelte runtime loaded');
+		
+		// Load component
+		const componentModule = await importFn();
+		const Component = componentModule.default;
+		
+		console.log('🟦 Component imported:', Component);
 		
 		island.innerHTML = ''; // Clear placeholder
-		return mountComponent(island, props);
+		
+		// Mount component using Svelte 5 mount API
+		const component = svelte.mount(Component, { 
+			target: island,
+			props: props
+		});
+		
+		console.log(`🟦 ${componentName} mounted successfully`);
+		return component;
+		
 	} catch (error) {
 		console.error(`Failed to load Svelte component ${componentName}:`, error);
+		island.innerHTML = `<div style="color: red; padding: 1rem;">Error: ${error.message}</div>`;
 	}
 });
 

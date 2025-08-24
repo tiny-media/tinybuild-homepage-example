@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # TinyBuild Homepage - Progressive is-land + Svelte Setup
 
 ## Overview
@@ -19,11 +23,14 @@ This project demonstrates a progressive loading architecture using @11ty/is-land
 
 ### Technology Stack
 
+- **Static Site Generator**: Eleventy 4.0 (alpha)
 - **Build Tool**: Vite 7+ with @11ty/eleventy-plugin-vite
 - **Island Architecture**: @11ty/is-land for lazy loading
 - **Framework**: Svelte 5 with runes (when needed)
 - **State Management**: Svelte runes-based global state
-- **Template Engine**: VentoJS
+- **Template Engine**: VentoJS (default in Eleventy 4.0)
+- **Package Manager**: Bun
+- **Code Formatting**: Biome
 
 ## Project Structure
 
@@ -49,50 +56,31 @@ src/
     └── complex.html         # Level 3: Multiple Svelte
 ```
 
-## Configuration Files
+## Key Architecture Notes
 
-### eleventy.config.js
+### Component Registration System
+Components must be registered in `src/assets/main.js` to be available:
+
 ```js
-import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
+const vanillaComponents = {
+  'mobile-menu': () => import('/src/components/mobile-menu.js'),
+  'search-toggle': () => import('/src/components/search-toggle.js')
+};
 
-export default async function (eleventyConfig) {
-  eleventyConfig.addPlugin(EleventyVitePlugin, {
-    viteOptions: {
-      clearScreen: false,
-      appType: "mpa",
-      plugins: [svelte()],
-      
-      build: {
-        rollupOptions: {
-          input: {
-            main: "src/assets/main.js",
-            // Vanilla components
-            "mobile-menu": "src/components/mobile-menu.js",
-            "search-toggle": "src/components/search-toggle.js",
-            // Svelte components
-            counter: "src/islands/Counter.js",
-            greeting: "src/islands/Greeting.js"
-          },
-          output: {
-            manualChunks: {
-              // Shared Svelte runtime
-              svelte: ['svelte']
-            }
-          }
-        }
-      }
-    }
-  });
-
-  return {
-    dir: {
-      input: "src",
-      output: "_site"
-    }
-  };
-}
+const svelteComponents = {
+  'counter': () => import('/src/islands/Counter.js'),
+  'greeting': () => import('/src/islands/Greeting.js'),
+  'statedemo': () => import('/src/islands/StateDemo.js')
+};
 ```
+
+### Build Configuration
+Vite builds only the main entry point (`src/assets/main.js`) with Svelte runtime as a shared chunk. Components are loaded dynamically via ES modules, not pre-bundled.
+
+### Component Loading Strategy
+1. **Vanilla JS**: Loaded on-demand when `<is-land>` triggers
+2. **Svelte**: Runtime loaded once, cached for subsequent components
+3. **Shared State**: Available across all Svelte components via `app-state.svelte.js`
 
 ## Component Patterns
 
@@ -240,27 +228,43 @@ Island.addInitType("svelte", async (island) => {
 - **Components**: Counter, greeting, shared state demo
 - **Bundle Size**: ~30KB total (runtime cached, only component code loads)
 
-## Development Workflow
+## Common Development Commands
 
-### Creating New Vanilla Component
+### Development Server
 ```bash
-bun scripts/new-vanilla-component.js ComponentName
+bun run dev
+```
+Starts Eleventy with live reload, incremental building, and Vite integration on port 4321.
+
+### Production Build
+```bash
+bun run build
+```
+Creates optimized production build in `_site/` directory.
+
+### Preview Production Build
+```bash
+bun run preview
+```
+Serves the production build on port 4173 for testing.
+
+### Clean Build Directory
+```bash
+bun run clean
+```
+Removes the `_site/` build directory.
+
+### Code Formatting (Biome)
+```bash
+bunx @biomejs/biome format --write .
+bunx @biomejs/biome check --write .
 ```
 
 ### Creating New Svelte Component
 ```bash
 bun scripts/new-component.js ComponentName
 ```
-
-### Development Server
-```bash
-bun run dev
-```
-
-### Production Build
-```bash
-bun run build
-```
+Generates both `.svelte` and `.js` loader files in `src/islands/` with proper templates.
 
 ## Performance Expectations
 
@@ -288,6 +292,20 @@ bun run build
 - **Older Browsers**: Graceful degradation (static content works)
 - **No JavaScript**: All content accessible without JS
 
----
+## Adding New Components
 
-*Last updated: $(date)*
+### For Vanilla JS Components:
+1. Create component file in `src/components/ComponentName.js`
+2. Register in `src/assets/main.js` vanillaComponents object
+3. Use in HTML: `<is-land on:interaction type="vanilla" component="component-name">`
+
+### For Svelte Components:
+1. Use script: `bun scripts/new-component.js ComponentName`
+2. Register in `src/assets/main.js` svelteComponents object  
+3. Use in HTML: `<is-land on:visible type="svelte" component="componentname">`
+
+### Important Notes:
+- Component names in HTML use kebab-case for vanilla, lowercase for Svelte
+- All new Svelte components automatically get access to shared state via `app-state.svelte.js`
+- Svelte runtime is cached after first component load
+- Components are loaded only when their `<is-land>` trigger condition is met

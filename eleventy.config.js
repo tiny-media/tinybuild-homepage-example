@@ -1,9 +1,8 @@
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-import path from "path";
-import { fileURLToPath } from "url";
+import { eleventyVitePluginConfig } from "./src/_utilities/eleventyVitePluginConfig.js";
 
 export default async function (eleventyConfig) {
+	// Server Configuration
 	eleventyConfig.setServerOptions({
 		domDiff: true,
 		port: 4321,
@@ -11,52 +10,13 @@ export default async function (eleventyConfig) {
 		showAllHosts: false,
 	});
 
+	// Vite Plugin Configuration
 	eleventyConfig.addPlugin(EleventyVitePlugin, {
-		tempFolderName: ".11ty-vite", // Default name of the temp folder
-
-		// Options passed to the Eleventy Dev Server
-		// Defaults
-		serverOptions: {
-			module: "@11ty/eleventy-dev-server",
-			domDiff: false,
-		},
-
-		// Defaults
-		viteOptions: {
-			clearScreen: false,
-			appType: "mpa",
-			plugins: [svelte()],
-
-			resolve: {
-				alias: {
-					'/src': path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src')
-				}
-			},
-
-			server: {
-				middlewareMode: true,
-			},
-
-			build: {
-				emptyOutDir: true,
-				rollupOptions: {
-					input: {
-						main: "src/assets/main.js"
-					},
-					output: {
-						manualChunks: {
-							// Shared Svelte runtime chunk
-							svelte: ['svelte']
-						}
-					}
-				}
-			},
-		},
+		viteOptions: eleventyVitePluginConfig(),
 	});
 
 	// Static files to pass through
-	eleventyConfig.addPassthroughCopy("src/assets");
-	eleventyConfig.addPassthroughCopy("src/islands");
+	// eleventyConfig.addPassthroughCopy("src/assets");
 
 	eleventyConfig.setServerPassthroughCopyBehavior("copy");
 

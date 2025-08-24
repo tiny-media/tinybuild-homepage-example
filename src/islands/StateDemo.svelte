@@ -2,44 +2,30 @@
   import { appState, updateTheme, incrementCounter } from './app-state.svelte.js';
   
   let { } = $props();
-  let stateValue = $state();
   
   // Track when this component mounts
-  $effect(() => {
-    appState.update(state => ({
-      ...state,
-      counters: state.counters + 1
-    }));
+  import { onMount, onDestroy } from 'svelte';
+  
+  onMount(() => {
+    appState.counters++;
     console.log('🟦 Svelte: StateDemo component mounted');
-    
-    return () => {
-      appState.update(state => ({
-        ...state,
-        counters: state.counters - 1
-      }));
-      console.log('🟦 Svelte: StateDemo component unmounted');
-    };
   });
   
-  // Subscribe to store changes
-  $effect(() => {
-    const unsubscribe = appState.subscribe(value => {
-      stateValue = value;
-    });
-    return unsubscribe;
+  onDestroy(() => {
+    appState.counters--;
+    console.log('🟦 Svelte: StateDemo component unmounted');
   });
 </script>
 
 <div class="state-demo">
   <h3>🔗 Shared State Demo</h3>
   
-  {#if stateValue}
   <div class="stats">
-    <p><strong>Active Components:</strong> {stateValue.counters}</p>
-    <p><strong>Total Clicks:</strong> {stateValue.totalClicks}</p>
-    <p><strong>Current Theme:</strong> {stateValue.theme}</p>
-    {#if stateValue.lastActivity}
-      <p><strong>Last Activity:</strong> {new Date(stateValue.lastActivity).toLocaleTimeString()}</p>
+    <p><strong>Active Components:</strong> {appState.counters}</p>
+    <p><strong>Total Clicks:</strong> {appState.totalClicks}</p>
+    <p><strong>Current Theme:</strong> {appState.theme}</p>
+    {#if appState.lastActivity}
+      <p><strong>Last Activity:</strong> {new Date(appState.lastActivity).toLocaleTimeString()}</p>
     {/if}
   </div>
   
@@ -48,24 +34,23 @@
       Increment Global Counter
     </button>
     
-    <button onclick={() => updateTheme(stateValue.theme === 'light' ? 'dark' : 'light')}>
-      Toggle Theme ({stateValue.theme === 'light' ? 'Switch to Dark' : 'Switch to Light'})
+    <button onclick={() => updateTheme(appState.theme === 'light' ? 'dark' : 'light')}>
+      Toggle Theme ({appState.theme === 'light' ? 'Switch to Dark' : 'Switch to Light'})
     </button>
   </div>
   
   <div class="visits">
     <h4>Page Visits:</h4>
-    {#if stateValue.pageVisits.length === 0}
+    {#if appState.pageVisits.length === 0}
       <p><em>No page visits tracked yet</em></p>
     {:else}
       <ul>
-        {#each stateValue.pageVisits.slice(-5) as visit}
+        {#each appState.pageVisits.slice(-5) as visit}
           <li>{visit.page} - {new Date(visit.timestamp).toLocaleTimeString()}</li>
         {/each}
       </ul>
     {/if}
   </div>
-  {/if}
 </div>
 
 <style>
