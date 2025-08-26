@@ -1,0 +1,54 @@
+{{# VentoJS utility functions for template formatting #}}
+
+{{ export function formatDate(dateString) }}
+  {{ set date = new Date(dateString) }}
+  {{ date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  }) }}
+{{ /export }}
+
+{{ export function formatFileSize(bytes) }}
+  {{ if bytes === 0 }}0 Bytes{{ /if }}
+  {{ set k = 1024 }}
+  {{ set sizes = ['Bytes', 'KB', 'MB', 'GB'] }}
+  {{ set i = Math.floor(Math.log(bytes) / Math.log(k)) }}
+  {{ (bytes / Math.pow(k, i)).toFixed(1) }} {{ sizes[i] }}
+{{ /export }}
+
+{{ export function generateId(text) }}
+  {{ text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') }}
+{{ /export }}
+
+{{ export function createStatusBadge(level, text) }}
+  {{ set colors = {
+    info: { bg: '#f0f9ff', border: '#0ea5e9', icon: 'ℹ️' },
+    success: { bg: '#dcfce7', border: '#16a34a', icon: '✅' },
+    warning: { bg: '#fef3c7', border: '#f59e0b', icon: '⚠️' },
+    error: { bg: '#fee2e2', border: '#dc2626', icon: '❌' }
+  } }}
+  {{ set color = colors[level] || colors.info }}
+  <div style="background: {{ color.bg }}; border: 1px solid {{ color.border }}; padding: 0.5rem 1rem; border-radius: 4px; display: inline-block; margin: 0.25rem;">
+    {{ color.icon }} {{ text }}
+  </div>
+{{ /export }}
+
+{{ export function renderCodeBlock(code, language = 'javascript') }}
+  <pre style="background: #f8fafc; padding: 1rem; border-radius: 6px; overflow-x: auto; border: 1px solid #e2e8f0;"><code class="language-{{ language }}">{{ code |> escape }}</code></pre>
+{{ /export }}
+
+{{ export function islandPlaceholder(componentType, message) }}
+  {{ set bgColors = {
+    vanilla: '#fffbeb',
+    svelte: '#faf5ff'
+  } }}
+  {{ set borderColors = {
+    vanilla: '#f59e0b', 
+    svelte: '#a855f7'
+  } }}
+  <div style="padding: 1.5rem; border: 2px dashed {{ borderColors[componentType] || '#6b7280' }}; border-radius: 8px; background: {{ bgColors[componentType] || '#f9fafb' }}; text-align: center;">
+    {{ if componentType === 'vanilla' }}🟨{{ else if componentType === 'svelte' }}🟦{{ else }}⚫{{ /if }} {{ message }}<br>
+    <small>{{ componentType |> toUpperCase }} component loading...</small>
+  </div>
+{{ /export }}

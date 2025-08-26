@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "eleventy --serve --incremental --ignore-initial --quiet",
-    "build": "NODE_ENV=production eleventy",
+    "build": "npm run clean && NODE_ENV=production eleventy",
     "preview": "eleventy --serve --port 4173 --input _site",
-    "clean": "rm -rf _site"
+    "clean": "rm -rf _site .11ty-vite"
   },
   "dependencies": {
     "@11ty/eleventy": "^4.0.0-alpha.4",

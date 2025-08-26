@@ -1,5 +1,10 @@
+{{ import { formatDate, generateId } from "../utils/formatters.vto" }}
+
+{{ set buildTime = new Date().toISOString() }}
+{{ set pageId = generateId(title) }}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-page="{{ pageId }}" data-build="{{ buildTime }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +12,8 @@
   <script type="module" src="/assets/main.js"></script>
   {{ /if }}
   <title>{{ title || "Eleventy + VentoJS + Islands" }}</title>
+  <meta name="description" content="{{ description || 'Progressive island architecture with Eleventy, VentoJS, and Svelte 5' }}">
+  <meta name="build-time" content="{{ buildTime }}">
   <style>
     body {
       font-family: system-ui, sans-serif;

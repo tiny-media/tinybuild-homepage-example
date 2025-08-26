@@ -1,5 +1,23 @@
+{{ import utils from "./_includes/fragments/code-examples.vto" }}
+{{ import { createStatusBadge, formatFileSize } from "./_includes/utils/formatters.vto" }}
+
+{{ set performanceBenefits = [
+  { metric: 'JavaScript Bundle', value: 0, unit: 'KB', status: 'excellent' },
+  { metric: 'Time to Interactive', value: '< 16ms', status: 'excellent' },
+  { metric: 'Network Requests', value: 1, unit: ' (HTML only)', status: 'excellent' },
+  { metric: 'Memory Usage', value: '< 1MB', status: 'excellent' }
+] }}
+
+{{ set architectureLevels = [
+  { level: 0, name: 'Static', js: 0, framework: 0, components: 0, description: 'Pure HTML - Maximum performance' },
+  { level: 1, name: 'Vanilla', js: 3000, framework: 0, components: 2000, description: 'On-demand vanilla JS' },
+  { level: 2, name: 'First Svelte', js: 3000, framework: 26580, components: 1380, description: 'Runtime investment' },
+  { level: 3, name: 'Multiple Svelte', js: 3000, framework: 0, components: 4740, description: 'Runtime efficiency' }
+] }}
+
 {{ layout "layouts/base.vto" {
   title: "Level 0: Static Homepage - No JavaScript",
+  description: "Demonstration of zero-JavaScript baseline for progressive island architecture",
   statusBg: "#f0f9ff",
   statusBorder: "#0ea5e9",
   navigation: [
@@ -13,25 +31,46 @@
 <header>
   <h1>🏠 Level 0: Static Homepage</h1>
   <div class="status">
-    <strong>JavaScript Status:</strong> None loaded ✨<br>
-    <strong>Bundle Size:</strong> 0 KB<br>
-    <strong>Performance:</strong> Optimal - Static HTML only
+    {{ for benefit of performanceBenefits }}
+      {{ createStatusBadge(benefit.status, `${benefit.metric}: ${benefit.value}${benefit.unit || ''}`) }}
+    {{ /for }}
   </div>
 </header>
 
 <h2>Progressive is-land Loading Demo</h2>
-<p>This homepage demonstrates <strong>zero JavaScript loading</strong> - the fastest possible web experience. No frameworks, no bundlers, no components - just pure HTML and CSS.</p>
+<p>This homepage demonstrates <strong>zero JavaScript loading</strong> - the fastest possible web experience.</p>
 
-<p>Navigate through the test pages to see how JavaScript loads progressively based on the complexity needed:</p>
+<h3>Architecture Progression</h3>
+<div style="overflow-x: auto; margin: 1rem 0;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem; background: white;">
+    <thead>
+      <tr style="background: #f8fafc;">
+        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e2e8f0;">Level</th>
+        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e2e8f0;">Strategy</th>
+        <th style="padding: 0.75rem; text-align: right; border: 1px solid #e2e8f0;">Bundle Size</th>
+        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e2e8f0;">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ for arch of architectureLevels }}
+        {{ set totalSize = arch.js + arch.framework + arch.components }}
+        {{ set rowColor = arch.level === 0 ? '#f0f9ff' : arch.level === 1 ? '#fffbeb' : arch.level === 2 ? '#dcfce7' : '#f3e8ff' }}
+        <tr style="background: {{ rowColor }};">
+          <td style="padding: 0.75rem; border: 1px solid #e2e8f0; font-weight: bold;">{{ arch.level }}</td>
+          <td style="padding: 0.75rem; border: 1px solid #e2e8f0;">{{ arch.name }}</td>
+          <td style="padding: 0.75rem; border: 1px solid #e2e8f0; text-align: right; font-family: monospace;">
+            {{ formatFileSize(totalSize) }}
+          </td>
+          <td style="padding: 0.75rem; border: 1px solid #e2e8f0; color: #4b5563;">{{ arch.description }}</td>
+        </tr>
+      {{ /for }}
+    </tbody>
+  </table>
+</div>
 
-<h3>What This Demonstrates</h3>
-<ul>
-  <li><strong>Zero JavaScript:</strong> No JS files are requested from the server</li>
-  <li><strong>Maximum Performance:</strong> Instant loading with no parsing overhead</li>
-  <li><strong>SEO Friendly:</strong> All content is immediately available to crawlers</li>
-  <li><strong>Accessibility:</strong> Works perfectly without JavaScript</li>
-  <li><strong>Network Efficiency:</strong> Minimal bandwidth usage</li>
-</ul>
+<h3>Zero JavaScript Benefits</h3>
+{{ import { performanceMetrics } from "./_includes/fragments/code-examples.vto" }}
+{{ performanceMetrics(0) }}
 
 <h3>Technical Details</h3>
 <p>This page intentionally does <strong>not</strong> include:</p>

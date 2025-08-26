@@ -1,3 +1,11 @@
+{{ import { performanceStats, loadingSequence, performanceComparison } from "./_includes/components/performance-stats.vto" }}
+{{ import { islandDemo } from "./_includes/components/island-showcase.vto" }}
+
+{{ set components = ['counter', 'greeting', 'statedemo'] }}
+{{ set runtimeCost = 26580 }}
+{{ set componentSizes = { counter: 1380, greeting: 1220, statedemo: 2140 } }}
+{{ set totalComponentSize = Object.values(componentSizes).reduce((sum, size) => sum + size, 0) }}
+
 {{ layout "layouts/base.vto" {
   title: "Level 3: Complex Page - Multiple Svelte Components",
   loadJS: true,
@@ -13,53 +21,31 @@
 
 <header>
   <h1>🔗 Level 3: Complex Page</h1>
-  <div class="status">
-    <strong>JavaScript Status:</strong> Multiple Svelte components sharing cached runtime 🟦<br>
-    <strong>Bundle Size:</strong> ~30KB total (runtime cached, component code only)<br>
-    <strong>Components:</strong> Multiple interactive components + shared state
-  </div>
+  {{ performanceStats(3, 3000, 0, totalComponentSize) }}
 </header>
 
 <h2>Multiple Svelte Components</h2>
-<p>This page demonstrates the <strong>efficiency of shared runtime</strong> - multiple Svelte components that reuse the cached runtime and share global state seamlessly.</p>
+<p>This page demonstrates the <strong>efficiency of shared runtime</strong> - multiple components reusing cached runtime.</p>
 
-<div class="components-grid" style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-  <div class="component-demo" style="border: 2px dashed #a855f7; padding: 1rem; margin: 1rem 0; border-radius: 6px; background: #faf5ff;">
-    <h4>Counter Component</h4>
-    <p>A reactive counter that updates global state on each interaction.</p>
-    
-    <is-land on:visible type="svelte" component="counter" props='{"initialCount": 0}'>
-      <div style="padding: 1rem; border: 2px dashed #a855f7; border-radius: 8px; background: #faf5ff; text-align: center;">
-        🟦 Loading Counter...<br>
-        <small>Reusing cached Svelte runtime</small>
-      </div>
-    </is-land>
-  </div>
+{{ set efficiencyData = [
+  { name: 'Individual Runtimes', jsSize: 3000, frameworkSize: runtimeCost * 3, componentSize: totalComponentSize, components: 3 },
+  { name: 'Shared Runtime (Actual)', jsSize: 3000, frameworkSize: 0, componentSize: totalComponentSize, components: 3 }
+] }}
 
-  <div class="component-demo" style="border: 2px dashed #a855f7; padding: 1rem; margin: 1rem 0; border-radius: 6px; background: #faf5ff;">
-    <h4>Greeting Component</h4>
-    <p>An interactive greeting component with time display and state management.</p>
-    
-    <is-land on:visible type="svelte" component="greeting" props='{"name": "Developer", "showTime": true}'>
-      <div style="padding: 1rem; border: 2px dashed #a855f7; border-radius: 8px; background: #faf5ff; text-align: center;">
-        🟦 Loading Greeting...<br>
-        <small>Component code only (~2KB)</small>
-      </div>
-    </is-land>
-  </div>
+{{ set savings = (runtimeCost * 3) - 0 }}
+<div style="background: #f0fdf4; padding: 1rem; border-radius: 6px; border: 1px solid #16a34a; margin: 1rem 0;">
+  <strong>🎯 Runtime Sharing Efficiency:</strong><br>
+  Without sharing: {{ ((runtimeCost * 3 + totalComponentSize + 3000) / 1024).toFixed(1) }}KB<br>
+  With sharing: {{ ((totalComponentSize + 3000) / 1024).toFixed(1) }}KB<br>
+  <span style="color: #166534; font-weight: bold;">Savings: {{ (savings / 1024).toFixed(1) }}KB ({{ ((savings / (runtimeCost * 3 + totalComponentSize + 3000)) * 100).toFixed(1) }}% reduction)</span>
 </div>
 
-<div class="component-demo" style="border: 2px dashed #a855f7; padding: 1rem; margin: 1rem 0; border-radius: 6px; background: #faf5ff;">
-  <h4>Shared State Demo</h4>
-  <p>This component shows global state shared across all Svelte components - including counters, theme, and activity tracking.</p>
-  
-  <is-land on:visible type="svelte" component="statedemo">
-    <div style="padding: 1.5rem; border: 2px dashed #a855f7; border-radius: 8px; background: #faf5ff; text-align: center;">
-      🟦 Loading State Demo...<br>
-      <small>Shared global state management</small>
-    </div>
-  </is-land>
-</div>
+<h3>Component Showcase</h3>
+
+{{ for component of components }}
+  {{ set props = component === 'counter' ? { initialCount: 0 } : component === 'greeting' ? { name: 'Developer', showTime: true } : {} }}
+  {{ islandDemo(component, 'svelte', props, 'visible') }}
+{{ /for }}
 
 <h3>What This Demonstrates</h3>
 <ul>

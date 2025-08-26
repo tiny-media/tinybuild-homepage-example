@@ -1,3 +1,10 @@
+{{ import { performanceStats, loadingSequence } from "./_includes/components/performance-stats.vto" }}
+{{ import { islandDemo, performanceComparison } from "./_includes/components/island-showcase.vto" }}
+
+{{ set runtimeInvestment = 26580 }}
+{{ set componentCost = 1380 }}
+{{ set totalCost = 3000 + runtimeInvestment + componentCost }}
+
 {{ layout "layouts/base.vto" {
   title: "Level 2: Interactive Page - First Svelte Component",
   loadJS: true,
@@ -13,29 +20,22 @@
 
 <header>
   <h1>🎯 Level 2: Interactive Page</h1>
-  <div class="status">
-    <strong>JavaScript Status:</strong> Svelte runtime loaded on first component 🟦<br>
-    <strong>Bundle Size:</strong> ~25KB total (includes Svelte runtime)<br>
-    <strong>Components:</strong> First Svelte component + shared state
-  </div>
+  {{ performanceStats(2, 3000, runtimeInvestment, componentCost) }}
 </header>
 
 <h2>First Svelte Component</h2>
-<p>This page demonstrates loading the <strong>first Svelte component</strong>, which triggers loading the Svelte runtime (~15KB). This is the "runtime cost" that subsequent Svelte components get for free.</p>
+<p>This page demonstrates loading the <strong>first Svelte component</strong>, which triggers loading the Svelte runtime. This is the "runtime investment" that all subsequent Svelte components benefit from.</p>
+
+{{ performanceComparison([
+  { name: 'Without Runtime Sharing', jsSize: 3000, frameworkSize: 26580, componentSize: 1380, components: 1 },
+  { name: 'With Runtime Sharing (This Page)', jsSize: 3000, frameworkSize: 26580, componentSize: 1380, components: 1 },
+  { name: 'Next Svelte Component', jsSize: 0, frameworkSize: 0, componentSize: 1380, components: 1 },
+  { name: 'Multiple Svelte Components', jsSize: 0, frameworkSize: 0, componentSize: 4140, components: 3 }
+]) }}
 
 <h3>Interactive Svelte Component</h3>
 
-<div class="component-demo" style="border: 2px dashed #16a34a; padding: 1rem; margin: 1rem 0; border-radius: 6px; background: #f0fdf4;">
-  <h4>Counter Component (loads when visible)</h4>
-  <p>This counter component will automatically load when it becomes visible. It includes reactive state, event handlers, and connects to shared global state.</p>
-  
-  <is-land on:visible type="svelte" component="counter" props='{"initialCount": 10}'>
-    <div style="padding: 1.5rem; border: 2px dashed #16a34a; border-radius: 8px; background: #f0fdf4; text-align: center;">
-      🟦 Loading Svelte Counter component...<br>
-      <small>Svelte runtime loading for the first time</small>
-    </div>
-  </is-land>
-</div>
+{{ islandDemo('counter', 'svelte', { initialCount: 10 }, 'visible') }}
 
 <h3>What This Demonstrates</h3>
 <ul>

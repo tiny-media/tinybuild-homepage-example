@@ -1,0 +1,114 @@
+{{# Advanced island component showcase using VentoJS features #}}
+
+{{ import { islandPlaceholder, formatFileSize } from "../utils/formatters.vto" }}
+
+{{ export function islandDemo(component, type, props = {}, trigger = "visible") }}
+  {{ set triggerIcons = {
+    visible: '👁️',
+    interaction: '👆',
+    idle: '⏱️',
+    media: '📱'
+  } }}
+  
+  {{ set componentData = {
+    counter: { 
+      title: 'Interactive Counter',
+      description: 'Reactive state with localStorage persistence and cross-tab sync',
+      estimatedSize: 1380,
+      features: ['Svelte 5 runes', 'Global state', 'Cross-tab sync', 'Persistence']
+    },
+    greeting: {
+      title: 'Dynamic Greeting', 
+      description: 'Time-aware greeting with personalized messages',
+      estimatedSize: 1220,
+      features: ['Async operations', 'Date formatting', 'Props handling']
+    },
+    statedemo: {
+      title: 'State Management Demo',
+      description: 'Comprehensive shared state demonstration',
+      estimatedSize: 2140,
+      features: ['Theme switching', 'Activity tracking', 'Visit history', 'Real-time updates']
+    },
+    'mobile-menu': {
+      title: 'Mobile Navigation',
+      description: 'Progressive navigation menu for mobile devices', 
+      estimatedSize: 1330,
+      features: ['DOM manipulation', 'ARIA support', 'Dynamic creation', 'Event handling']
+    },
+    'search-toggle': {
+      title: 'Search Interface',
+      description: 'Modal search interface with keyboard navigation',
+      estimatedSize: 1720, 
+      features: ['Modal management', 'Keyboard shortcuts', 'Focus management']
+    },
+  } }}
+  
+  {{ set data = componentData[component] || { title: component, description: 'Component', estimatedSize: 1000, features: [] } }}
+  {{ set propsJson = Object.keys(props).length > 0 ? ` props='${JSON.stringify(props)}'` : '' }}
+  
+  <div class="island-showcase" style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin: 1rem 0; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+    <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 1rem;">
+      <div>
+        <h4 style="margin: 0; color: #1e293b;">{{ data.title }}</h4>
+        <p style="margin: 0.25rem 0; color: #64748b; font-size: 0.875rem;">{{ data.description }}</p>
+      </div>
+      <div style="text-align: right; font-size: 0.75rem; color: #6b7280;">
+        {{ triggerIcons[trigger] || '⚡' }} on:{{ trigger }}<br>
+        ~{{ formatFileSize(data.estimatedSize) }}
+      </div>
+    </div>
+    
+    {{ if data.features.length > 0 }}
+    <div style="margin: 1rem 0;">
+      <div style="font-size: 0.75rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">FEATURES:</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+        {{ for feature of data.features }}
+          <span style="background: #e0e7ff; color: #3730a3; padding: 0.125rem 0.5rem; border-radius: 12px; font-size: 0.75rem;">{{ feature }}</span>
+        {{ /for }}
+      </div>
+    </div>
+    {{ /if }}
+    
+    <is-land on:{{ trigger }} type="{{ type }}" component="{{ component }}"{{ propsJson |> safe }}>
+      {{ islandPlaceholder(type, `Loading ${data.title}...`) }}
+    </is-land>
+  </div>
+{{ /export }}
+
+{{ export function performanceComparison(scenarios) }}
+  <div class="performance-comparison" style="background: #f0fdf4; border: 1px solid #16a34a; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+    <h4 style="margin-top: 0; color: #166534;">📈 Performance Comparison</h4>
+    
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+        <thead>
+          <tr style="background: #dcfce7;">
+            <th style="padding: 0.5rem; text-align: left; border: 1px solid #16a34a;">Scenario</th>
+            <th style="padding: 0.5rem; text-align: right; border: 1px solid #16a34a;">Bundle Size</th>
+            <th style="padding: 0.5rem; text-align: right; border: 1px solid #16a34a;">Components</th>
+            <th style="padding: 0.5rem; text-align: center; border: 1px solid #16a34a;">Efficiency</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ for scenario of scenarios }}
+            {{ set efficiency = scenario.frameworkSize > 0 ? 
+                 ((scenario.componentSize / (scenario.jsSize + scenario.frameworkSize + scenario.componentSize)) * 100).toFixed(1) 
+                 : 100 }}
+            <tr style="border-bottom: 1px solid #bbf7d0;">
+              <td style="padding: 0.5rem; border: 1px solid #16a34a; font-weight: 500;">{{ scenario.name }}</td>
+              <td style="padding: 0.5rem; border: 1px solid #16a34a; text-align: right; font-family: monospace;">
+                {{ formatFileSize(scenario.jsSize + scenario.frameworkSize + scenario.componentSize) }}
+              </td>
+              <td style="padding: 0.5rem; border: 1px solid #16a34a; text-align: right;">{{ scenario.components || 0 }}</td>
+              <td style="padding: 0.5rem; border: 1px solid #16a34a; text-align: center;">
+                <span style="padding: 0.125rem 0.5rem; background: {{ efficiency > 80 ? '#dcfce7' : efficiency > 50 ? '#fef3c7' : '#fee2e2' }}; border-radius: 12px; font-weight: 600;">
+                  {{ efficiency }}%
+                </span>
+              </td>
+            </tr>
+          {{ /for }}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{{ /export }}

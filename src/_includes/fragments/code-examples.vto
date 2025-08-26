@@ -1,0 +1,90 @@
+{{# VentoJS fragments for reusable code examples #}}
+
+{{ export function islandUsage(component, type = 'svelte', trigger = 'visible', props = null) }}
+  {{ echo }}
+<is-land on:{{ trigger }} type="{{ type }}" component="{{ component }}"{{ if props }} props='{{ JSON.stringify(props) }}'{{ /if }}>
+  <div>Loading {{ component }} component...</div>
+</is-land>
+  {{ /echo }}
+{{ /export }}
+
+{{ set vanillaComponentPattern }}
+// src/components/ComponentName.js
+export default function(target, props = {}) {
+  const element = target.querySelector('selector');
+  
+  function handleEvent() {
+    // Component logic here
+    console.log('Component interaction');
+  }
+  
+  element.addEventListener('event', handleEvent);
+  
+  // Return cleanup function
+  return () => {
+    element.removeEventListener('event', handleEvent);
+  };
+}
+{{ /set }}
+
+{{ export vanillaComponentPattern = vanillaComponentPattern }}
+
+{{ set svelteComponentPattern }}
+<!-- src/islands/ComponentName.svelte -->
+<script>
+  import { appState } from './app-state.svelte.js';
+  import { onMount, onDestroy } from 'svelte';
+  
+  let { propName = defaultValue } = $props();
+  let localState = $state(initialValue);
+  
+  onMount(() => {
+    appState.counters++;
+  });
+  
+  onDestroy(() => {
+    appState.counters--;
+  });
+  
+  $effect(() => {
+    // Reactive side effects
+  });
+</script>
+
+<div class="component">
+  <p>Value: {localState}</p>
+  <button onclick={() => localState++}>Increment</button>
+</div>
+{{ /set }}
+
+{{ export svelteComponentPattern = svelteComponentPattern }}
+
+{{ export function performanceMetrics(bundleSize = 0) }}
+  {{ set bundleSizeFormatted = bundleSize === 0 ? "0 Bytes" : 
+       bundleSize < 1024 ? bundleSize + " Bytes" :
+       bundleSize < 1048576 ? (bundleSize / 1024).toFixed(1) + " KB" :
+       (bundleSize / 1048576).toFixed(1) + " MB" }}
+  
+  {{ set metrics = [
+    { label: 'Time to Interactive', value: '< 50ms', status: 'excellent' },
+    { label: 'First Contentful Paint', value: '< 100ms', status: 'excellent' },
+    { label: 'Cumulative Layout Shift', value: '0.001', status: 'excellent' },
+    { label: 'JavaScript Bundle', value: bundleSizeFormatted, status: bundleSize < 5000 ? 'excellent' : 'good' }
+  ] }}
+  
+  <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+    {{ for metric of metrics }}
+      {{ set statusColors = {
+        excellent: { bg: '#dcfce7', border: '#16a34a', text: '#166534' },
+        good: { bg: '#fef3c7', border: '#f59e0b', text: '#92400e' },
+        warning: { bg: '#fee2e2', border: '#dc2626', text: '#991b1b' }
+      } }}
+      {{ set colors = statusColors[metric.status] || statusColors.good }}
+      
+      <div style="background: {{ colors.bg }}; border: 1px solid {{ colors.border }}; padding: 1rem; border-radius: 6px; text-align: center;">
+        <div style="font-weight: bold; color: {{ colors.text }};">{{ metric.value }}</div>
+        <div style="font-size: 0.875rem; color: #6b7280;">{{ metric.label }}</div>
+      </div>
+    {{ /for }}
+  </div>
+{{ /export }}

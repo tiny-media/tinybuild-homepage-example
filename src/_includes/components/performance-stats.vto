@@ -1,0 +1,62 @@
+{{# Performance statistics component using advanced VentoJS features #}}
+
+{{ import { formatFileSize, createStatusBadge } from "../utils/formatters.vto" }}
+
+{{ export function performanceStats(level, jsSize, frameworkSize, componentSize) }}
+  {{ set totalSize = jsSize + frameworkSize + componentSize }}
+  {{ set statusLevel = totalSize < 5000 ? 'success' : totalSize < 20000 ? 'warning' : 'info' }}
+  
+  <div class="performance-stats" style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; margin: 1rem 0;">
+    <h4 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+      📊 Performance Level {{ level }}
+      {{ createStatusBadge(statusLevel, formatFileSize(totalSize)) }}
+    </h4>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin: 1rem 0;">
+      <div style="text-align: center;">
+        <div style="font-weight: bold; color: #6b7280;">Initial JS</div>
+        <div style="font-size: 1.25rem; color: #374151;">{{ formatFileSize(jsSize) }}</div>
+      </div>
+      
+      {{ if frameworkSize > 0 }}
+      <div style="text-align: center;">
+        <div style="font-weight: bold; color: #6b7280;">Framework</div>
+        <div style="font-size: 1.25rem; color: #7c3aed;">{{ formatFileSize(frameworkSize) }}</div>
+      </div>
+      {{ /if }}
+      
+      {{ if componentSize > 0 }}
+      <div style="text-align: center;">
+        <div style="font-weight: bold; color: #6b7280;">Components</div>
+        <div style="font-size: 1.25rem; color: #059669;">{{ formatFileSize(componentSize) }}</div>
+      </div>
+      {{ /if }}
+      
+      <div style="text-align: center; border-left: 2px solid #e2e8f0; padding-left: 1rem;">
+        <div style="font-weight: bold; color: #6b7280;">Total</div>
+        <div style="font-size: 1.5rem; font-weight: bold; color: #111827;">{{ formatFileSize(totalSize) }}</div>
+      </div>
+    </div>
+    
+    {{ set efficiency = frameworkSize > 0 ? ((componentSize / totalSize) * 100).toFixed(1) : 100 }}
+    <div style="background: #f0fdf4; padding: 0.75rem; border-radius: 4px; border: 1px solid #16a34a; font-size: 0.875rem;">
+      <strong>Efficiency:</strong> {{ efficiency }}% of total size is actual component code
+    </div>
+  </div>
+{{ /export }}
+
+{{ export function loadingSequence(steps) }}
+  <div class="loading-sequence" style="background: #fefce8; padding: 1rem; border-radius: 6px; border: 1px solid #eab308;">
+    <h5 style="margin-top: 0; color: #92400e;">⚡ Loading Sequence</h5>
+    <ol style="margin: 0; padding-left: 1.5rem;">
+      {{ for step of steps }}
+        <li style="margin: 0.25rem 0; color: #451a03;">
+          <strong>{{ step.name }}:</strong> {{ step.description }}
+          {{ if step.size }}
+            <span style="color: #92400e; font-weight: bold;">({{ formatFileSize(step.size) }})</span>
+          {{ /if }}
+        </li>
+      {{ /for }}
+    </ol>
+  </div>
+{{ /export }}

@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 Technical reference for building progressive island-based websites with Eleventy 4.0, Vite 7, and Svelte 5.
 
 ## Architecture Overview
@@ -122,7 +124,9 @@ export function eleventyVitePluginConfig() {
 import "./styles/tokens.css";
 import "@11ty/is-land/is-land.js";
 
-// Component registries
+console.log('🟩 Main bundle loaded - is-land initialized');
+
+// Component registries for static analysis
 const vanillaComponents = {
   'mobile-menu': () => import('/src/components/mobile-menu.js'),
   'search-toggle': () => import('/src/components/search-toggle.js')
@@ -134,42 +138,77 @@ const svelteComponents = {
   'statedemo': () => import('/src/islands/StateDemo.svelte')
 };
 
-// Wait for is-land custom element
+// Ensure is-land is loaded before registering loaders
 await customElements.whenDefined('is-land');
 
-// Vanilla JS loader
+// Vanilla JS component loader
 Island.addInitType("vanilla", async (island) => {
   const componentName = island.getAttribute("component");
-  const props = JSON.parse(island.getAttribute("props") || "{}");
+  const propsAttr = island.getAttribute("props");
+  const props = propsAttr ? JSON.parse(propsAttr) : {};
   
-  const importFn = vanillaComponents[componentName];
-  if (!importFn) throw new Error(`Unknown vanilla component: ${componentName}`);
+  console.log(`🟨 Loading vanilla component: ${componentName}`);
   
-  const loader = await importFn();
-  island.innerHTML = '';
-  return loader.default(island, props);
+  try {
+    const importFn = vanillaComponents[componentName];
+    if (!importFn) {
+      throw new Error(`Unknown vanilla component: ${componentName}`);
+    }
+    const loader = await importFn();
+    island.innerHTML = ''; // Clear placeholder
+    return loader.default(island, props);
+  } catch (error) {
+    console.error(`Failed to load vanilla component ${componentName}:`, error);
+  }
 });
 
-// Svelte loader with runtime caching
+// Shared Svelte runtime cache
 let svelteRuntimePromise = null;
 
+// Svelte component loader  
 Island.addInitType("svelte", async (island) => {
   const componentName = island.getAttribute("component");
-  const props = JSON.parse(island.getAttribute("props") || "{}");
+  const propsAttr = island.getAttribute("props");
+  const props = propsAttr ? JSON.parse(propsAttr) : {};
   
-  // Cache Svelte runtime across all components
-  if (!svelteRuntimePromise) {
-    svelteRuntimePromise = import('svelte');
+  console.log(`🟦 Loading Svelte component: ${componentName}`);
+  
+  try {
+    // Load Svelte runtime once and cache it
+    if (!svelteRuntimePromise) {
+      console.log('🟦 Loading Svelte runtime for first time...');
+      svelteRuntimePromise = import('svelte');
+    } else {
+      console.log('🟦 Using cached Svelte runtime');
+    }
+    
+    const importFn = svelteComponents[componentName];
+    if (!importFn) {
+      throw new Error(`Unknown Svelte component: ${componentName}`);
+    }
+    
+    // Load both runtime and component
+    const svelte = await svelteRuntimePromise;
+    const componentModule = await importFn();
+    
+    island.innerHTML = ''; // Clear placeholder
+    
+    // Mount component using Svelte 5 mount API
+    const component = svelte.mount(componentModule.default, { 
+      target: island,
+      props: props
+    });
+    
+    console.log(`🟦 ${componentName} mounted successfully`);
+    return component;
+    
+  } catch (error) {
+    console.error(`Failed to load Svelte component ${componentName}:`, error);
+    island.innerHTML = `<div style="color: red; padding: 1rem;">Error: ${error.message}</div>`;
   }
-  
-  const [svelte, componentModule] = await Promise.all([
-    svelteRuntimePromise,
-    svelteComponents[componentName]()
-  ]);
-  
-  island.innerHTML = '';
-  return svelte.mount(componentModule.default, { target: island, props });
 });
+
+console.log('🟩 Component loaders registered');
 ```
 
 ## Component Patterns
@@ -392,15 +431,28 @@ src/
 │   ├── mobile-menu.js
 │   └── search-toggle.js
 ├── islands/                 # Svelte components
-│   ├── Counter.svelte       # Component
-│   ├── Counter.js          # Loader (legacy, can be removed)
-│   └── app-state.svelte.js  # Global state
+│   ├── Counter.svelte       # Interactive counter component
+│   ├── Greeting.svelte      # Simple greeting component
+│   ├── StateDemo.svelte     # Cross-tab state demo
+│   ├── app-state.svelte.js  # Global state with cross-tab sync
+│   └── *.js                 # Legacy loaders (being phased out)
 ├── _includes/
-│   └── layouts/
-│       └── base.vto         # VentoJS layout template
+│   ├── layouts/
+│   │   └── base.vto         # Main layout template
+│   ├── components/          # Reusable VentoJS components
+│   │   ├── island-showcase.vto
+│   │   └── performance-stats.vto
+│   ├── fragments/           # Template fragments
+│   │   └── code-examples.vto
+│   └── utils/               # VentoJS utility functions
+│       └── formatters.vto   # Formatters and helpers
 ├── _utilities/
 │   └── eleventyVitePluginConfig.js  # Vite configuration
 ├── _data/                   # Eleventy data files
+│   ├── site.js              # Site-wide data
+│   └── navigation.js        # Navigation structure
+├── content/                 # Content pages
+│   └── pages/
 └── *.vto                    # VentoJS page templates
 ```
 
@@ -461,12 +513,17 @@ const svelteComponents = {
 
 ## Performance Characteristics
 
+Component sizes are tracked in `src/_includes/components/island-showcase.vto` as `estimatedSize` values:
+- **Svelte Runtime Cost**: 26,580 bytes (shared across all components)
+- **Component Sizes**: counter: 1,380b, greeting: 1,220b, statedemo: 2,140b
+- **Vanilla Components**: mobile-menu: 1,330b, search-toggle: 1,720b
+
 | Page Type | Initial JS | Framework JS | Component JS | Total JS |
 |-----------|------------|--------------|--------------|----------|
 | Static    | 0 KB       | 0 KB         | 0 KB         | 0 KB     |
-| Vanilla   | 3 KB       | 0 KB         | 2 KB         | 5 KB     |
-| First Svelte | 3 KB    | 22 KB        | 3 KB         | 28 KB    |
-| Additional Svelte | 3 KB | 0 KB (cached) | 3 KB      | 6 KB     |
+| Vanilla   | 3 KB       | 0 KB         | 1-2 KB       | 4-5 KB   |
+| First Svelte | 3 KB    | 26 KB        | 1-2 KB       | 30-31 KB |
+| Additional Svelte | 3 KB | 0 KB (cached) | 1-2 KB    | 4-5 KB   |
 
 ## Key Implementation Details
 
@@ -530,26 +587,40 @@ Page content goes here
 
 ### Layout Template (`src/_includes/layouts/base.vto`)
 ```vento
+{{ import { formatDate, generateId } from "../utils/formatters.vto" }}
+
+{{ set buildTime = new Date().toISOString() }}
+{{ set pageId = title |> generateId }}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-page="{{ pageId }}" data-build="{{ buildTime }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {{ if loadJS }}
   <script type="module" src="/assets/main.js"></script>
   {{ /if }}
-  <title>{{ title || "Default Title" }}</title>
+  <title>{{ title || "Eleventy + VentoJS + Islands" }}</title>
+  <meta name="description" content="{{ description || 'Progressive island architecture with Eleventy, VentoJS, and Svelte 5' }}">
+  <meta name="build-time" content="{{ buildTime }}">
+  <style>
+    /* Inline critical CSS for immediate rendering */
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; }
+    .nav { background: #f8fafc; padding: 1rem; border-radius: 6px; margin: 2rem 0; }
+    .nav a { display: inline-block; padding: 0.5rem 1rem; margin: 0.25rem; 
+             text-decoration: none; background: #e2e8f0; border-radius: 4px; }
+    .nav a.current { background: #3b82f6; color: white; }
+  </style>
 </head>
 <body>
-  <div class="nav">
-    {{ for navItem of navigation }}
-      <a href="{{ navItem.url }}"{{ if navItem.current }} class="current"{{ /if }}>
-        {{ navItem.label }}
-      </a>
-    {{ /for }}
-  </div>
-  
-  {{ content }}
+  <main>
+    <div class="nav">
+      {{ for navItem of navigation }}
+        <a href="{{ navItem.url }}"{{ if navItem.current }} class="current"{{ /if }}>{{ navItem.label }}</a>
+      {{ /for }}
+    </div>
+    {{ content }}
+  </main>
 </body>
 </html>
 ```
@@ -579,11 +650,215 @@ Page content goes here
 - **Automatic Escaping**: Disabled by default, use `|> safe` for trusted HTML
 - **Whitespace Control**: `{{- }}` and `{{ -}}` for trimming
 
+### VentoJS Components and Utilities
+
+The project includes modular VentoJS components and utilities:
+
+#### Utility Functions (`src/_includes/utils/formatters.vto`)
+Real examples from the codebase:
+
+```vento
+{{# Import utility functions - VentoJS supports destructuring imports #}}
+{{ import { formatDate, formatFileSize, generateId, createStatusBadge } from "../utils/formatters.vto" }}
+
+{{# Function examples with complex logic #}}
+{{ formatDate("2024-01-01") }}        # Human-readable date formatting
+{{ formatFileSize(25600) }}           # File size in appropriate units (25.0 KB)
+{{ generateId("Page Title") }}        # URL-safe ID generation (page-title)
+
+{{# Advanced: Exported function with complex object and conditional logic #}}
+{{ export function createStatusBadge(level, text) }}
+  {{ set colors = {
+    info: { bg: '#f0f9ff', border: '#0ea5e9', icon: 'ℹ️' },
+    success: { bg: '#dcfce7', border: '#16a34a', icon: '✅' },
+    warning: { bg: '#fef3c7', border: '#f59e0b', icon: '⚠️' },
+    error: { bg: '#fee2e2', border: '#dc2626', icon: '❌' },
+    excellent: { bg: '#dcfce7', border: '#16a34a', icon: '🚀' }
+  } }}
+  {{ set color = colors[level] || colors.info }}
+  <span style="background: {{ color.bg }}; color: {{ color.border }}; border: 1px solid {{ color.border }}; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">
+    {{ color.icon }} {{ text }}
+  </span>
+{{ /export }}
+```
+
+#### Template Components (`src/_includes/components/`)
+Real examples from the codebase showing advanced VentoJS techniques:
+
+```vento
+{{# Complex exported function with default parameters and object manipulation #}}
+{{ export function islandDemo(component, type, props = {}, trigger = "visible") }}
+  {{# Advanced: Object literal with nested data structures #}}
+  {{ set triggerIcons = {
+    visible: '👁️',
+    interaction: '👆', 
+    idle: '⏱️',
+    media: '📱'
+  } }}
+  
+  {{# Complex object with multiple component configurations #}}
+  {{ set componentData = {
+    counter: { 
+      title: 'Interactive Counter',
+      description: 'Reactive state with localStorage persistence and cross-tab sync',
+      estimatedSize: 1380,
+      features: ['Svelte 5 runes', 'Global state', 'Cross-tab sync', 'Persistence']
+    },
+    greeting: {
+      title: 'Dynamic Greeting', 
+      description: 'Time-aware greeting with personalized messages',
+      estimatedSize: 1220,
+      features: ['Async operations', 'Date formatting', 'Props handling']
+    }
+  } }}
+  
+  {{# Advanced: Conditional assignment with fallback and property access #}}
+  {{ set data = componentData[component] || { title: component, description: 'Component', estimatedSize: 1000, features: [] } }}
+  
+  {{# JavaScript integration: Object.keys and JSON.stringify in templates #}}
+  {{ set propsJson = Object.keys(props).length > 0 ? ` props='${JSON.stringify(props)}'` : '' }}
+  
+  {{# Conditional rendering with array length check #}}
+  {{ if data.features.length > 0 }}
+    <div style="margin: 1rem 0;">
+      <div style="font-size: 0.75rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">FEATURES:</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+        {{# VentoJS for loop with array iteration #}}
+        {{ for feature of data.features }}
+          <span style="background: #e0e7ff; color: #3730a3; padding: 0.125rem 0.5rem; border-radius: 12px; font-size: 0.75rem;">{{ feature }}</span>
+        {{ /for }}
+      </div>
+    </div>
+  {{ /if }}
+  
+  {{# Echo tag for preventing VentoJS processing of is-land syntax #}}
+  {{ echo }}
+<is-land on:{{ trigger }} type="{{ type }}" component="{{ component }}"{{ propsJson |> safe }}>
+  {{ islandPlaceholder(type, `Loading ${data.title}...`) }}
+</is-land>
+  {{ /echo }}
+{{ /export }}
+
+{{# Usage: Import and call with parameters #}}
+{{ import { islandDemo } from "./_includes/components/island-showcase.vto" }}
+{{ islandDemo('counter', 'svelte', { initialCount: 10 }, 'visible') }}
+```
+
+#### Advanced Mathematical Operations in Templates
+Real performance calculation examples:
+
+```vento
+{{# Complex mathematical expressions with reduce and object methods #}}
+{{ set componentSizes = { counter: 1380, greeting: 1220, statedemo: 2140 } }}
+{{ set totalComponentSize = Object.values(componentSizes).reduce((sum, size) => sum + size, 0) }}
+
+{{# Performance calculations with conditional logic #}}
+{{ for scenario of scenarios }}
+  {{ set efficiency = scenario.frameworkSize > 0 ? 
+       ((scenario.componentSize / (scenario.jsSize + scenario.frameworkSize + scenario.componentSize)) * 100).toFixed(1) 
+       : 100 }}
+  {{# Complex conditional styling based on calculated values #}}
+  <span style="background: {{ efficiency > 80 ? '#dcfce7' : efficiency > 50 ? '#fef3c7' : '#fee2e2' }}; padding: 0.125rem 0.5rem;">
+    {{ efficiency }}%
+  </span>
+{{ /for }}
+```
+
+### Advanced VentoJS Techniques Used in This Project
+
+#### 1. **Function Exports with Default Parameters**
+```vento
+{{ export function islandDemo(component, type, props = {}, trigger = "visible") }}
+  {{# Function body with complex logic #}}
+{{ /export }}
+```
+
+**CRITICAL**: VentoJS export syntax must use `{{ export function name() }}`, NOT `{{ export name = function() }}`. The latter causes parsing errors.
+
+#### 2. **Complex Object Manipulation**
+```vento
+{{# Object literal with method calls and conditional expressions #}}
+{{ set propsJson = Object.keys(props).length > 0 ? ` props='${JSON.stringify(props)}'` : '' }}
+{{ set data = componentData[component] || fallbackData }}
+```
+
+**Performance Calculations**: VentoJS handles complex mathematical expressions with array methods:
+```vento
+{{ set totalComponentSize = Object.values(componentSizes).reduce((sum, size) => sum + size, 0) }}
+{{ set efficiency = frameworkSize > 0 ? 
+     ((componentSize / (jsSize + frameworkSize + componentSize)) * 100).toFixed(1) 
+     : 100 }}
+```
+
+#### 3. **Mathematical Operations in Templates**
+```vento
+{{# Array reduce operations #}}
+{{ set totalSize = Object.values(sizes).reduce((sum, size) => sum + size, 0) }}
+
+{{# Complex percentage calculations #}}
+{{ set efficiency = frameworkSize > 0 ? 
+     ((componentSize / (jsSize + frameworkSize + componentSize)) * 100).toFixed(1) 
+     : 100 }}
+```
+
+#### 4. **Conditional Rendering and Styling**
+```vento
+{{# Conditional CSS classes based on calculated values #}}
+<span style="background: {{ efficiency > 80 ? '#dcfce7' : efficiency > 50 ? '#fef3c7' : '#fee2e2' }};">
+  {{ efficiency }}%
+</span>
+
+{{# Array length conditional checks #}}
+{{ if data.features.length > 0 }}
+  {{# Render feature list #}}
+{{ /if }}
+```
+
+#### 5. **Echo Tag for Mixed Syntax**
+```vento
+{{# Prevent VentoJS from processing specific HTML syntax #}}
+{{ echo }}
+<is-land on:{{ trigger }} type="{{ type }}" component="{{ component }}"{{ propsJson |> safe }}>
+  {{ islandPlaceholder(type, `Loading ${data.title}...`) }}
+</is-land>
+{{ /echo }}
+```
+
+#### 6. **Template Import/Export System**
+```vento
+{{# Export multiple functions from utility files #}}
+{{ export function formatDate(dateString) }}
+  {{ set date = new Date(dateString) }}
+  {{ date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+{{ /export }}
+
+{{# Import specific functions with destructuring #}}
+{{ import { formatDate, formatFileSize, generateId } from "../utils/formatters.vto" }}
+```
+
+#### 7. **Pipe vs Function Call Patterns**
+```vento
+{{# Safe filter for HTML content #}}
+{{ htmlContent |> safe }}
+
+{{# IMPORTANT: Use function calls, NOT pipes for custom functions #}}
+{{ generateId(title) }}  {{# CORRECT #}}
+{{ title |> generateId }}  {{# WRONG - causes errors #}}
+
+{{# JavaScript string methods as filters work fine #}}
+{{ "hello world" |> toUpperCase }}
+```
+
+**CRITICAL**: Custom utility functions must be called as functions `generateId(value)`, not as pipes `value |> generateId`. Only built-in filters work with pipe syntax.
+
 ### Plugin Integration Benefits
 - Eleventy filters automatically available in VentoJS templates
 - Shortcodes and paired shortcodes work seamlessly
 - Template inheritance and partial includes
 - Hot reload support in development
 - Production build optimization
+- Import/export system for modular template organization
+- JavaScript integration for complex calculations
+- Conditional rendering with template functions
 
-This setup provides optimal performance scaling from static content to complex interactive applications while maintaining excellent developer experience and modern templating capabilities.
+This setup provides optimal performance scaling from static content to complex interactive applications while maintaining excellent developer experience and modern templating capabilities with advanced VentoJS features.
