@@ -6,15 +6,14 @@ console.log('🟩 Main bundle loaded - is-land initialized');
 
 // Component registry for static analysis
 const vanillaComponents = {
+	'counter': () => import('/src/assets/js/Counter.js'),
 	'mobile-menu': () => import('/src/assets/js/mobile-menu.js'),
 	'search-toggle': () => import('/src/assets/js/search-toggle.js')
 };
 
 const svelteComponents = {
-	'counter': () => import('/src/assets/svelte/Counter.svelte'),
-	'greeting': () => import('/src/assets/svelte/Greeting.svelte'),
-	'statedemo': () => import('/src/assets/svelte/StateDemo.svelte'),
-	'theme-toggle': () => import('/src/assets/svelte/ThemeToggle.svelte')
+	// Add Svelte components here as needed
+	// 'example': () => import('/src/assets/svelte/Example.svelte')
 };
 
 // Ensure is-land is loaded before registering loaders

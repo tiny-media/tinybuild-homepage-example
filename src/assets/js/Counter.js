@@ -1,36 +1,66 @@
-// Dynamic loader for Counter Svelte component
-export default async function() {
-  console.log('🟦 Counter.js loader called');
+// Minimal counter component with persistence
+export default function(target, props = {}) {
+  const { initialCount = 0 } = props;
+  const storageKey = 'counter';
+  const channelName = 'counter-sync';
   
-  try {
-    // Import Svelte and component separately for debugging
-    const [svelte, counterModule] = await Promise.all([
-      import('svelte'),
-      import('./Counter.svelte')
-    ]);
+  // Get persisted count or use initial value
+  let count = typeof localStorage !== 'undefined' 
+    ? parseInt(localStorage.getItem(storageKey) || initialCount.toString())
+    : initialCount;
+  
+  // Cross-tab synchronization
+  const channel = typeof BroadcastChannel !== 'undefined' 
+    ? new BroadcastChannel(channelName) 
+    : null;
+  
+  // Update count and sync across tabs
+  function updateCount(newCount) {
+    count = newCount;
+    localStorage.setItem(storageKey, count.toString());
+    render();
     
-    console.log('🟦 Svelte runtime loaded:', svelte);
-    console.log('🟦 Counter component loaded:', counterModule.default);
-    
-    const Counter = counterModule.default;
-    
-    return (target, props = {}) => {
-      console.log('🟦 Mounting Counter with props:', props);
-      
-      target.innerHTML = '';
-      
-      // Use Svelte 5 mount function
-      const component = new Counter({ 
-        target,
-        props
-      });
-      
-      console.log('🟦 Counter mounted successfully');
-      return component;
-    };
-  } catch (error) {
-    console.error('🟥 Counter failed:', error);
-    target.innerHTML = `<p style="color: red;">Counter Error: ${error.message}</p>`;
-    throw error;
+    if (channel) {
+      channel.postMessage({ type: 'UPDATE_COUNTER', value: count });
+    }
   }
+  
+  // Listen for cross-tab updates
+  if (channel) {
+    channel.addEventListener('message', (event) => {
+      if (event.data.type === 'UPDATE_COUNTER') {
+        count = event.data.value;
+        render();
+      }
+    });
+  }
+  
+  // Render the component
+  function render() {
+    target.innerHTML = `
+      <div class="counter island stack" style="--stack-space: var(--spacing-sm);">
+        <h3>Counter: ${count}</h3>
+        <div class="cluster" style="--cluster-space: var(--spacing-sm);">
+          <button class="button" data-action="decrement">-</button>
+          <button class="button" data-action="increment">+</button>
+          <button class="button" data-action="reset">Reset</button>
+        </div>
+      </div>
+    `;
+    
+    // Add event listeners
+    target.querySelector('[data-action="increment"]').addEventListener('click', () => updateCount(count + 1));
+    target.querySelector('[data-action="decrement"]').addEventListener('click', () => updateCount(count - 1));
+    target.querySelector('[data-action="reset"]').addEventListener('click', () => updateCount(0));
+  }
+  
+  // Initial render
+  render();
+  
+  // Cleanup function
+  return () => {
+    if (channel) {
+      channel.close();
+    }
+  };
 }

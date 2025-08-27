@@ -1,0 +1,110 @@
+/* Homepage block - follows CUBE CSS methodology */
+@layer blocks {
+  
+  /* Hero block */
+  .hero {
+    text-align: center;
+    padding-block: var(--spacing-scale-3xl);
+  }
+  
+  .hero__title {
+    font-size: var(--typography-scale-2xl);
+    font-weight: var(--typography-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: var(--typography-lineHeight-tight);
+  }
+  
+  .hero__lead {
+    font-size: var(--typography-scale-lg);
+    color: var(--color-text-secondary);
+    max-width: 60ch;
+    margin-inline: auto;
+    line-height: var(--typography-lineHeight-normal);
+  }
+  
+  /* Features block */
+  .features {
+    padding-block: var(--spacing-scale-2xl);
+  }
+  
+  .features__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-scale-xl);
+    margin-block-start: var(--spacing-scale-xl);
+  }
+  
+  .feature-card {
+    padding: var(--spacing-scale-xl);
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-subtle);
+    container-type: inline-size;
+  }
+  
+  .feature-card__title {
+    margin: 0;
+    margin-block-end: var(--spacing-scale-sm);
+    font-size: var(--typography-scale-lg);
+    font-weight: var(--typography-weight-medium);
+    color: var(--color-text-primary);
+    line-height: var(--typography-lineHeight-tight);
+  }
+  
+  .feature-card__description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--typography-lineHeight-normal);
+  }
+  
+  /* Tech stack block */
+  .tech-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .tech-list__item {
+    padding-block: var(--spacing-scale-sm);
+    border-bottom: 1px solid var(--color-border-subtle);
+    line-height: var(--typography-lineHeight-normal);
+  }
+  
+  .tech-list__item:last-child {
+    border-bottom: none;
+  }
+  
+  .tech-list__name {
+    font-weight: var(--typography-weight-medium);
+    color: var(--color-text-primary);
+  }
+  
+  .tech-list__description {
+    color: var(--color-text-secondary);
+  }
+  
+  /* CTA block */
+  .cta {
+    text-align: center;
+    padding: var(--spacing-scale-xl);
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-lg);
+    margin-block-start: var(--spacing-scale-2xl);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .cta__text {
+    font-size: var(--typography-scale-lg);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: var(--typography-lineHeight-normal);
+  }
+  
+  /* Container queries for responsive design */
+  @container (min-width: 20rem) {
+    .feature-card {
+      padding: var(--spacing-scale-2xl);
+    }
+  }
+}

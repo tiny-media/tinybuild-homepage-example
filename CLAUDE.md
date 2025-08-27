@@ -2,265 +2,134 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Progressive island architecture: Eleventy 4.0 + VentoJS + Svelte 5 + is-land.
+**Progressive Islands Template**: Clean starting point with Eleventy 4.0 + VentoJS + modern web standards.
 
-## Architecture
-
-- **Static pages**: Zero JavaScript
-- **Interactive elements**: Vanilla JS components on-demand  
-- **Complex UI**: Svelte 5 components with shared runtime
-- **CSS**: CUBE methodology with design tokens
-
-## Stack
-
-- **Static Site Generator**: Eleventy 4.0 (alpha)
-- **Templates**: VentoJS with unified `{{ }}` syntax
-- **Build Tool**: Vite 7+ with LightningCSS
-- **Islands**: @11ty/is-land v5 (beta)
-- **Components**: Svelte 5 with runes
-- **CSS Processing**: LightningCSS (100x faster than PostCSS)
-- **Package Manager**: Bun
-
-## Key Files
-
-- `src/assets/main.js` - Island loader and CSS entry point
-- `src/assets/js/` - Vanilla JS components
-- `src/assets/svelte/` - Svelte 5 components  
-- `src/assets/css/` - CUBE CSS architecture
-- `eleventy.config.js` - Main configuration
-- `eleventyVitePluginConfig.js` - Vite integration
-
-## Development
+## Quick Start
 
 ```bash
-bun run dev       # Development server
+bun run dev       # Development server (localhost:8080)
 bun run build     # Production build 
-bun run build:dev # Development build
-bun run preview   # Preview built site (port 4173)
+bun run preview   # Preview built site (localhost:4173)
 bun run clean     # Clean build directories
 bun run tokens    # Generate CSS from design tokens
 ```
 
-**Linting**: Biome is configured for JavaScript/TypeScript linting:
-```bash
-bunx biome check .              # Check code quality
-bunx biome check --write .      # Fix issues automatically
+**Linting**: `bunx biome check . --write`
+
+## Architecture Overview
+
+- **Static-first**: Zero JavaScript by default, fastest possible loading
+- **Progressive Islands**: Add interactivity only where needed with @11ty/is-land
+- **Modern CSS**: CUBE methodology with design tokens and container queries  
+- **Developer Experience**: Hot reload, fast builds, type safety
+
+## Tech Stack
+
+- **SSG**: Eleventy 4.0 (alpha) with VentoJS templates
+- **Bundling**: Vite 7+ with LightningCSS (100x faster than PostCSS)
+- **Components**: Vanilla JS + Svelte 5 islands
+- **Styling**: CUBE CSS with cascade layers and modern features
+- **Runtime**: Bun for fast package management and builds
+
+## CUBE CSS Methodology
+
+**Structure**: `0-reset/` → `1-design-tokens/` → `2-composition/` → `3-utilities/` → `4-blocks/` → `5-exceptions/`
+
+**Class Grouping Pattern**:
+```html
+<article class="[ card ] [ flow flow--lg ] [ bg-surface ]" data-state="featured">
 ```
 
-## Component Registration
+**Design Tokens** (auto-generated from `src/design-tokens/tokens.json`):
+```css
+--color-brand-primary: oklch(50% 0.15 25);
+--spacing-scale-lg: 1rem;
+--typography-scale-xl: 1.5rem;
+```
 
-**Vanilla JS** (`main.js`):
+**Key Utilities**:
+- `.flow` - Vertical rhythm with `--flow-space` override
+- `.wrapper` - Centered container with responsive padding
+- `.stack` / `.cluster` - Layout composition patterns
+
+## Islands Architecture
+
+**Registration** (`src/assets/main.js`):
 ```js
 const vanillaComponents = {
-  'component-name': () => import('/src/assets/js/ComponentName.js'),
-};
-```
-
-**Svelte** (`main.js`):
-```js
-const svelteComponents = {
-  'component-name': () => import('/src/assets/svelte/ComponentName.svelte'),
+  'counter': () => import('/src/assets/js/Counter.js'),
 };
 ```
 
 **Usage**:
 ```html
-<is-land on:interaction type="vanilla" component="component-name">
-  <button>Fallback content</button>
+<is-land on:visible type="vanilla" component="counter" props='{"initialCount": 0}'>
+  <div>Loading counter...</div>
 </is-land>
 ```
 
-## CSS Architecture
-
-**CUBE CSS** structure:
-- `0-reset/` - Modern CSS reset
-- `1-design-tokens/` - CSS custom properties from JSON
-- `2-composition/` - Layout patterns (stack, cluster, container)  
-- `3-utilities/` - Single-purpose classes
-- `4-blocks/` - Component styles
-- `5-exceptions/` - State variations and themes
-
-**Design Tokens** (`src/design-tokens/tokens.json`):
-```json
-{
-  "color": {
-    "brand": {
-      "primary": { "value": "oklch(50% 0.15 25)" }
-    },
-    "semantic": {
-      "surface": {
-        "primary": {
-          "light": { "value": "oklch(100% 0 0)" },
-          "dark": { "value": "oklch(14% 0.01 240)" }
-        }
-      }
-    }
-  },
-  "spacing": {
-    "scale": {
-      "lg": { "value": "1rem" }
-    }
-  }
-}
-```
-
-**Token Generation**: CSS files are auto-generated from `tokens.json`:
-```bash
-bun run tokens  # Generates design token CSS files
-```
-
-**Component Styling**:
-```css
-.my-component {
-  padding: var(--spacing-md);
-  background: var(--color-surface);
-  container-type: inline-size;
-}
-
-@container (min-width: 300px) {
-  .my-component {
-    display: grid;
-    grid-template-columns: auto 1fr;
-  }
-}
-```
+**Loading Strategy**:
+- `on:visible` - Load when scrolled into view
+- `on:interaction` - Load on first click/focus
+- `on:idle` - Load when browser is idle
 
 ## VentoJS Templates
 
-**Basic Syntax**:
+**Key Patterns**:
 ```vento
-{{ title }}                    # Variables
-{{ user.name || "Anonymous" }} # JavaScript expressions
-{{ value |> toUpperCase }}     # Pipes
-{{ htmlContent |> safe }}      # Trusted HTML
-```
-
-**Layouts**:
-```vento
-{{ layout "layouts/base.vto" {
-  title: "Page Title",
-  loadJS: true
-} }}
-
-Page content
-
-{{ /layout }}
-```
-
-**Loops and Conditionals**:
-```vento
-{{ if condition }}
-  Content
-{{ /if }}
-
-{{ for item of items }}
-  <li>{{ item.name }}</li>
-{{ /for }}
-```
-
-**Functions**:
-```vento
-{{ export function helper(param) }}
-  {{ param |> toUpperCase }}
-{{ /export }}
-
+{{ layout "layouts/base.vto" { title: "Page Title" } }}
+{{ if condition }}...{{ /if }}
+{{ for item of items }}...{{ /for }}
 {{ import { helper } from "./utils.vto" }}
-{{ helper("test") }}
 ```
 
-## Svelte 5 Components
+**Template Structure**:
+- `src/_includes/layouts/` - Page layouts
+- `src/_includes/components/` - Reusable components
+- `*.vto` files use `{{ }}` syntax (unified with design tokens)
 
-**Component Structure**:
-```svelte
-<script>
-  import { appState } from './app-state.svelte.js';
-  import { onMount } from 'svelte';
-  
-  let { prop = defaultValue } = $props();
-  let state = $state(initialValue);
-  
-  $effect(() => {
-    // Reactive side effects
-  });
-  
-  onMount(() => {
-    appState.counters++;
-  });
-</script>
+## Performance Characteristics
 
-<div class="component">
-  <p>Count: {state}</p>
-  <button onclick={() => state++}>+</button>
-</div>
-
-<style>
-  .component {
-    padding: var(--spacing-md);
-    background: var(--color-surface);
-  }
-</style>
-```
-
-**Global State** (`app-state.svelte.js`):
-```js
-export const appState = $state({
-  theme: 'light',
-  counters: 0
-});
-
-export function updateTheme(newTheme) {
-  appState.theme = newTheme;
-  localStorage.setItem('theme', newTheme);
-}
-```
+| Level | JavaScript | Description |
+|-------|------------|-------------|
+| Static | 0 KB | Pure HTML/CSS (this template) |
+| Interactive | ~5 KB | Vanilla JS components |
+| Enhanced | ~30 KB | First Svelte component + runtime |
+| Complex | +2 KB each | Additional Svelte components |
 
 ## Critical Configuration
 
-**Must include** in `eleventy.config.js`:
+**Required** in `eleventy.config.js`:
 ```js
-// Required for asset loading
-eleventyConfig.addPassthroughCopy("src/assets");
+eleventyConfig.addPassthroughCopy("src/assets"); // Asset loading
+eleventyConfig.addPlugin(VentoPlugin);            // Order matters!
+eleventyConfig.addPlugin(EleventyVitePlugin);
 ```
 
-**Plugin order matters**:
-```js
-// VentoJS must load before Vite
-eleventyConfig.addPlugin(VentoPlugin, { /* config */ });
-eleventyConfig.addPlugin(EleventyVitePlugin, { /* config */ });
-```
-
-**Module resolution** in `eleventyVitePluginConfig.js`:
+**Module Resolution** (`eleventyVitePluginConfig.js`):
 ```js
 resolve: {
-  alias: {
-    '/src': path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src'),
-  }
+  alias: { '/src': path.resolve('./src') }
 }
 ```
 
-## Performance
+## Key Files
 
-- **Static pages**: 0 KB JavaScript
-- **Vanilla components**: ~5 KB total
-- **First Svelte component**: ~30 KB (runtime + component)
-- **Additional Svelte**: ~1-2 KB each (runtime cached)
-- **HTML minification**: ~19% size reduction in production
+- `src/assets/main.js` - Islands loader + CSS entry
+- `src/assets/css/main.css` - CSS imports with cascade layers
+- `src/_includes/layouts/base.vto` - Base HTML template  
+- `src/design-tokens/tokens.json` - Single source of design truth
+- `eleventy.config.js` - Main SSG configuration
 
-## File Structure
+## Additional Documentation
 
-```
-src/
-├── assets/
-│   ├── css/              # CUBE CSS architecture (0-reset, 1-design-tokens, etc.)
-│   ├── js/               # Vanilla JS components
-│   ├── svelte/           # Svelte 5 components
-│   └── main.js           # Entry point
-├── _includes/
-│   ├── layouts/          # VentoJS layouts
-│   ├── components/       # VentoJS components
-│   └── utils/            # VentoJS utilities
-├── _data/                # Site data
-├── design-tokens/        # Design system tokens (tokens.json)
-├── index.vto             # Static homepage
-└── demo.vto              # Interactive demo
-```
+- `COMPONENT_PATTERNS.md` - Component examples and patterns
+- `ARCHITECTURE_DEEP_DIVE.md` - Detailed technical implementation
+- `CSS_SETUP.md` - Complete CUBE CSS setup and methodology
+
+## Common Tasks
+
+**Add Component**: Create in `src/assets/js/`, register in `main.js`, use with `<is-land>`  
+**Update Styling**: Modify `tokens.json`, run `bun run tokens`, add CSS blocks  
+**New Page**: Create `*.vto` file, use `{{ layout "layouts/base.vto" }}`  
+**Debug Islands**: Check browser console for component loading errors

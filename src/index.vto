@@ -1,32 +1,64 @@
 {{ layout "layouts/base.vto" {
-  title: "Static Homepage - Zero JavaScript",
-  description: "Progressive island architecture baseline with zero JavaScript",
-  navigation: [
-    { url: "/", label: "Home", current: true },
-    { url: "/demo/", label: "Demo" }
-  ]
+  title: "Progressive Islands Template",
+  description: "A clean starting point for progressive island architecture with Eleventy, VentoJS, and modern web standards"
 } }}
 
-<h1>Static Homepage</h1>
-<p>This page loads <strong>zero JavaScript</strong> - the fastest possible web experience.</p>
+<div class="[ hero ] [ flow flow--lg ]">
+  <h1 class="hero__title">Progressive Islands Template</h1>
+  <p class="hero__lead">A modern, performance-first web development template combining <strong>Eleventy 4.0</strong>, <strong>VentoJS</strong>, and <strong>progressive enhancement</strong>.</p>
+</div>
 
-<h2>Architecture Levels</h2>
-<ol>
-  <li><strong>Static</strong> (this page): 0 KB JavaScript</li>
-  <li><strong>Interactive</strong>: ~5 KB for vanilla JS components</li>
-  <li><strong>Enhanced</strong>: ~30 KB for first Svelte component (runtime + component)</li>
-  <li><strong>Complex</strong>: +1-2 KB per additional Svelte component (runtime cached)</li>
-</ol>
+<section class="[ features ] [ flow flow--xl ]">
+  <h2>Built for Performance</h2>
+  <div class="features__grid">
+    <div class="[ feature-card ] [ flow flow--sm ]">
+      <h3 class="feature-card__title">⚡ Zero JavaScript by Default</h3>
+      <p class="feature-card__description">Static pages load instantly with no client-side JavaScript unless needed.</p>
+    </div>
+    
+    <div class="[ feature-card ] [ flow flow--sm ]">
+      <h3 class="feature-card__title">🏝️ Islands Architecture</h3>
+      <p class="feature-card__description">Add interactive components exactly where you need them, when you need them.</p>
+    </div>
+    
+    <div class="[ feature-card ] [ flow flow--sm ]">
+      <h3 class="feature-card__title">🎨 Modern CSS</h3>
+      <p class="feature-card__description">CUBE methodology with design tokens, container queries, and cascade layers.</p>
+    </div>
+    
+    <div class="[ feature-card ] [ flow flow--sm ]">
+      <h3 class="feature-card__title">🚀 Lightning Fast Builds</h3>
+      <p class="feature-card__description">Vite + LightningCSS for 100x faster processing than traditional tools.</p>
+    </div>
+  </div>
+</section>
 
-<h2>Progressive Enhancement</h2>
-<p>Each level adds functionality only when needed:</p>
-<ul>
-  <li>Content works without JavaScript</li>
-  <li>Interactive elements load on demand</li>
-  <li>Framework runtime shared across components</li>
-  <li>State management scales from local to global</li>
-</ul>
+<section class="[ flow flow--lg ]">
+  <h2>Tech Stack</h2>
+  <ul class="tech-list">
+    <li class="tech-list__item">
+      <span class="tech-list__name">Eleventy 4.0</span> - <span class="tech-list__description">Static site generation</span>
+    </li>
+    <li class="tech-list__item">
+      <span class="tech-list__name">VentoJS</span> - <span class="tech-list__description">Modern template engine</span>
+    </li>
+    <li class="tech-list__item">
+      <span class="tech-list__name">Vite 7+</span> - <span class="tech-list__description">Asset bundling and dev server</span>
+    </li>
+    <li class="tech-list__item">
+      <span class="tech-list__name">LightningCSS</span> - <span class="tech-list__description">Ultra-fast CSS processing</span>
+    </li>
+    <li class="tech-list__item">
+      <span class="tech-list__name">@11ty/is-land</span> - <span class="tech-list__description">Progressive component hydration</span>
+    </li>
+    <li class="tech-list__item">
+      <span class="tech-list__name">Bun</span> - <span class="tech-list__description">Fast package manager and runtime</span>
+    </li>
+  </ul>
+</section>
 
-<p><a href="/demo/">View Interactive Demo →</a></p>
+<section class="cta">
+  <p class="cta__text">Ready to build fast, modern websites? Check the documentation to get started.</p>
+</section>
 
 {{ /layout }}

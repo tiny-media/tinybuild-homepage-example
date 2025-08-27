@@ -5,10 +5,11 @@
 @import "./2-composition/stack.css";
 @import "./2-composition/cluster.css";
 @import "./3-utilities/text.css";
+@import "./3-utilities/layout.css";
 @import "./4-blocks/button.css";
 @import "./4-blocks/badge.css";
 @import "./4-blocks/island.css";
-@import "./4-blocks/island-showcase.css";
+@import "./4-blocks/homepage.css";
 @import "./4-blocks/performance.css";
 @import "./4-blocks/table.css";
 @import "./4-blocks/code-block.css";
