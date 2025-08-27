@@ -106,7 +106,7 @@ const svelteComponents = {
 
 **Token Generation**: CSS files are auto-generated from `tokens.json`:
 ```bash
-bun run tokens  # Generates tokens.css and tokens-themed.css
+bun run tokens  # Generates design token CSS files
 ```
 
 **Component Styling**:
