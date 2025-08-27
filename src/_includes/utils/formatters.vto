@@ -22,32 +22,25 @@
 {{ /export }}
 
 {{ export function createStatusBadge(level, text) }}
-  {{ set colors = {
-    info: { bg: '#f0f9ff', border: '#0ea5e9', icon: 'ℹ️' },
-    success: { bg: '#dcfce7', border: '#16a34a', icon: '✅' },
-    warning: { bg: '#fef3c7', border: '#f59e0b', icon: '⚠️' },
-    error: { bg: '#fee2e2', border: '#dc2626', icon: '❌' }
+  {{ set icons = {
+    info: 'ℹ️',
+    success: '✅', 
+    warning: '⚠️',
+    error: '❌',
+    excellent: '🚀'
   } }}
-  {{ set color = colors[level] || colors.info }}
-  <div style="background: {{ color.bg }}; border: 1px solid {{ color.border }}; padding: 0.5rem 1rem; border-radius: 4px; display: inline-block; margin: 0.25rem;">
-    {{ color.icon }} {{ text }}
-  </div>
+  {{ set icon = icons[level] || icons.info }}
+  <span class="badge badge--{{ level }}">
+    {{ icon }} {{ text }}
+  </span>
 {{ /export }}
 
 {{ export function renderCodeBlock(code, language = 'javascript') }}
-  <pre style="background: #f8fafc; padding: 1rem; border-radius: 6px; overflow-x: auto; border: 1px solid #e2e8f0;"><code class="language-{{ language }}">{{ code |> escape }}</code></pre>
+  <pre class="code-block"><code class="language-{{ language }}">{{ code |> escape }}</code></pre>
 {{ /export }}
 
 {{ export function islandPlaceholder(componentType, message) }}
-  {{ set bgColors = {
-    vanilla: '#fffbeb',
-    svelte: '#faf5ff'
-  } }}
-  {{ set borderColors = {
-    vanilla: '#f59e0b', 
-    svelte: '#a855f7'
-  } }}
-  <div style="padding: 1.5rem; border: 2px dashed {{ borderColors[componentType] || '#6b7280' }}; border-radius: 8px; background: {{ bgColors[componentType] || '#f9fafb' }}; text-align: center;">
+  <div class="island-placeholder island-placeholder--{{ componentType }}">
     {{ if componentType === 'vanilla' }}🟨{{ else if componentType === 'svelte' }}🟦{{ else }}⚫{{ /if }} {{ message }}<br>
     <small>{{ componentType |> toUpperCase }} component loading...</small>
   </div>

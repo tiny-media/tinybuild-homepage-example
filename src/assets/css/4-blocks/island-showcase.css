@@ -1,0 +1,28 @@
+/* Island showcase component */
+@layer blocks {
+  .island-showcase {
+    background: light-dark(
+      linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%),
+      linear-gradient(135deg, #0f1419 0%, #1a202c 100%)
+    );
+    border: 2px solid var(--border);
+  }
+
+  .island-placeholder {
+    padding: var(--spacing-lg);
+    border: 2px dashed var(--border);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+    background: var(--surface);
+  }
+
+  .island-placeholder--vanilla {
+    background: light-dark(#fffbeb, #1c1611);
+    border-color: light-dark(#f59e0b, #d97706);
+  }
+
+  .island-placeholder--svelte {
+    background: light-dark(#faf5ff, #1e1b3a);
+    border-color: light-dark(#a855f7, #7c3aed);
+  }
+}

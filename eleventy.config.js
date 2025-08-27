@@ -1,6 +1,6 @@
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
 import { VentoPlugin } from "eleventy-plugin-vento";
-import { eleventyVitePluginConfig } from "./src/_utilities/eleventyVitePluginConfig.js";
+import { eleventyVitePluginConfig } from "./eleventyVitePluginConfig.js";
 
 export default async function (eleventyConfig) {
 	// Server Configuration
@@ -29,7 +29,6 @@ export default async function (eleventyConfig) {
 
 	// Static files to pass through
 	eleventyConfig.addPassthroughCopy("src/assets");
-	eleventyConfig.addPassthroughCopy("src/islands");
 
 
 	eleventyConfig.setServerPassthroughCopyBehavior("copy");

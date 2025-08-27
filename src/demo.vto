@@ -1,0 +1,38 @@
+{{ import { islandDemo } from "./_includes/components/island-showcase.vto" }}
+
+{{ layout "layouts/base.vto" {
+  title: "Interactive Demo",
+  description: "Progressive island architecture demo with vanilla JS and Svelte components",
+  loadJS: true,
+  navigation: [
+    { url: "/", label: "Home" },
+    { url: "/demo/", label: "Demo", current: true }
+  ]
+} }}
+
+<h1>Interactive Demo</h1>
+<p>This page demonstrates progressive loading: vanilla JS components and Svelte islands.</p>
+
+<h2>Vanilla JS Component</h2>
+<p>Simple modal popup (loads ~2KB JavaScript on interaction):</p>
+
+<is-land on:interaction type="vanilla" component="mobile-menu">
+  <button class="button">Open Modal</button>
+</is-land>
+
+<h2>Svelte Component</h2>
+<p>Cross-tab synchronized counter (loads ~30KB on first Svelte component):</p>
+
+{{ islandDemo('counter', 'svelte', { initialCount: 0 }, 'visible') }}
+
+<h2>Technical Implementation</h2>
+<ul>
+  <li><strong>Vanilla JS</strong>: Minimal modal with no framework overhead</li>
+  <li><strong>Svelte Runtime</strong>: Shared across all Svelte components (cached after first load)</li>
+  <li><strong>Cross-tab State</strong>: BroadcastChannel API for real-time sync</li>
+  <li><strong>Persistence</strong>: localStorage maintains state across sessions</li>
+</ul>
+
+<p><a href="/">← Back to Static Homepage</a></p>
+
+{{ /layout }}

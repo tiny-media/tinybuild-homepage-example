@@ -1,0 +1,16 @@
+/* Container composition */
+@layer composition {
+  .container {
+    container-type: inline-size;
+    width: 100%;
+    max-width: var(--container-size-lg);
+    margin-inline: auto;
+    padding-inline: var(--spacing-scale-lg);
+  }
+
+  @container (min-width: 48rem) {
+    .container {
+      padding-inline: var(--spacing-scale-xl);
+    }
+  }
+}

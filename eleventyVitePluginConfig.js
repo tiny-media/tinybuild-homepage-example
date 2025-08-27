@@ -1,7 +1,9 @@
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import simpleHtml from "vite-plugin-simple-html";
 import path from "node:path";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
+import browserslist from 'browserslist';
+import { browserslistToTargets, Features } from 'lightningcss';
 
 export function eleventyVitePluginConfig() {
   return {
@@ -27,9 +29,29 @@ export function eleventyVitePluginConfig() {
       ] : [])
     ],
 
+    css: {
+      // Use LightningCSS instead of PostCSS
+      transformer: 'lightningcss',
+      lightningcss: {
+        // Browser targets from browserslist
+        targets: browserslistToTargets(browserslist('>= 0.25%')),
+        // Enable modern CSS features
+        include: Features.Nesting | Features.CustomMediaQueries,
+        // Enable draft features for cutting-edge CSS
+        drafts: {
+          customMedia: true,
+          nesting: true
+        },
+        // Only minify CSS in production
+        minify: process.env.NODE_ENV === 'production',
+      },
+      devSourcemap: true,
+    },
+
     resolve: {
       alias: {
-        '/src': path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../')
+        '/src': path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src'),
+        '@styles': path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src/assets/css'),
       }
     },
 
@@ -40,14 +62,19 @@ export function eleventyVitePluginConfig() {
 
     build: {
       emptyOutDir: true,
+      cssCodeSplit: true, // Enable CSS code splitting
+      // Production-only minification settings
+      cssMinify: process.env.NODE_ENV === 'production' ? 'lightningcss' : false,
+      minify: process.env.NODE_ENV === 'production' ? 'esbuild' : false, // JS minification
       rollupOptions: {
         input: {
           main: "src/assets/main.js"
         },
         output: {
           manualChunks: {
-            // Shared Svelte runtime chunk
-            svelte: ['svelte']
+            svelte: ['svelte'],
+            // Separate chunk for design system CSS
+            'design-system': ['@styles/main.css']
           }
         },
       }

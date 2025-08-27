@@ -1,90 +1,32 @@
-{{ import utils from "./_includes/fragments/code-examples.vto" }}
-{{ import { createStatusBadge, formatFileSize } from "./_includes/utils/formatters.vto" }}
-
-{{ set performanceBenefits = [
-  { metric: 'JavaScript Bundle', value: 0, unit: 'KB', status: 'excellent' },
-  { metric: 'Time to Interactive', value: '< 16ms', status: 'excellent' },
-  { metric: 'Network Requests', value: 1, unit: ' (HTML only)', status: 'excellent' },
-  { metric: 'Memory Usage', value: '< 1MB', status: 'excellent' }
-] }}
-
-{{ set architectureLevels = [
-  { level: 0, name: 'Static', js: 0, framework: 0, components: 0, description: 'Pure HTML - Maximum performance' },
-  { level: 1, name: 'Vanilla', js: 3000, framework: 0, components: 2000, description: 'On-demand vanilla JS' },
-  { level: 2, name: 'First Svelte', js: 3000, framework: 26580, components: 1380, description: 'Runtime investment' },
-  { level: 3, name: 'Multiple Svelte', js: 3000, framework: 0, components: 4740, description: 'Runtime efficiency' }
-] }}
-
 {{ layout "layouts/base.vto" {
-  title: "Level 0: Static Homepage - No JavaScript",
-  description: "Demonstration of zero-JavaScript baseline for progressive island architecture",
-  statusBg: "#f0f9ff",
-  statusBorder: "#0ea5e9",
+  title: "Static Homepage - Zero JavaScript",
+  description: "Progressive island architecture baseline with zero JavaScript",
   navigation: [
-    { url: "/", label: "🏠 Static Homepage", current: true },
-    { url: "/simple/", label: "📱 Simple Page" },
-    { url: "/interactive/", label: "🎯 Interactive Page" },
-    { url: "/complex/", label: "🔗 Complex Page" }
+    { url: "/", label: "Home", current: true },
+    { url: "/demo/", label: "Demo" }
   ]
 } }}
 
-<header>
-  <h1>🏠 Level 0: Static Homepage</h1>
-  <div class="status">
-    {{ for benefit of performanceBenefits }}
-      {{ createStatusBadge(benefit.status, `${benefit.metric}: ${benefit.value}${benefit.unit || ''}`) }}
-    {{ /for }}
-  </div>
-</header>
+<h1>Static Homepage</h1>
+<p>This page loads <strong>zero JavaScript</strong> - the fastest possible web experience.</p>
 
-<h2>Progressive is-land Loading Demo</h2>
-<p>This homepage demonstrates <strong>zero JavaScript loading</strong> - the fastest possible web experience.</p>
+<h2>Architecture Levels</h2>
+<ol>
+  <li><strong>Static</strong> (this page): 0 KB JavaScript</li>
+  <li><strong>Interactive</strong>: ~5 KB for vanilla JS components</li>
+  <li><strong>Enhanced</strong>: ~30 KB for first Svelte component (runtime + component)</li>
+  <li><strong>Complex</strong>: +1-2 KB per additional Svelte component (runtime cached)</li>
+</ol>
 
-<h3>Architecture Progression</h3>
-<div style="overflow-x: auto; margin: 1rem 0;">
-  <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem; background: white;">
-    <thead>
-      <tr style="background: #f8fafc;">
-        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e2e8f0;">Level</th>
-        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e2e8f0;">Strategy</th>
-        <th style="padding: 0.75rem; text-align: right; border: 1px solid #e2e8f0;">Bundle Size</th>
-        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e2e8f0;">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{ for arch of architectureLevels }}
-        {{ set totalSize = arch.js + arch.framework + arch.components }}
-        {{ set rowColor = arch.level === 0 ? '#f0f9ff' : arch.level === 1 ? '#fffbeb' : arch.level === 2 ? '#dcfce7' : '#f3e8ff' }}
-        <tr style="background: {{ rowColor }};">
-          <td style="padding: 0.75rem; border: 1px solid #e2e8f0; font-weight: bold;">{{ arch.level }}</td>
-          <td style="padding: 0.75rem; border: 1px solid #e2e8f0;">{{ arch.name }}</td>
-          <td style="padding: 0.75rem; border: 1px solid #e2e8f0; text-align: right; font-family: monospace;">
-            {{ formatFileSize(totalSize) }}
-          </td>
-          <td style="padding: 0.75rem; border: 1px solid #e2e8f0; color: #4b5563;">{{ arch.description }}</td>
-        </tr>
-      {{ /for }}
-    </tbody>
-  </table>
-</div>
-
-<h3>Zero JavaScript Benefits</h3>
-{{ import { performanceMetrics } from "./_includes/fragments/code-examples.vto" }}
-{{ performanceMetrics(0) }}
-
-<h3>Technical Details</h3>
-<p>This page intentionally does <strong>not</strong> include:</p>
+<h2>Progressive Enhancement</h2>
+<p>Each level adds functionality only when needed:</p>
 <ul>
-  <li>No <code>&lt;script&gt;</code> tags</li>
-  <li>No <code>&lt;is-land&gt;</code> components</li>
-  <li>No JavaScript frameworks or libraries</li>
-  <li>No dynamic imports or module loading</li>
+  <li>Content works without JavaScript</li>
+  <li>Interactive elements load on demand</li>
+  <li>Framework runtime shared across components</li>
+  <li>State management scales from local to global</li>
 </ul>
 
-<p>Open your browser's Network tab to verify that zero JavaScript files are downloaded when loading this page.</p>
-
-<footer>
-  <p><em>This is the baseline for progressive enhancement. Every bit of JavaScript added to subsequent pages serves a specific purpose.</em></p>
-</footer>
+<p><a href="/demo/">View Interactive Demo →</a></p>
 
 {{ /layout }}

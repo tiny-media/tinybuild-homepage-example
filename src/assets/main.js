@@ -1,19 +1,20 @@
 // Main entry point for Vite processing
-import "./styles/tokens.css";
+import "/src/assets/css/main.css";
 import "@11ty/is-land/is-land.js";
 
 console.log('🟩 Main bundle loaded - is-land initialized');
 
 // Component registry for static analysis
 const vanillaComponents = {
-	'mobile-menu': () => import('/src/components/mobile-menu.js'),
-	'search-toggle': () => import('/src/components/search-toggle.js')
+	'mobile-menu': () => import('/src/assets/js/mobile-menu.js'),
+	'search-toggle': () => import('/src/assets/js/search-toggle.js')
 };
 
 const svelteComponents = {
-	'counter': () => import('/src/islands/Counter.svelte'),
-	'greeting': () => import('/src/islands/Greeting.svelte'),
-	'statedemo': () => import('/src/islands/StateDemo.svelte')
+	'counter': () => import('/src/assets/svelte/Counter.svelte'),
+	'greeting': () => import('/src/assets/svelte/Greeting.svelte'),
+	'statedemo': () => import('/src/assets/svelte/StateDemo.svelte'),
+	'theme-toggle': () => import('/src/assets/svelte/ThemeToggle.svelte')
 };
 
 // Ensure is-land is loaded before registering loaders

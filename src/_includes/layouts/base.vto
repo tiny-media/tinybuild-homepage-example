@@ -11,61 +11,34 @@
   {{ if loadJS }}
   <script type="module" src="/assets/main.js"></script>
   {{ /if }}
+  
   <title>{{ title || "Eleventy + VentoJS + Islands" }}</title>
   <meta name="description" content="{{ description || 'Progressive island architecture with Eleventy, VentoJS, and Svelte 5' }}">
   <meta name="build-time" content="{{ buildTime }}">
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      line-height: 1.6;
-      color: #333;
-    }
-    .status {
-      background: {{ statusBg || "#fef3c7" }};
-      border: 1px solid {{ statusBorder || "#f59e0b" }};
-      padding: 1rem;
-      border-radius: 6px;
-      margin: 1rem 0;
-    }
-    .nav {
-      background: #f8fafc;
-      padding: 1rem;
-      border-radius: 6px;
-      margin: 2rem 0;
-    }
-    .nav a {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      margin: 0.25rem;
-      text-decoration: none;
-      background: #e2e8f0;
-      border-radius: 4px;
-      color: #1e293b;
-    }
-    .nav a.current {
-      background: #3b82f6;
-      color: white;
-    }
-    .nav a:hover {
-      background: #cbd5e1;
-    }
-    .nav a.current:hover {
-      background: #2563eb;
-    }
-  </style>
 </head>
 <body>
-  <main>
-    <div class="nav">
-      {{ for navItem of navigation }}
-        <a href="{{ navItem.url }}"{{ if navItem.current }} class="current"{{ /if }}>{{ navItem.label }}</a>
-      {{ /for }}
-    </div>
+  <div class="container">
+    <main class="stack" style="--stack-space: var(--spacing-scale-xl);">
+      <header class="site-header">
+        <nav class="cluster" style="--cluster-space: var(--spacing-scale-lg);">
+          {{ for navItem of navigation }}
+            <a href="{{ navItem.url }}" class="button{{ if navItem.current }} current{{ /if }}">{{ navItem.label }}</a>
+          {{ /for }}
+        </nav>
+        
+        <div class="theme-toggle-wrapper">
+          {{ if loadJS }}
+          <is-land on:interaction type="svelte" component="theme-toggle">
+            <button class="button button--ghost" aria-label="Toggle theme">💻 Auto</button>
+          </is-land>
+          {{ /if }}
+        </div>
+      </header>
 
-    {{ content }}
-  </main>
+      <div class="content">
+        {{ content }}
+      </div>
+    </main>
+  </div>
 </body>
 </html>

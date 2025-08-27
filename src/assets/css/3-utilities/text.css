@@ -1,0 +1,28 @@
+/* Text utilities */
+@layer utilities {
+  /* Text sizes */
+  .text-xs { font-size: var(--font-size-xs, 0.75rem); }
+  .text-sm { font-size: var(--font-size-sm); }
+  .text-base { font-size: var(--font-size-base); }
+  .text-lg { font-size: var(--font-size-lg); }
+  .text-xl { font-size: var(--font-size-xl); }
+
+  /* Text colors */
+  .text-primary { color: var(--text-primary); }
+  .text-secondary { color: var(--text-secondary); }
+  .text-green { color: var(--color-semantic-success, #16a34a); }
+  .text-purple { color: var(--color-semantic-info, #7c3aed); }
+
+  /* Text alignment */
+  .text-left { text-align: left; }
+  .text-center { text-align: center; }
+  .text-right { text-align: right; }
+
+  /* Font weights */
+  .font-medium { font-weight: 500; }
+  .font-semibold { font-weight: 600; }
+  .font-bold { font-weight: 700; }
+
+  /* Font families */
+  .font-mono { font-family: ui-monospace, SFMono-Regular, monospace; }
+}
