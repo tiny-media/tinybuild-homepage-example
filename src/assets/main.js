@@ -6,9 +6,7 @@ console.log('🟩 Main bundle loaded - is-land initialized');
 
 // Component registry for static analysis
 const vanillaComponents = {
-	'counter': () => import('/src/assets/js/Counter.js'),
-	'mobile-menu': () => import('/src/assets/js/mobile-menu.js'),
-	'search-toggle': () => import('/src/assets/js/search-toggle.js')
+	'counter': () => import('/src/assets/js/Counter.js')
 };
 
 const svelteComponents = {

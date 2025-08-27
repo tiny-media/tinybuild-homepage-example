@@ -1,1 +1,0 @@
-console.log('🟩 Search toggle component loaded');
