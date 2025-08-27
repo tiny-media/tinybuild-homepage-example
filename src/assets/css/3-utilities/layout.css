@@ -60,4 +60,28 @@
   .inline-block { display: inline-block; }
   .inline { display: inline; }
   .hidden { display: none; }
+  
+  /* Flex utilities */
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cluster-space, var(--spacing-scale-md));
+    align-items: center;
+  }
+  
+  .justify-between { justify-content: space-between; }
+  .justify-center { justify-content: center; }
+  .justify-start { justify-content: flex-start; }
+  .justify-end { justify-content: flex-end; }
+  
+  .align-center { align-items: center; }
+  .align-start { align-items: flex-start; }
+  .align-end { align-items: flex-end; }
+  
+  /* Stack utility for vertical layouts */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stack-space, var(--spacing-scale-lg));
+  }
 }

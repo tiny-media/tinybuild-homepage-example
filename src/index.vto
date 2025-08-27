@@ -1,64 +1,69 @@
-{{ layout "layouts/base.vto" {
-  title: "Progressive Islands Template",
-  description: "A clean starting point for progressive island architecture with Eleventy, VentoJS, and modern web standards"
-} }}
+---
+title: "Progressive Islands Template"
+description: "Clean starting point for building modern web applications"
+eleventyNavigation:
+  key: "Home"
+  order: 1
+---
+
+{{ layout "layouts/base.vto" }}
 
 <div class="[ hero ] [ flow flow--lg ]">
   <h1 class="hero__title">Progressive Islands Template</h1>
-  <p class="hero__lead">A modern, performance-first web development template combining <strong>Eleventy 4.0</strong>, <strong>VentoJS</strong>, and <strong>progressive enhancement</strong>.</p>
+  <p class="hero__lead">Start building with static-first architecture and add interactivity where needed.</p>
 </div>
 
-<section class="[ features ] [ flow flow--xl ]">
-  <h2>Built for Performance</h2>
-  <div class="features__grid">
-    <div class="[ feature-card ] [ flow flow--sm ]">
-      <h3 class="feature-card__title">⚡ Zero JavaScript by Default</h3>
-      <p class="feature-card__description">Static pages load instantly with no client-side JavaScript unless needed.</p>
-    </div>
-    
-    <div class="[ feature-card ] [ flow flow--sm ]">
-      <h3 class="feature-card__title">🏝️ Islands Architecture</h3>
-      <p class="feature-card__description">Add interactive components exactly where you need them, when you need them.</p>
-    </div>
-    
-    <div class="[ feature-card ] [ flow flow--sm ]">
-      <h3 class="feature-card__title">🎨 Modern CSS</h3>
-      <p class="feature-card__description">CUBE methodology with design tokens, container queries, and cascade layers.</p>
-    </div>
-    
-    <div class="[ feature-card ] [ flow flow--sm ]">
-      <h3 class="feature-card__title">🚀 Lightning Fast Builds</h3>
-      <p class="feature-card__description">Vite + LightningCSS for 100x faster processing than traditional tools.</p>
-    </div>
+<section class="[ guide ] [ flow flow--xl ]">
+  <h2>Getting Started</h2>
+  
+  <div class="[ step-card ] [ flow flow--md ]">
+    <h3 class="step-card__title">1. Development Server</h3>
+    <pre class="step-card__code">bun run dev</pre>
+    <p class="step-card__description">Starts development server at localhost:8080 with hot reload</p>
+  </div>
+
+  <div class="[ step-card ] [ flow flow--md ]">
+    <h3 class="step-card__title">2. Build for Production</h3>
+    <pre class="step-card__code">bun run build</pre>
+    <p class="step-card__description">Creates optimized static build in _site directory</p>
+  </div>
+
+  <div class="[ step-card ] [ flow flow--md ]">
+    <h3 class="step-card__title">3. Add Interactive Components</h3>
+    <pre class="step-card__code">&lt;is-land on:visible type="vanilla" component="counter"&gt;
+  &lt;div&gt;Loading...&lt;/div&gt;
+&lt;/is-land&gt;</pre>
+    <p class="step-card__description">Use islands to add JavaScript components only where needed</p>
+  </div>
+
+  <div class="[ step-card ] [ flow flow--md ]">
+    <h3 class="step-card__title">4. Customize Design System</h3>
+    <pre class="step-card__code">src/design-tokens/tokens.json
+bun run tokens</pre>
+    <p class="step-card__description">Update design tokens and regenerate CSS custom properties</p>
   </div>
 </section>
 
-<section class="[ flow flow--lg ]">
-  <h2>Tech Stack</h2>
-  <ul class="tech-list">
-    <li class="tech-list__item">
-      <span class="tech-list__name">Eleventy 4.0</span> - <span class="tech-list__description">Static site generation</span>
-    </li>
-    <li class="tech-list__item">
-      <span class="tech-list__name">VentoJS</span> - <span class="tech-list__description">Modern template engine</span>
-    </li>
-    <li class="tech-list__item">
-      <span class="tech-list__name">Vite 7+</span> - <span class="tech-list__description">Asset bundling and dev server</span>
-    </li>
-    <li class="tech-list__item">
-      <span class="tech-list__name">LightningCSS</span> - <span class="tech-list__description">Ultra-fast CSS processing</span>
-    </li>
-    <li class="tech-list__item">
-      <span class="tech-list__name">@11ty/is-land</span> - <span class="tech-list__description">Progressive component hydration</span>
-    </li>
-    <li class="tech-list__item">
-      <span class="tech-list__name">Bun</span> - <span class="tech-list__description">Fast package manager and runtime</span>
-    </li>
-  </ul>
-</section>
-
-<section class="cta">
-  <p class="cta__text">Ready to build fast, modern websites? Check the documentation to get started.</p>
+<section class="[ architecture ] [ flow flow--lg ]">
+  <h2>Template Architecture</h2>
+  <dl class="architecture-list">
+    <div class="architecture-item">
+      <dt class="architecture-item__term">Static-First</dt>
+      <dd class="architecture-item__definition">HTML and CSS load first, JavaScript loads progressively</dd>
+    </div>
+    <div class="architecture-item">
+      <dt class="architecture-item__term">CUBE CSS</dt>
+      <dd class="architecture-item__definition">Composition, Utility, Block, Exception methodology for maintainable styles</dd>
+    </div>
+    <div class="architecture-item">
+      <dt class="architecture-item__term">VentoJS Templates</dt>
+      <dd class="architecture-item__definition">Modern template engine with unified syntax</dd>
+    </div>
+    <div class="architecture-item">
+      <dt class="architecture-item__term">Design Tokens</dt>
+      <dd class="architecture-item__definition">Single source of truth for colors, spacing, and typography</dd>
+    </div>
+  </dl>
 </section>
 
 {{ /layout }}

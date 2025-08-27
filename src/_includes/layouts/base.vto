@@ -1,31 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>{{ title || "Progressive Islands Template" }}</title>
-  <meta name="description" content="{{ description || 'Clean starting template for progressive island architecture' }}">
-  
-  {{ if loadJS }}
-  <script type="module" src="/assets/main.js"></script>
-  {{ /if }}
+  {{ include "partials/head.vto" }}
 </head>
 <body>
-  <div class="container">
-    <main class="stack" style="--stack-space: var(--spacing-scale-xl);">
-      {{ if navigation }}
-      <nav class="cluster" style="--cluster-space: var(--spacing-scale-sm);">
-        {{ for navItem of navigation }}
-          <a href="{{ navItem.url }}" {{ if navItem.current }}aria-current="page"{{ /if }}>{{ navItem.label }}</a>
-        {{ /for }}
-      </nav>
-      {{ /if }}
-      
-      <div class="content">
-        {{ content }}
-      </div>
+  <div class="[ wrapper ] [ flow flow--xl ]">
+    {{ include "partials/header.vto" }}
+    
+    <main class="[ site-main ] [ flow flow--xl ]">
+      {{ content }}
     </main>
+    
+    {{ include "partials/footer.vto" }}
   </div>
 </body>
 </html>

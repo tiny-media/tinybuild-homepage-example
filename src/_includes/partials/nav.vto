@@ -1,0 +1,16 @@
+<nav class="site-nav">
+  {{ set navPages = collections.all |> eleventyNavigation }}
+  {{ if navPages.length > 0 }}
+    <ul class="[ nav-list ] [ cluster ] [ justify-start align-center ]" role="list">
+      {{ for entry of navPages }}
+        <li class="nav-item">
+          <a href="{{ entry.url }}" 
+             class="nav-link{{ if entry.url == page.url }} nav-link--active{{ /if }}"
+             {{ if entry.url == page.url }}aria-current="page"{{ /if }}>
+            {{ entry.title }}
+          </a>
+        </li>
+      {{ /for }}
+    </ul>
+  {{ /if }}
+</nav>

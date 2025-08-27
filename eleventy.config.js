@@ -1,5 +1,6 @@
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
 import { VentoPlugin } from "eleventy-plugin-vento";
+import EleventyNavigationPlugin from "@11ty/eleventy-navigation";
 import { eleventyVitePluginConfig } from "./eleventyVitePluginConfig.js";
 
 export default async function (eleventyConfig) {
@@ -10,6 +11,9 @@ export default async function (eleventyConfig) {
 		watch: [],
 		showAllHosts: false,
 	});
+
+	// Navigation Plugin Configuration
+	eleventyConfig.addPlugin(EleventyNavigationPlugin);
 
 	// VentoJS Plugin Configuration
 	eleventyConfig.addPlugin(VentoPlugin, {

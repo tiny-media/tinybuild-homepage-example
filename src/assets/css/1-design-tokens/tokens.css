@@ -5,29 +5,33 @@
   :root {
 
     /* Colors */
-    --color-brand-primary: oklch(50% 0.15 25);
-    --color-brand-secondary: oklch(45% 0.12 15);
-    --color-brand-accent: oklch(60% 0.20 270);
-    --color-semantic-surface-primary-light: oklch(100% 0 0);
-    --color-semantic-surface-primary-dark: oklch(14% 0.01 240);
-    --color-semantic-surface-secondary-light: oklch(98% 0.005 240);
-    --color-semantic-surface-secondary-dark: oklch(16% 0.015 240);
-    --color-semantic-surface-elevated-light: oklch(100% 0 0);
-    --color-semantic-surface-elevated-dark: oklch(18% 0.02 240);
-    --color-semantic-text-primary-light: oklch(20% 0.02 240);
-    --color-semantic-text-primary-dark: oklch(92% 0.015 240);
-    --color-semantic-text-secondary-light: oklch(55% 0.02 240);
-    --color-semantic-text-secondary-dark: oklch(68% 0.02 240);
-    --color-semantic-text-tertiary-light: oklch(70% 0.015 240);
-    --color-semantic-text-tertiary-dark: oklch(55% 0.015 240);
-    --color-semantic-border-subtle-light: oklch(92% 0.008 240);
-    --color-semantic-border-subtle-dark: oklch(24% 0.02 240);
-    --color-semantic-border-medium-light: oklch(85% 0.015 240);
-    --color-semantic-border-medium-dark: oklch(32% 0.025 240);
-    --color-semantic-interactive-hover-light: oklch(96% 0.008 240);
-    --color-semantic-interactive-hover-dark: oklch(20% 0.02 240);
-    --color-semantic-interactive-active-light: oklch(94% 0.01 240);
-    --color-semantic-interactive-active-dark: oklch(22% 0.025 240);
+    --color-brand-primary: oklch(47% 0.08 25);
+    --color-brand-secondary: oklch(42% 0.06 15);
+    --color-brand-accent: oklch(55% 0.12 270);
+    --color-semantic-surface-primary-light: oklch(96% 0.008 35);
+    --color-semantic-surface-primary-dark: oklch(18% 0.015 25);
+    --color-semantic-surface-secondary-light: oklch(94% 0.01 35);
+    --color-semantic-surface-secondary-dark: oklch(21% 0.018 25);
+    --color-semantic-surface-elevated-light: oklch(98% 0.006 35);
+    --color-semantic-surface-elevated-dark: oklch(24% 0.02 25);
+    --color-semantic-surface-tertiary-light: oklch(92% 0.012 35);
+    --color-semantic-surface-tertiary-dark: oklch(27% 0.022 25);
+    --color-semantic-text-primary-light: oklch(22% 0.025 30);
+    --color-semantic-text-primary-dark: oklch(88% 0.018 35);
+    --color-semantic-text-secondary-light: oklch(48% 0.03 30);
+    --color-semantic-text-secondary-dark: oklch(72% 0.022 35);
+    --color-semantic-text-tertiary-light: oklch(65% 0.02 30);
+    --color-semantic-text-tertiary-dark: oklch(58% 0.018 35);
+    --color-semantic-border-subtle-light: oklch(88% 0.012 35);
+    --color-semantic-border-subtle-dark: oklch(32% 0.025 25);
+    --color-semantic-border-medium-light: oklch(82% 0.018 35);
+    --color-semantic-border-medium-dark: oklch(42% 0.03 25);
+    --color-semantic-border-strong-light: oklch(68% 0.025 35);
+    --color-semantic-border-strong-dark: oklch(52% 0.035 25);
+    --color-semantic-interactive-hover-light: oklch(90% 0.014 35);
+    --color-semantic-interactive-hover-dark: oklch(30% 0.025 25);
+    --color-semantic-interactive-active-light: oklch(88% 0.016 35);
+    --color-semantic-interactive-active-dark: oklch(33% 0.028 25);
 
     /* Spacing */
     --spacing-scale-2xs: 0.125rem;

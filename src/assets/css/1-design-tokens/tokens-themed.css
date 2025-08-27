@@ -1,25 +1,12 @@
 /* Auto-generated themed design tokens from tokens.json */
-/* DO NOT EDIT - Run 'node generate-tokens.js' to regenerate */
+/* DO NOT EDIT - Run 'bun run tokens' to regenerate */
 
 @layer tokens {
   :root {
-
-    /* Semantic Colors with Theme Support */
-    --color-surface-primary: light-dark(oklch(100% 0 0), oklch(14% 0.01 240));
-    --color-surface-secondary: light-dark(oklch(98% 0.005 240), oklch(16% 0.015 240));
-    --color-surface-elevated: light-dark(oklch(100% 0 0), oklch(18% 0.02 240));
-    --color-text-primary: light-dark(oklch(20% 0.02 240), oklch(92% 0.015 240));
-    --color-text-secondary: light-dark(oklch(55% 0.02 240), oklch(68% 0.02 240));
-    --color-text-tertiary: light-dark(oklch(70% 0.015 240), oklch(55% 0.015 240));
-    --color-border-subtle: light-dark(oklch(92% 0.008 240), oklch(24% 0.02 240));
-    --color-border-medium: light-dark(oklch(85% 0.015 240), oklch(32% 0.025 240));
-    --color-interactive-hover: light-dark(oklch(96% 0.008 240), oklch(20% 0.02 240));
-    --color-interactive-active: light-dark(oklch(94% 0.01 240), oklch(22% 0.025 240));
-
-    /* Brand Colors */
-    --color-brand-primary: oklch(50% 0.15 25);
-    --color-brand-secondary: oklch(45% 0.12 15);
-    --color-brand-accent: oklch(60% 0.20 270);
+    /* Brand Colors (theme-independent) */
+    --color-brand-primary: oklch(47% 0.08 25);
+    --color-brand-secondary: oklch(42% 0.06 15);
+    --color-brand-accent: oklch(55% 0.12 270);
 
     /* Spacing */
     --spacing-scale-2xs: 0.125rem;
@@ -66,25 +53,59 @@
     --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.1), 0 4px 6px -4px oklch(0% 0 0 / 0.1);
   }
 
-  /* Theme Support */
-  @media (prefers-color-scheme: light) {
-    :root {
-      color-scheme: light;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-    }
-  }
-
-  /* Manual Theme Classes */
+  /* Default Light Theme */
+  :root,
   [data-theme="light"] {
-    color-scheme: light;
+    --color-surface-primary: oklch(96% 0.008 35);
+    --color-surface-secondary: oklch(94% 0.01 35);
+    --color-surface-elevated: oklch(98% 0.006 35);
+    --color-surface-tertiary: oklch(92% 0.012 35);
+    --color-text-primary: oklch(22% 0.025 30);
+    --color-text-secondary: oklch(48% 0.03 30);
+    --color-text-tertiary: oklch(65% 0.02 30);
+    --color-border-subtle: oklch(88% 0.012 35);
+    --color-border-medium: oklch(82% 0.018 35);
+    --color-border-strong: oklch(68% 0.025 35);
+    --color-interactive-hover: oklch(90% 0.014 35);
+    --color-interactive-active: oklch(88% 0.016 35);
   }
 
+  /* Dark Theme Override */
   [data-theme="dark"] {
-    color-scheme: dark;
+    --color-surface-primary: oklch(18% 0.015 25);
+    --color-surface-secondary: oklch(21% 0.018 25);
+    --color-surface-elevated: oklch(24% 0.02 25);
+    --color-surface-tertiary: oklch(27% 0.022 25);
+    --color-text-primary: oklch(88% 0.018 35);
+    --color-text-secondary: oklch(72% 0.022 35);
+    --color-text-tertiary: oklch(58% 0.018 35);
+    --color-border-subtle: oklch(32% 0.025 25);
+    --color-border-medium: oklch(42% 0.03 25);
+    --color-border-strong: oklch(52% 0.035 25);
+    --color-interactive-hover: oklch(30% 0.025 25);
+    --color-interactive-active: oklch(33% 0.028 25);
   }
+
+  /* System Preference Auto Mode (fallback only) */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      --color-surface-primary: oklch(18% 0.015 25);
+      --color-surface-secondary: oklch(21% 0.018 25);
+      --color-surface-elevated: oklch(24% 0.02 25);
+      --color-surface-tertiary: oklch(27% 0.022 25);
+      --color-text-primary: oklch(88% 0.018 35);
+      --color-text-secondary: oklch(72% 0.022 35);
+      --color-text-tertiary: oklch(58% 0.018 35);
+      --color-border-subtle: oklch(32% 0.025 25);
+      --color-border-medium: oklch(42% 0.03 25);
+      --color-border-strong: oklch(52% 0.035 25);
+      --color-interactive-hover: oklch(30% 0.025 25);
+      --color-interactive-active: oklch(33% 0.028 25);
+    }
+  }
+
+  /* Browser UI Theme Support */
+  :root { color-scheme: light dark; }
+  [data-theme="light"] { color-scheme: light; }
+  [data-theme="dark"] { color-scheme: dark; }
 }

@@ -1,0 +1,16 @@
+<header class="site-header">
+  <div class="[ cluster ] [ justify-between align-center ]">
+    <div class="[ cluster ] [ justify-start align-center ]">
+      <a href="/" class="site-logo">
+        <h1 class="[ site-title ]">Progressive Islands</h1>
+      </a>
+      {{ include "partials/nav.vto" }}
+    </div>
+    
+    <div class="header-actions">
+      <is-land on:interaction type="vanilla" component="theme-toggle">
+        <button class="theme-toggle" aria-label="Toggle theme">☀</button>
+      </is-land>
+    </div>
+  </div>
+</header>

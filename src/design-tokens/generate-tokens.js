@@ -109,30 +109,16 @@ function generateCSS() {
   return css;
 }
 
-// Generate themed CSS with light-dark() functions
+// Generate themed CSS with explicit theme classes using OKLCH math
 function generateThemedCSS() {
   let css = `/* Auto-generated themed design tokens from tokens.json */\n`;
-  css += `/* DO NOT EDIT - Run 'node generate-tokens.js' to regenerate */\n\n`;
+  css += `/* DO NOT EDIT - Run 'bun run tokens' to regenerate */\n\n`;
   css += `@layer tokens {\n`;
   css += `  :root {\n`;
   
-  // Handle semantic colors with light/dark variants
-  if (tokens.color && tokens.color.semantic) {
-    css += `\n    /* Semantic Colors with Theme Support */\n`;
-    
-    Object.entries(tokens.color.semantic).forEach(([category, variants]) => {
-      Object.entries(variants).forEach(([name, values]) => {
-        if (values.light && values.dark) {
-          const cssVar = `--color-${category}-${name}`;
-          css += `    ${cssVar}: light-dark(${values.light.value}, ${values.dark.value});\n`;
-        }
-      });
-    });
-  }
-  
-  // Handle brand colors (no theming needed)
+  // Handle brand colors (theme-independent)
   if (tokens.color && tokens.color.brand) {
-    css += `\n    /* Brand Colors */\n`;
+    css += `    /* Brand Colors (theme-independent) */\n`;
     Object.entries(tokens.color.brand).forEach(([name, token]) => {
       css += `    --color-brand-${name}: ${token.value};\n`;
     });
@@ -155,29 +141,64 @@ function generateThemedCSS() {
   
   css += `  }\n\n`;
   
-  // Add color scheme preferences
-  css += `  /* Theme Support */\n`;
-  css += `  @media (prefers-color-scheme: light) {\n`;
-  css += `    :root {\n`;
-  css += `      color-scheme: light;\n`;
-  css += `    }\n`;
-  css += `  }\n\n`;
-  
-  css += `  @media (prefers-color-scheme: dark) {\n`;
-  css += `    :root {\n`;
-  css += `      color-scheme: dark;\n`;
-  css += `    }\n`;
-  css += `  }\n\n`;
-  
-  // Manual theme overrides
-  css += `  /* Manual Theme Classes */\n`;
+  // Generate explicit theme classes for better control
+  css += `  /* Default Light Theme */\n`;
+  css += `  :root,\n`;
   css += `  [data-theme="light"] {\n`;
-  css += `    color-scheme: light;\n`;
+  
+  if (tokens.color && tokens.color.semantic) {
+    Object.entries(tokens.color.semantic).forEach(([category, variants]) => {
+      Object.entries(variants).forEach(([name, values]) => {
+        if (values.light) {
+          const cssVar = `--color-${category}-${name}`;
+          css += `    ${cssVar}: ${values.light.value};\n`;
+        }
+      });
+    });
+  }
+  
   css += `  }\n\n`;
   
+  css += `  /* Dark Theme Override */\n`;
   css += `  [data-theme="dark"] {\n`;
-  css += `    color-scheme: dark;\n`;
-  css += `  }\n`;
+  
+  if (tokens.color && tokens.color.semantic) {
+    Object.entries(tokens.color.semantic).forEach(([category, variants]) => {
+      Object.entries(variants).forEach(([name, values]) => {
+        if (values.dark) {
+          const cssVar = `--color-${category}-${name}`;
+          css += `    ${cssVar}: ${values.dark.value};\n`;
+        }
+      });
+    });
+  }
+  
+  css += `  }\n\n`;
+  
+  // System preference fallback (only when no explicit theme is set)
+  css += `  /* System Preference Auto Mode (fallback only) */\n`;
+  css += `  @media (prefers-color-scheme: dark) {\n`;
+  css += `    :root:not([data-theme]) {\n`;
+  
+  if (tokens.color && tokens.color.semantic) {
+    Object.entries(tokens.color.semantic).forEach(([category, variants]) => {
+      Object.entries(variants).forEach(([name, values]) => {
+        if (values.dark) {
+          const cssVar = `--color-${category}-${name}`;
+          css += `      ${cssVar}: ${values.dark.value};\n`;
+        }
+      });
+    });
+  }
+  
+  css += `    }\n`;
+  css += `  }\n\n`;
+  
+  // Color scheme declarations for browser UI
+  css += `  /* Browser UI Theme Support */\n`;
+  css += `  :root { color-scheme: light dark; }\n`;
+  css += `  [data-theme="light"] { color-scheme: light; }\n`;
+  css += `  [data-theme="dark"] { color-scheme: dark; }\n`;
   
   css += `}\n`;
   

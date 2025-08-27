@@ -9,6 +9,7 @@
 @import "./4-blocks/button.css";
 @import "./4-blocks/badge.css";
 @import "./4-blocks/island.css";
+@import "./4-blocks/navigation.css";
 @import "./4-blocks/homepage.css";
 @import "./4-blocks/performance.css";
 @import "./4-blocks/table.css";
@@ -41,16 +42,6 @@
     border-radius: var(--radius-sm);
   }
   
-  /* Site header */
-  .site-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-scale-lg) 0;
-    border-bottom: 1px solid var(--color-border-subtle);
-    margin-bottom: var(--spacing-scale-xl);
-  }
-  
   .theme-toggle-wrapper {
     flex-shrink: 0;
   }
@@ -62,12 +53,6 @@
   
   /* Responsive design */
   @media (max-width: 768px) {
-    .site-header {
-      flex-direction: column;
-      gap: var(--spacing-scale-lg);
-      align-items: stretch;
-    }
-    
     .theme-toggle-wrapper {
       align-self: flex-end;
     }
