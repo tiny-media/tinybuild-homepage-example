@@ -4,8 +4,9 @@
 <title>{{ title || "Progressive Islands Template" }}</title>
 <meta name="description" content="{{ description || 'Clean starting template for progressive island architecture' }}">
 
-<!-- Pico classless CSS for base styling -->
-<link rel="stylesheet" href="/assets/css/pico_classless.css">
+<!-- Preload critical CSS for faster rendering -->
+<link rel="preload" href="/assets/css/pico_classless.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/assets/css/pico_classless.css"></noscript>
 
 <!-- Basic theme system (no CSS dependencies) -->
 <script>
