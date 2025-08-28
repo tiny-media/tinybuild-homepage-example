@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun run assets:process && eleventy --serve --incremental --ignore-initial --quiet",
-    "build": "bun run clean && bun run assets:build && NODE_ENV=production eleventy",
-    "build:dev": "bun run clean && bun run assets:process && NODE_ENV=development eleventy",
+    "dev": "eleventy --serve --incremental --ignore-initial --quiet",
+    "build": "bun run clean && NODE_ENV=production eleventy",
+    "build:dev": "bun run clean && NODE_ENV=development eleventy",
     "preview": "eleventy --serve --port 4173 --input _site",
-    "clean": "rm -rf _site .11ty-vite src/_data/assets.json src/_data/cache.json src/_data/hashes.json",
-    "tokens": "bun src/design-tokens/generate-tokens.js",
-    "assets:process": "bun run tokens && bun scripts/process-css.ts && bun scripts/hash-assets.ts",
-    "assets:build": "bun run tokens && bun scripts/process-css.ts && bun scripts/hash-assets.ts --force"
+    "clean": "rm -rf _site .11ty-vite"
   },
   "dependencies": {},
   "devDependencies": {

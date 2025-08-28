@@ -38,12 +38,12 @@ export default function(target, props = {}) {
   // Render the component
   function render() {
     target.innerHTML = `
-      <div class="counter island stack" style="--stack-space: var(--spacing-sm);">
+      <div class="counter island stack"">
         <h3>Counter: ${count}</h3>
-        <div class="cluster" style="--cluster-space: var(--spacing-sm);">
-          <button class="button" data-action="decrement">-</button>
-          <button class="button" data-action="increment">+</button>
-          <button class="button" data-action="reset">Reset</button>
+        <div>
+          <button data-action="decrement">-</button>
+          <button data-action="increment">+</button>
+          <button data-action="reset">Reset</button>
         </div>
       </div>
     `;

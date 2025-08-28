@@ -1,16 +1,21 @@
-<header class="site-header">
-  <div class="[ cluster ] [ justify-between align-center ]">
-    <div class="[ cluster ] [ justify-start align-center ]">
-      <a href="/" class="site-logo">
-        <h1 class="[ site-title ]">Progressive Islands</h1>
-      </a>
-      {{ include "partials/nav.vto" }}
-    </div>
-    
-    <div class="header-actions">
-      <is-land on:interaction type="vanilla" component="theme-toggle">
-        <button class="theme-toggle" aria-label="Toggle theme">☀</button>
-      </is-land>
-    </div>
-  </div>
+<header>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Progressive Islands Home"><strong>Progressive Islands</strong></a></li>
+    </ul>
+    {{ include "partials/nav.vto" }}
+    <ul>
+      <li>
+        {{ if (page.url === "/") }}
+          <!-- Landing page: Simple theme toggle (handled by inline script) -->
+          <button class="theme-toggle" aria-label="Toggle theme">☀</button>
+        {{ else }}
+          <!-- Other pages: Island-based theme toggle -->
+          <is-land on:interaction type="vanilla" component="theme-toggle">
+            <button class="theme-toggle" aria-label="Toggle theme">☀</button>
+          </is-land>
+        {{ /if }}
+      </li>
+    </ul>
+  </nav>
 </header>

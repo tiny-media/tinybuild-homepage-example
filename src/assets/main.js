@@ -1,5 +1,4 @@
 // Main entry point for Vite processing
-import "/src/assets/css/main.css";
 import "@11ty/is-land/is-land.js";
 
 console.log('🟩 Main bundle loaded - is-land initialized');

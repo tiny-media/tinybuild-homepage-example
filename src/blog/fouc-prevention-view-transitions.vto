@@ -11,18 +11,18 @@ tags: ["performance", "css", "progressive-enhancement", "cube-css", "view-transi
 
 {{ layout "layouts/base.vto" }}
 
-<article class="[ blog-post ] [ flow flow--xl ]">
-  <header class="[ blog-header ] [ flow flow--lg ]">
-    <h1 class="hero__title">FOUC Prevention and View Transitions in Progressive Islands</h1>
-    <p class="hero__lead">How to eliminate layout shifts during navigation and add smooth view transitions using CUBE CSS methodology and native web APIs.</p>
-    <div class="[ meta ] [ cluster ] [ text-secondary ]">
+<article>
+  <header>
+    <h1>FOUC Prevention and View Transitions in Progressive Islands</h1>
+    <p>How to eliminate layout shifts during navigation and add smooth view transitions using CUBE CSS methodology and native web APIs.</p>
+    <div>
       <time datetime="2025-01-27">January 27, 2025</time>
       <span>•</span>
       <span>Performance, CSS, Progressive Enhancement</span>
     </div>
   </header>
 
-  <div class="[ blog-content ] [ flow flow--lg ]">
+  <div>
     <h2>The Problem: Navigation Layout Shifts</h2>
     
     <p>When navigating between pages, users often experience a brief flash where content appears unstyled in the upper left corner before shifting into its proper layout. This Flash of Unstyled Content (FOUC) creates a jarring experience that makes websites feel slow and unpolished.</p>
@@ -37,7 +37,7 @@ tags: ["performance", "css", "progressive-enhancement", "cube-css", "view-transi
 
     <p>We inline only the essential above-the-fold styles directly in the <code>&lt;head&gt;</code>:</p>
 
-    <pre class="code-block"><code><!-- Critical CSS inlined to prevent FOUC -->
+    <pre><code><!-- Critical CSS inlined to prevent FOUC -->
 &lt;style&gt;
 /* Essential Design Tokens */
 @layer tokens {
@@ -66,7 +66,7 @@ tags: ["performance", "css", "progressive-enhancement", "cube-css", "view-transi
 
     <p>Non-critical CSS loads progressively using the native <code>@11ty/is-land</code> capabilities:</p>
 
-    <pre class="code-block"><code>&lt;is-land on:idle&gt;
+    <pre><code>&lt;is-land on:idle&gt;
   &lt;template data-island&gt;
     &lt;link rel="stylesheet" href="/assets/main.css"&gt;
   &lt;/template&gt;
@@ -80,7 +80,7 @@ tags: ["performance", "css", "progressive-enhancement", "cube-css", "view-transi
 
     <p>We add the native CSS View Transitions API as a progressive enhancement:</p>
 
-    <pre class="code-block"><code>/* Progressive enhancement for smooth navigation */
+    <pre><code>/* Progressive enhancement for smooth navigation */
 @media not (prefers-reduced-motion: reduce) {
   @view-transition {
     navigation: auto;  /* Multi-page transitions */
@@ -108,7 +108,7 @@ tags: ["performance", "css", "progressive-enhancement", "cube-css", "view-transi
 
     <h2>Performance Benefits</h2>
 
-    <div class="[ performance-table ]">
+    <div>
       <h3>Before vs After</h3>
       <table>
         <thead>
@@ -155,7 +155,7 @@ tags: ["performance", "css", "progressive-enhancement", "cube-css", "view-transi
 
     <p>The navigation system uses the official Eleventy plugin with VentoJS syntax:</p>
 
-    <pre class="code-block"><code>// In eleventy.config.js
+    <pre><code>// In eleventy.config.js
 eleventyConfig.addPlugin(EleventyNavigationPlugin);
 
 // In navigation partial (note |> syntax for VentoJS)

@@ -11,18 +11,18 @@ tags: ["performance", "css", "progressive-enhancement", "layout-stability"]
 
 {{ layout "layouts/base.vto" }}
 
-<article class="[ blog-post ] [ flow flow--xl ]">
-  <header class="[ blog-header ] [ flow flow--lg ]">
-    <h1 class="hero__title">Preventing Scrollbar Layout Shifts with Modern CSS</h1>
-    <p class="hero__lead">Eliminate jarring layout shifts when navigating between pages with different content heights using 2025's best CSS techniques.</p>
-    <div class="[ meta ] [ cluster ] [ text-secondary ]">
+<article>
+  <header>
+    <h1>Preventing Scrollbar Layout Shifts with Modern CSS</h1>
+    <p>Eliminate jarring layout shifts when navigating between pages with different content heights using 2025's best CSS techniques.</p>
+    <div>
       <time datetime="2025-01-27">January 27, 2025</time>
       <span>•</span>
       <span>Performance, CSS, Progressive Enhancement</span>
     </div>
   </header>
 
-  <div class="[ blog-content ] [ flow flow--lg ]">
+  <div>
     <h2>The Problem: Navigation Layout Shifts</h2>
     
     <p>A common but frustrating UX issue occurs when navigating between pages with different content heights. The Home page has enough content to trigger a vertical scrollbar, but the Blog and Examples pages don't. This creates a noticeable layout shift as the scrollbar appears and disappears, causing the entire page content to jump horizontally.</p>
@@ -33,7 +33,7 @@ tags: ["performance", "css", "progressive-enhancement", "layout-stability"]
 
     <p>The 2025 approach uses the <code>scrollbar-gutter</code> CSS property with progressive enhancement:</p>
 
-    <pre class="code-block"><code>html {
+    <pre><code>html {
   font-family: var(--typography-family-sans);
   font-size: 1rem;
   line-height: 1.5;
@@ -70,7 +70,7 @@ tags: ["performance", "css", "progressive-enhancement", "layout-stability"]
 
     <h2>Browser Support and Progressive Enhancement</h2>
 
-    <div class="[ performance-table ]">
+    <div>
       <h3>Current Browser Support (2025)</h3>
       <table>
         <thead>
@@ -115,7 +115,7 @@ tags: ["performance", "css", "progressive-enhancement", "layout-stability"]
 
     <p>For more complex scenarios, you might need the viewport width calculation method:</p>
 
-    <pre class="code-block"><code>/* Calculate scrollbar width and offset content */
+    <pre><code>/* Calculate scrollbar width and offset content */
 main {
   padding-left: calc(100vw - 100%);
 }</code></pre>

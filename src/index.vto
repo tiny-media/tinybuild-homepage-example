@@ -8,61 +8,57 @@ eleventyNavigation:
 
 {{ layout "layouts/base.vto" }}
 
-<div class="[ hero ] [ flow flow--lg ]">
-  <h1 class="hero__title">Progressive Islands Template</h1>
-  <p class="hero__lead">Start building with static-first architecture and add interactivity where needed.</p>
-</div>
+<header>
+  <hgroup>
+    <h1>Progressive Islands Template</h1>
+    <p>Clean starting point for building modern web applications with static-first architecture</p>
+  </hgroup>
+</header>
 
-<section class="[ guide ] [ flow flow--xl ]">
+<section>
   <h2>Getting Started</h2>
   
-  <div class="[ step-card ] [ flow flow--md ]">
-    <h3 class="step-card__title">1. Development Server</h3>
-    <pre class="step-card__code">bun run dev</pre>
-    <p class="step-card__description">Starts development server at localhost:8080 with hot reload</p>
-  </div>
+  <article>
+    <header>
+      <h3>1. Development Server</h3>
+    </header>
+    <pre><code>bun run dev</code></pre>
+    <p>Starts development server at <kbd>localhost:4321</kbd> with hot reload</p>
+  </article>
 
-  <div class="[ step-card ] [ flow flow--md ]">
-    <h3 class="step-card__title">2. Build for Production</h3>
-    <pre class="step-card__code">bun run build</pre>
-    <p class="step-card__description">Creates optimized static build in _site directory</p>
-  </div>
+  <article>
+    <header>
+      <h3>2. Build for Production</h3>
+    </header>
+    <pre><code>bun run build</code></pre>
+    <p>Creates optimized static build in <code>_site</code> directory</p>
+  </article>
 
-  <div class="[ step-card ] [ flow flow--md ]">
-    <h3 class="step-card__title">3. Add Interactive Components</h3>
-    <pre class="step-card__code">&lt;is-land on:visible type="vanilla" component="counter"&gt;
+  <article>
+    <header>
+      <h3>3. Add Interactive Components</h3>
+    </header>
+    <pre><code>&lt;is-land on:visible type="vanilla" component="counter"&gt;
   &lt;div&gt;Loading...&lt;/div&gt;
-&lt;/is-land&gt;</pre>
-    <p class="step-card__description">Use islands to add JavaScript components only where needed</p>
-  </div>
-
-  <div class="[ step-card ] [ flow flow--md ]">
-    <h3 class="step-card__title">4. Customize Design System</h3>
-    <pre class="step-card__code">src/design-tokens/tokens.json
-bun run tokens</pre>
-    <p class="step-card__description">Update design tokens and regenerate CSS custom properties</p>
-  </div>
+&lt;/is-land&gt;</code></pre>
+    <p>Use <strong>islands</strong> to add JavaScript components only where needed</p>
+  </article>
 </section>
 
-<section class="[ architecture ] [ flow flow--lg ]">
+<section>
   <h2>Template Architecture</h2>
-  <dl class="architecture-list">
-    <div class="architecture-item">
-      <dt class="architecture-item__term">Static-First</dt>
-      <dd class="architecture-item__definition">HTML and CSS load first, JavaScript loads progressively</dd>
-    </div>
-    <div class="architecture-item">
-      <dt class="architecture-item__term">CUBE CSS</dt>
-      <dd class="architecture-item__definition">Composition, Utility, Block, Exception methodology for maintainable styles</dd>
-    </div>
-    <div class="architecture-item">
-      <dt class="architecture-item__term">VentoJS Templates</dt>
-      <dd class="architecture-item__definition">Modern template engine with unified syntax</dd>
-    </div>
-    <div class="architecture-item">
-      <dt class="architecture-item__term">Design Tokens</dt>
-      <dd class="architecture-item__definition">Single source of truth for colors, spacing, and typography</dd>
-    </div>
+  <dl>
+    <dt><strong>Static-First</strong></dt>
+    <dd>HTML and CSS load first, JavaScript loads progressively for optimal performance</dd>
+    
+    <dt><strong>Progressive Islands</strong></dt>
+    <dd>Add interactivity incrementally with component-based architecture</dd>
+    
+    <dt><strong>VentoJS Templates</strong></dt>
+    <dd>Modern template engine with intuitive syntax and JavaScript integration</dd>
+    
+    <dt><strong>Theme System</strong></dt>
+    <dd>Built-in light/dark/auto theme switching with system preference detection</dd>
   </dl>
 </section>
 

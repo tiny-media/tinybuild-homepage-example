@@ -67,17 +67,10 @@ export default function(target, props = {}) {
   });
 </script>
 
-<div class="component">
+<div>
   <p>Value: {localState}</p>
   <button onclick={() => localState++}>Increment</button>
 </div>
-
-<style>
-  .component {
-    padding: var(--spacing-md);
-    background: var(--color-surface);
-  }
-</style>
 ```
 
 ## Cross-Tab Persistence Pattern
@@ -130,12 +123,12 @@ export function createPerformanceMetrics(bundleSize = 0) {
   {{ set totalSize = jsSize + frameworkSize + componentSize }}
   {{ set statusLevel = totalSize < 5000 ? 'success' : totalSize < 20000 ? 'warning' : 'info' }}
   
-  <div class="performance-stats island stack" style="--stack-space: var(--spacing-md);">
+  <div>
     <h4>📊 Performance Level {{ level }}</h4>
-    <div class="performance-grid">
-      <div class="performance-metric text-center">
-        <div class="font-semibold text-secondary">Total</div>
-        <div class="text-xl font-bold">{{ formatFileSize(totalSize) }}</div>
+    <div>
+      <div>
+        <div>Total</div>
+        <div>{{ formatFileSize(totalSize) }}</div>
       </div>
     </div>
   </div>
@@ -145,14 +138,14 @@ export function createPerformanceMetrics(bundleSize = 0) {
 ### Loading Sequence
 ```vento
 {{ export function loadingSequence(steps) }}
-  <div class="loading-sequence island stack" style="--stack-space: var(--spacing-sm);">
+  <div>
     <h5>⚡ Loading Sequence</h5>
-    <ol class="sequence-list">
+    <ol>
       {{ for step of steps }}
-        <li class="sequence-item">
+        <li>
           <strong>{{ step.name }}:</strong> {{ step.description }}
           {{ if step.size }}
-            <span class="sequence-size">({{ formatFileSize(step.size) }})</span>
+            <span>({{ formatFileSize(step.size) }})</span>
           {{ /if }}
         </li>
       {{ /for }}

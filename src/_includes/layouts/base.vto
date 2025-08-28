@@ -4,14 +4,12 @@
   {{ include "partials/head-adaptive.vto" }}
 </head>
 <body>
-  <div class="[ wrapper ] [ flow flow--xl ]">
-    {{ include "partials/header.vto" }}
-    
-    <main class="[ site-main ] [ flow flow--xl ]">
-      {{ content }}
-    </main>
-    
-    {{ include "partials/footer.vto" }}
-  </div>
+  {{ include "partials/header.vto" }}
+  
+  <main>
+    {{ content }}
+  </main>
+  
+  {{ include "partials/footer.vto" }}
 </body>
 </html>
