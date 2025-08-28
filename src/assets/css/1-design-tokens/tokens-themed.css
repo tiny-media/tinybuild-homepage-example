@@ -6,7 +6,7 @@
     /* Brand Colors (theme-independent) */
     --color-brand-primary: oklch(47% 0.08 25);
     --color-brand-secondary: oklch(42% 0.06 15);
-    --color-brand-accent: oklch(55% 0.12 270);
+    --color-brand-accent: oklch(60% 0.14 280);
 
     /* Spacing */
     --spacing-scale-2xs: 0.125rem;

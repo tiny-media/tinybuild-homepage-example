@@ -1,0 +1,125 @@
+{{ set isProduction = (__env.NODE_ENV === "production") }}
+{{ set isLandingPage = (page.url === "/") }}
+{{ set shouldInlineAll = isProduction && isLandingPage }}
+{{ set assetVersion = assets?.version || "dev" }}
+{{ set cssVersion = assets?.css?.hash || "dev" }}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ title || "Progressive Islands Template" }}</title>
+<meta name="description" content="{{ description || 'Clean starting template for progressive island architecture' }}">
+
+{{ if shouldInlineAll }}
+  <!-- PRODUCTION LANDING PAGE: 100% Inline Strategy -->
+  
+  <!-- All CSS inlined for instant rendering -->
+  <style data-version="v{{ assetVersion }}" data-strategy="inline-all">
+{{ assets?.css?.combined || "/* CSS not found */" }}
+  </style>
+
+  <!-- Theme initialization (always inline for FOUC prevention) -->
+  <script data-version="v{{ assetVersion }}">
+    // Initialize theme before page renders to prevent flash
+    (function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      const html = document.documentElement;
+      
+      if (theme === 'auto') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        html.style.colorScheme = prefersDark ? 'dark' : 'light';
+      } else {
+        html.setAttribute('data-theme', theme);
+        html.style.colorScheme = theme;
+      }
+      
+      // Cache inline CSS as external file for subsequent pages
+      if ('caches' in window && 'serviceWorker' in navigator) {
+        const cssContent = document.querySelector('[data-strategy="inline-all"]').textContent;
+        
+        caches.open('assets-v{{ assetVersion }}').then(cache => {
+          // Cache CSS as external file
+          cache.put('/assets/main.css', new Response(cssContent, {
+            headers: {
+              'Content-Type': 'text/css',
+              'Cache-Control': 'public, max-age=31536000'
+            }
+          }));
+          
+          // Set cookie to indicate cache is ready
+          document.cookie = 'cached=true; path=/; max-age=31536000';
+        }).catch(err => console.log('Cache setup failed:', err));
+      }
+    })();
+
+{{ assets?.js?.content || "/* JS not found */" }}
+  </script>
+
+{{ else }}
+  <!-- DEVELOPMENT/SUBSEQUENT PAGES: External References -->
+  
+  <!-- Critical CSS always inlined (FOUC prevention) -->
+  <style data-version="v{{ cssVersion }}" data-strategy="critical-only">
+{{ assets?.css?.critical || "/* Critical CSS not found */" }}
+  </style>
+
+  <!-- Theme initialization script -->
+  <script>
+    // Initialize theme before page renders to prevent flash
+    (function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      const html = document.documentElement;
+      
+      if (theme === 'auto') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        html.style.colorScheme = prefersDark ? 'dark' : 'light';
+      } else {
+        html.setAttribute('data-theme', theme);
+        html.style.colorScheme = theme;
+      }
+    })();
+  </script>
+
+  <!-- Aggressive async CSS loading (Phase 1 implementation) -->
+  <link rel="preload" href="/assets/main.css" as="style">
+  <link rel="stylesheet" href="/assets/main.css" media="print" onload="this.media='all'; this.onload=null;">
+  <noscript><link rel="stylesheet" href="/assets/main.css"></noscript>
+
+  <!-- Progressive prefetching for likely navigation -->
+  <link rel="prefetch" href="/blog/">
+  <link rel="prefetch" href="/examples/">
+  <link rel="prefetch" href="/assets/main.js">
+
+  <!-- Load JavaScript module -->
+  <script type="module" src="/assets/main.js"></script>
+
+{{ /if }}
+
+<!-- Progressive Service Worker Registration (both strategies) -->
+{{ if isProduction }}
+<script>
+  // Register Service Worker for app shell caching
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js?v={{ assetVersion }}').then(registration => {
+      console.log('SW registered:', registration.scope);
+    }).catch(err => {
+      console.log('SW registration failed:', err);
+    });
+  }
+</script>
+{{ /if }}
+
+<!-- Debug info for all builds -->
+<script>
+  console.log('🏗️ Build Info:', {
+    strategy: '{{ shouldInlineAll ? "inline-all" : "external-refs" }}',
+    version: '{{ assetVersion }}',
+    cssHash: '{{ cssVersion }}',
+    page: '{{ page.url }}',
+    production: {{ isProduction }},
+    isLandingPage: {{ isLandingPage }},
+    nodeEnv: '{{ __env.NODE_ENV || "undefined" }}'
+  });
+</script>

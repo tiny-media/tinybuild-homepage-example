@@ -1,0 +1,17 @@
+{
+  "version": "1c658523f69b",
+  "shortVersion": "1c658523",
+  "files": {
+    "css": "main-d32b1d43.css",
+    "js": "main-d32b1d43.js"
+  },
+  "timestamp": "2025-08-28T06:34:54.811Z",
+  "cacheStrategy": {
+    "shouldInvalidate": true,
+    "cacheKeys": [
+      "css-v1c658523f69b",
+      "js-v1c658523f69b",
+      "shell-v1c658523f69b"
+    ]
+  }
+}
