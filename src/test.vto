@@ -1,0 +1,82 @@
+---
+title: "CSS Test"
+description: "Testing the CSS System"
+eleventyNavigation:
+  key: "Test"
+  order: 5
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>CSS System Test</title>
+  
+  <script>
+    const t = localStorage.getItem('theme');
+    if (t) document.documentElement.dataset.theme = t;
+  </script>
+  
+  <!-- Import your CSS files -->
+  <link rel="stylesheet" href="/assets/css/0-critical/reset-and-base.css">
+  <link rel="stylesheet" href="/assets/css/1-tokens/colors.css">
+  <link rel="stylesheet" href="/assets/css/1-tokens/spacing.css">
+  <link rel="stylesheet" href="/assets/css/1-tokens/typography.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+  
+  <main>
+    <article>
+      <h1>Your CSS System</h1>
+      <p>This is using the classless base styles with your token system. Everything should look good without any classes.</p>
+      
+      <h2>Typography Test</h2>
+      <p>Regular paragraph with a <a href="#">link</a>, some <code>inline code</code>, and <strong>bold text</strong>.</p>
+      
+      <blockquote>
+        "A thoughtful quote that should have nice styling and proper contrast."
+      </blockquote>
+      
+      <h3>Code Example</h3>
+      <pre><code>const theme = localStorage.getItem('theme');
+if (theme) {
+  document.documentElement.dataset.theme = theme;
+}</code></pre>
+      
+      <h3>Interactive Elements</h3>
+      <button>Primary Button</button>
+      
+      <details>
+        <summary>Expandable Section</summary>
+        <p>Hidden content that appears when expanded.</p>
+      </details>
+    </article>
+  </main>
+  
+  <script>
+    // Simple theme toggle for testing
+    document.querySelector('button').addEventListener('click', () => {
+      const current = document.documentElement.dataset.theme || 'auto';
+      const themes = ['light', 'dark', 'auto'];
+      const next = themes[(themes.indexOf(current) + 1) % 3];
+      
+      if (next === 'auto') {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.removeItem('theme');
+      } else {
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('theme', next);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+---
+title: "Kitchen Sink - The CSS System"
+description: "Comprehensive demonstration of all CSS system features, tokens, and components"
+eleventyNavigation:
+  key: "Kitchen_Sink"
+  order: 4
+---
+
+{{ layout "layouts/base.vto" }}
+
+<style>
+  /* Additional utility classes for the kitchen sink */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+    margin-block: var(--space-lg);
+  }
+  
+  .demo-card {
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--space-md);
+  }
+  
+  .color-swatch {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    margin-right: var(--space-xs);
+    vertical-align: middle;
+  }
+  
+  .spacing-demo {
+    background: var(--color-surface-sunken);
+    border: 1px dashed var(--color-border-strong);
+    margin: var(--space-xs) 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+  }
+  
+  .text-size-demo {
+    margin-block: var(--space-xs);
+    line-height: var(--leading-normal);
+  }
+  
+  .theme-toggle {
+    background: var(--color-primary);
+    color: var(--color-surface);
+    border: none;
+    border-radius: 6px;
+    padding: var(--space-xs) var(--space-md);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin: var(--space-xs);
+  }
+  
+  .theme-toggle:hover {
+    transform: translateY(-1px);
+  }
+  
+  .semantic-demo {
+    padding: var(--space-sm);
+    border-radius: 6px;
+    margin: var(--space-xs) 0;
+    border: 1px solid;
+  }
+  
+  .semantic-success {
+    background: color-mix(in oklch, var(--color-success), transparent 85%);
+    border-color: var(--color-success);
+    color: var(--color-success);
+  }
+  
+  .semantic-info {
+    background: color-mix(in oklch, var(--color-info), transparent 85%);
+    border-color: var(--color-info);
+    color: var(--color-info);
+  }
+  
+  .semantic-warning {
+    background: color-mix(in oklch, var(--color-warning), transparent 85%);
+    border-color: var(--color-warning);
+    color: var(--color-warning);
+  }
+  
+  .semantic-error {
+    background: color-mix(in oklch, var(--color-error), transparent 85%);
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
+</style>
+
+<div>
+  <h1>Kitchen Sink - CSS System Showcase</h1>
+  <p>This page demonstrates all available CSS tokens, colors, typography, spacing, and semantic styles in the system.</p>
+  
+  <!-- Theme Switching Demo -->
+  <section>
+    <h2>Theme System</h2>
+    <p>Toggle between light, dark, and auto themes to see the <code>light-dark()</code> function in action.</p>
+    <button class="theme-toggle" onclick="cycleTheme()">Toggle Theme</button>
+    <p><small>Current theme: <span id="current-theme">auto</span></small></p>
+  </section>
+</div>
+
+<div class="demo-grid">
+  <!-- Color Tokens -->
+  <div class="demo-card">
+    <h3>Color Tokens</h3>
+    <h4>Primary & Surface Colors</h4>
+    <p>
+      <span class="color-swatch" style="background: var(--color-primary);"></span>
+      <code>--color-primary</code>
+    </p>
+    <p>
+      <span class="color-swatch" style="background: var(--color-surface);"></span>
+      <code>--color-surface</code>
+    </p>
+    <p>
+      <span class="color-swatch" style="background: var(--color-surface-elevated);"></span>
+      <code>--color-surface-elevated</code>
+    </p>
+    <p>
+      <span class="color-swatch" style="background: var(--color-surface-sunken);"></span>
+      <code>--color-surface-sunken</code>
+    </p>
+    
+    <h4>Text Colors</h4>
+    <p style="color: var(--color-text);">Primary text - <code>--color-text</code></p>
+    <p style="color: var(--color-text-secondary);">Secondary text - <code>--color-text-secondary</code></p>
+    <p style="color: var(--color-text-tertiary);">Tertiary text - <code>--color-text-tertiary</code></p>
+    
+    <h4>UI Elements</h4>
+    <div style="border: 1px solid var(--color-border); padding: var(--space-xs); margin: var(--space-xs) 0;">
+      Border - <code>--color-border</code>
+    </div>
+    <div style="border: 2px solid var(--color-border-strong); padding: var(--space-xs); margin: var(--space-xs) 0;">
+      Strong border - <code>--color-border-strong</code>
+    </div>
+  </div>
+
+  <!-- Semantic Colors -->
+  <div class="demo-card">
+    <h3>Semantic Colors</h3>
+    
+    <div class="semantic-success">
+      <strong>Success</strong> - <code>--color-success</code><br>
+      Used for positive actions and confirmations
+    </div>
+    
+    <div class="semantic-info">
+      <strong>Info</strong> - <code>--color-info</code><br>
+      Used for informational messages and neutral actions
+    </div>
+    
+    <div class="semantic-warning">
+      <strong>Warning</strong> - <code>--color-warning</code><br>
+      Used for caution and important notices
+    </div>
+    
+    <div class="semantic-error">
+      <strong>Error</strong> - <code>--color-error</code><br>
+      Used for errors and destructive actions
+    </div>
+    
+    <h4>Color Swatches</h4>
+    <p>
+      <span class="color-swatch" style="background: var(--color-success);"></span>
+      <span class="color-swatch" style="background: var(--color-info);"></span>
+      <span class="color-swatch" style="background: var(--color-warning);"></span>
+      <span class="color-swatch" style="background: var(--color-error);"></span>
+    </p>
+  </div>
+
+  <!-- Typography Scale -->
+  <div class="demo-card">
+    <h3>Typography Scale</h3>
+    <h4>Font Sizes</h4>
+    
+    <div class="text-size-demo" style="font-size: var(--text-4xl);">
+      4XL Heading - <code>--text-4xl</code>
+    </div>
+    <div class="text-size-demo" style="font-size: var(--text-3xl);">
+      3XL Heading - <code>--text-3xl</code>
+    </div>
+    <div class="text-size-demo" style="font-size: var(--text-2xl);">
+      2XL Heading - <code>--text-2xl</code>
+    </div>
+    <div class="text-size-demo" style="font-size: var(--text-xl);">
+      XL Heading - <code>--text-xl</code>
+    </div>
+    <div class="text-size-demo" style="font-size: var(--text-lg);">
+      Large Text - <code>--text-lg</code>
+    </div>
+    <div class="text-size-demo" style="font-size: var(--text-base);">
+      Base Text - <code>--text-base</code>
+    </div>
+    <div class="text-size-demo" style="font-size: var(--text-sm);">
+      Small Text - <code>--text-sm</code>
+    </div>
+    <div class="text-size-demo" style="font-size: var(--text-xs);">
+      Extra Small - <code>--text-xs</code>
+    </div>
+  </div>
+
+  <!-- Font Families -->
+  <div class="demo-card">
+    <h3>Font Families</h3>
+    
+    <p style="font-family: var(--font-sans);">
+      <strong>Sans Serif</strong> - <code>--font-sans</code><br>
+      System UI font stack for clean, modern text
+    </p>
+    
+    <p style="font-family: var(--font-serif);">
+      <strong>Serif</strong> - <code>--font-serif</code><br>
+      Traditional serif fonts for formal content
+    </p>
+    
+    <p style="font-family: var(--font-mono);">
+      <strong>Monospace</strong> - <code>--font-mono</code><br>
+      Fixed-width fonts for code and technical content
+    </p>
+  </div>
+
+  <!-- Font Weights -->
+  <div class="demo-card">
+    <h3>Font Weights</h3>
+    
+    <p style="font-weight: var(--font-light);">
+      Light - <code>--font-light (300)</code>
+    </p>
+    <p style="font-weight: var(--font-normal);">
+      Normal - <code>--font-normal (400)</code>
+    </p>
+    <p style="font-weight: var(--font-medium);">
+      Medium - <code>--font-medium (500)</code>
+    </p>
+    <p style="font-weight: var(--font-semibold);">
+      Semibold - <code>--font-semibold (600)</code>
+    </p>
+    <p style="font-weight: var(--font-bold);">
+      Bold - <code>--font-bold (700)</code>
+    </p>
+  </div>
+
+  <!-- Line Heights -->
+  <div class="demo-card">
+    <h3>Line Heights</h3>
+    
+    <p style="line-height: var(--leading-tight);">
+      <strong>Tight</strong> - <code>--leading-tight (1.25)</code><br>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+    </p>
+    
+    <p style="line-height: var(--leading-snug);">
+      <strong>Snug</strong> - <code>--leading-snug (1.375)</code><br>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+    </p>
+    
+    <p style="line-height: var(--leading-normal);">
+      <strong>Normal</strong> - <code>--leading-normal (1.6)</code><br>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+    </p>
+    
+    <p style="line-height: var(--leading-relaxed);">
+      <strong>Relaxed</strong> - <code>--leading-relaxed (1.75)</code><br>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+    </p>
+  </div>
+
+  <!-- Letter Spacing -->
+  <div class="demo-card">
+    <h3>Letter Spacing</h3>
+    
+    <p style="letter-spacing: var(--tracking-tight);">
+      Tight tracking - <code>--tracking-tight</code>
+    </p>
+    <p style="letter-spacing: var(--tracking-normal);">
+      Normal tracking - <code>--tracking-normal</code>
+    </p>
+    <p style="letter-spacing: var(--tracking-wide);">
+      Wide tracking - <code>--tracking-wide</code>
+    </p>
+    <p style="letter-spacing: var(--tracking-wider);">
+      Wider tracking - <code>--tracking-wider</code>
+    </p>
+  </div>
+</div>
+
+<!-- Spacing Tokens -->
+<section>
+  <h2>Spacing Tokens</h2>
+  <p>Fluid spacing system that scales with viewport width using <code>clamp()</code>.</p>
+  
+  <div class="demo-grid">
+    <div class="demo-card">
+      <h3>Spacing Scale</h3>
+      <div class="spacing-demo" style="padding: var(--space-3xs);">
+        3XS - <code>--space-3xs</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-2xs);">
+        2XS - <code>--space-2xs</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-xs);">
+        XS - <code>--space-xs</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-sm);">
+        SM - <code>--space-sm</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-md);">
+        MD - <code>--space-md</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-lg);">
+        LG - <code>--space-lg</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-xl);">
+        XL - <code>--space-xl</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-2xl);">
+        2XL - <code>--space-2xl</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-3xl);">
+        3XL - <code>--space-3xl</code>
+      </div>
+    </div>
+    
+    <div class="demo-card">
+      <h3>Semantic Spacing</h3>
+      <div class="spacing-demo" style="padding: var(--space-gutter);">
+        Gutter - <code>--space-gutter</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-section);">
+        Section - <code>--space-section</code>
+      </div>
+      <div class="spacing-demo" style="padding: var(--space-gap);">
+        Gap - <code>--space-gap</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Classless HTML Elements -->
+<section>
+  <h2>Classless HTML Elements</h2>
+  <p>These elements use default styling from the reset-and-base system:</p>
+  
+  <div class="demo-grid">
+    <div class="demo-card">
+      <h3>Headings</h3>
+      <h1>Heading 1</h1>
+      <h2>Heading 2</h2>
+      <h3>Heading 3</h3>
+      <h4>Heading 4</h4>
+      <h5>Heading 5</h5>
+      <h6>Heading 6</h6>
+    </div>
+    
+    <div class="demo-card">
+      <h3>Lists</h3>
+      <h4>Unordered List</h4>
+      <ul>
+        <li>First item</li>
+        <li>Second item</li>
+        <li>Third item</li>
+      </ul>
+      
+      <h4>Ordered List</h4>
+      <ol>
+        <li>First item</li>
+        <li>Second item</li>
+        <li>Third item</li>
+      </ol>
+    </div>
+    
+    <div class="demo-card">
+      <h3>Text Elements</h3>
+      <p>Regular paragraph with <a href="#">a link</a>, <strong>bold text</strong>, and <em>italic text</em>.</p>
+      
+      <blockquote>
+        This is a blockquote with some thoughtful content about the CSS system.
+      </blockquote>
+      
+      <p>Inline code: <code>var(--color-primary)</code></p>
+      
+      <pre><code>/* Code block example */
+.demo {
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: var(--space-md);
+}</code></pre>
+    </div>
+    
+    <div class="demo-card">
+      <h3>Form Elements</h3>
+      <button>Default Button</button>
+      <br><br>
+      
+      <details>
+        <summary>Expandable Details</summary>
+        <p>This content is hidden by default and can be expanded.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- Usage Instructions -->
+<section>
+  <h2>How to Use These Tokens</h2>
+  
+  <div class="demo-grid">
+    <div class="demo-card">
+      <h3>In CSS</h3>
+      <pre><code>/* Use tokens directly in CSS */
+.my-component {
+  background: var(--color-surface-elevated);
+  color: var(--color-text);
+  padding: var(--space-md);
+  font-size: var(--text-lg);
+  border-radius: 8px;
+}</code></pre>
+    </div>
+    
+    <div class="demo-card">
+      <h3>Color Mixing</h3>
+      <pre><code>/* Mix colors with transparency */
+.alert {
+  background: color-mix(
+    in oklch, 
+    var(--color-warning), 
+    transparent 85%
+  );
+  border: 1px solid var(--color-warning);
+}</code></pre>
+    </div>
+    
+    <div class="demo-card">
+      <h3>Responsive Design</h3>
+      <pre><code>/* All tokens are fluid and responsive */
+.container {
+  padding: var(--space-gutter);
+  gap: var(--space-gap);
+  font-size: var(--text-base);
+}
+
+/* No media queries needed! */</code></pre>
+    </div>
+    
+    <div class="demo-card">
+      <h3>Theme Switching</h3>
+      <pre><code>/* Colors automatically switch themes */
+.card {
+  background: var(--color-surface);
+  /* Light: warm off-white */
+  /* Dark: deep brown */
+  /* User preference respected */
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Theme cycling functionality
+  function cycleTheme() {
+    const themes = ['light', 'dark', 'auto'];
+    const currentTheme = document.documentElement.dataset.theme || 'auto';
+    const currentIndex = themes.indexOf(currentTheme);
+    const nextTheme = themes[(currentIndex + 1) % themes.length];
+    
+    if (nextTheme === 'auto') {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      document.documentElement.dataset.theme = nextTheme;
+      localStorage.setItem('theme', nextTheme);
+    }
+    
+    // Update the display
+    document.getElementById('current-theme').textContent = nextTheme;
+  }
+  
+  // Initialize theme display
+  document.addEventListener('DOMContentLoaded', function() {
+    const currentTheme = document.documentElement.dataset.theme || 'auto';
+    document.getElementById('current-theme').textContent = currentTheme;
+  });
+</script>

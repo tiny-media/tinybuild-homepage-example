@@ -1,0 +1,112 @@
+@layer tokens {
+    :root {
+      /* Enable native theme switching */
+      color-scheme: light dark;
+      
+      /* Brand hues - earthy, sophisticated */
+      --hue-warm: 35;   /* Terra cotta */
+      --hue-neutral: 85; /* Warm gray */
+      --hue-green: 145;  /* Forest */
+      --hue-blue: 240;   /* Muted blue */
+      --hue-amber: 80;   /* Golden */
+      
+      /* Primary colors */
+      --color-primary: light-dark(
+        oklch(62% 0.12 var(--hue-warm)),
+        oklch(68% 0.10 var(--hue-warm))
+      );
+      
+      /* Surface hierarchy */
+      --color-surface: light-dark(
+        oklch(97% 0.01 var(--hue-neutral)),
+        oklch(15% 0.01 var(--hue-neutral))
+      );
+      
+      --color-surface-elevated: light-dark(
+        oklch(99% 0.005 var(--hue-neutral)),
+        oklch(20% 0.01 var(--hue-neutral))
+      );
+      
+      --color-surface-sunken: light-dark(
+        oklch(95% 0.01 var(--hue-neutral)),
+        oklch(12% 0.01 var(--hue-neutral))
+      );
+      
+      /* Text hierarchy */
+      --color-text: light-dark(
+        oklch(25% 0.02 var(--hue-neutral)),
+        oklch(88% 0.01 var(--hue-neutral))
+      );
+      
+      --color-text-secondary: light-dark(
+        oklch(45% 0.02 var(--hue-neutral)),
+        oklch(70% 0.01 var(--hue-neutral))
+      );
+      
+      --color-text-tertiary: light-dark(
+        oklch(60% 0.01 var(--hue-neutral)),
+        oklch(55% 0.01 var(--hue-neutral))
+      );
+      
+      /* UI elements */
+      --color-border: light-dark(
+        oklch(90% 0.01 var(--hue-neutral)),
+        oklch(25% 0.01 var(--hue-neutral))
+      );
+      
+      --color-border-strong: light-dark(
+        oklch(80% 0.02 var(--hue-neutral)),
+        oklch(35% 0.01 var(--hue-neutral))
+      );
+      
+      /* Semantic colors */
+      --color-success: light-dark(
+        oklch(65% 0.15 var(--hue-green)),
+        oklch(70% 0.12 var(--hue-green))
+      );
+      
+      --color-info: light-dark(
+        oklch(60% 0.12 var(--hue-blue)),
+        oklch(65% 0.10 var(--hue-blue))
+      );
+      
+      --color-warning: light-dark(
+        oklch(70% 0.15 var(--hue-amber)),
+        oklch(75% 0.12 var(--hue-amber))
+      );
+      
+      --color-error: light-dark(
+        oklch(58% 0.18 25),
+        oklch(65% 0.15 25)
+      );
+    }
+    
+    /* User preference overrides */
+    [data-theme="light"] {
+      color-scheme: light;
+    }
+    
+    [data-theme="dark"] {
+      color-scheme: dark;
+    }
+    
+    /* Fallback for browsers without light-dark() support */
+    @supports not (color: light-dark(white, black)) {
+      :root {
+        --color-primary: oklch(62% 0.12 var(--hue-warm));
+        --color-surface: oklch(97% 0.01 var(--hue-neutral));
+        --color-text: oklch(25% 0.02 var(--hue-neutral));
+        /* ... other light defaults ... */
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --color-primary: oklch(68% 0.10 var(--hue-warm));
+          --color-surface: oklch(15% 0.01 var(--hue-neutral));
+          --color-text: oklch(88% 0.01 var(--hue-neutral));
+          /* ... other dark values ... */
+        }
+      }
+    }
+  }
+  

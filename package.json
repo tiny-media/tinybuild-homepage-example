@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "eleventy --serve --incremental --ignore-initial --quiet",
+    "dev": "eleventy --serve --incremental --quiet",
     "build": "bun run clean && NODE_ENV=production eleventy",
     "build:dev": "bun run clean && NODE_ENV=development eleventy",
     "preview": "eleventy --serve --port 4173 --input _site",
@@ -26,12 +26,8 @@
     "@types/node": "^24.3.0",
     "typescript": "^5.9.2"
   },
-  "browserslist": [
-    "> 0.25%",
-    "not dead",
-    "not ie 11"
-  ],
+  "browserslist": ["defaults and supports es6-module"],
   "engines": {
-    "node": ">=22.0.0"
+    "bun": ">=1.2.0"
   }
 }

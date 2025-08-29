@@ -8,7 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 bun run dev       # Development server (localhost:4321)
-bun run build     # Production build 
+bun run build     # Production build with minification
+bun run build:dev # Development build without minification
 bun run preview   # Preview built site (localhost:4173)
 bun run clean     # Clean build directories
 ```
@@ -37,11 +38,21 @@ bun run clean     # Clean build directories
 const vanillaComponents = {
   'counter': () => import('/src/assets/js/Counter.js'),
 };
+
+const svelteComponents = {
+  'counter': () => import('/src/assets/svelte/Counter.svelte'),
+};
 ```
 
 **Usage**:
 ```html
+<!-- Vanilla JS component -->
 <is-land on:visible type="vanilla" component="counter" props='{"initialCount": 0}'>
+  <div>Loading counter...</div>
+</is-land>
+
+<!-- Svelte component -->
+<is-land on:visible type="svelte" component="counter" props='{"initialCount": 0}'>
   <div>Loading counter...</div>
 </is-land>
 ```
@@ -126,7 +137,16 @@ resolve: {
 
 ## Common Tasks
 
-**Add Component**: Create in `src/assets/js/`, register in `main.js`, use with `<is-land>` (non-landing pages only)
+**Add Vanilla Component**: Create in `src/assets/js/`, register in `vanillaComponents` in `main.js`, use with `<is-land type="vanilla">` (non-landing pages only)
+**Add Svelte Component**: Create in `src/assets/svelte/`, register in `svelteComponents` in `main.js`, use with `<is-land type="svelte">` (non-landing pages only)
 **New Page**: Create `*.vto` file with `eleventyNavigation` front matter
 **Debug Performance**: Landing page = pure HTML, other pages = check islands loading
 **Add Navigation**: Add `eleventyNavigation` to page front matter, auto-renders in nav partial
+**Design Tokens**: Modify `src/design-tokens/tokens.json`, regenerate with `bun src/design-tokens/generate-tokens.js`
+
+## Important Constraints
+
+- **Landing Page (/) Exception**: No JavaScript loading - uses pure HTML only for maximum performance
+- **Bun Runtime Required**: This project requires Bun >=1.2.0 for package management and builds
+- **Eleventy 4.0 Alpha**: Using bleeding-edge Eleventy with potential breaking changes
+- **Plugin Order Critical**: VentoJS must be loaded before EleventyVitePlugin in config

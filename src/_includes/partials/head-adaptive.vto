@@ -5,8 +5,13 @@
 <meta name="description" content="{{ description || 'Clean starting template for progressive island architecture' }}">
 
 <!-- Preload critical CSS for faster rendering -->
-<link rel="preload" href="/assets/css/pico_classless.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/assets/css/pico_classless.css"></noscript>
+<link rel="preload" href="/assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/assets/css/main.css"></noscript>
+
+{{ if page.url !== "/" }}
+<!-- Main JS bundle for islands (non-landing pages only) -->
+<script type="module" src="/assets/main.js"></script>
+{{ /if }}
 
 <!-- Basic theme system (no CSS dependencies) -->
 <script>

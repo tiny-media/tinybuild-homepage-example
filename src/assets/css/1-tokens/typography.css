@@ -1,0 +1,38 @@
+@layer tokens {
+    :root {
+      /* Font stacks */
+      --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --font-serif: 'Iowan Old Style', 'Georgia', serif;
+      --font-mono: ui-monospace, 'Cascadia Mono', 'Consolas', monospace;
+      
+      /* Fluid type scale */
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+      --text-base: clamp(1rem, 0.925rem + 0.375vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+      --text-xl: clamp(1.25rem, 1.125rem + 0.625vw, 1.5rem);
+      --text-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+      --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);
+      --text-4xl: clamp(2.25rem, 1.75rem + 2.5vw, 3rem);
+      
+      /* Line heights */
+      --leading-tight: 1.25;
+      --leading-snug: 1.375;
+      --leading-normal: 1.6;
+      --leading-relaxed: 1.75;
+      --leading-loose: 2;
+      
+      /* Letter spacing */
+      --tracking-tight: -0.025em;
+      --tracking-normal: 0;
+      --tracking-wide: 0.025em;
+      --tracking-wider: 0.05em;
+      
+      /* Font weights */
+      --font-light: 300;
+      --font-normal: 400;
+      --font-medium: 500;
+      --font-semibold: 600;
+      --font-bold: 700;
+    }
+  }

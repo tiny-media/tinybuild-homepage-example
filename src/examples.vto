@@ -15,11 +15,29 @@ eleventyNavigation:
 
 <section>
   <div>
-    <h2>Coming Soon</h2>
-    <p>Interactive examples will be added here to demonstrate:</p>
+    <h2>Interactive Counter Example</h2>
+    <p>This counter demonstrates progressive islands loading with vanilla JavaScript:</p>
+    
+    <is-land on:visible type="vanilla" component="counter" props='{"initialCount": 0}'>
+      <div>Loading counter...</div>
+    </is-land>
+    
+    <p><strong>Features:</strong></p>
+    <ul>
+      <li>Loads only when scrolled into view</li>
+      <li>Persists count in localStorage</li>
+      <li>Syncs across browser tabs</li>
+      <li>Pure vanilla JavaScript implementation</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div>
+    <h2>More Examples Coming Soon</h2>
+    <p>Additional interactive examples will be added to demonstrate:</p>
     
     <ul>
-      <li>Vanilla JavaScript Islands</li>
       <li>Svelte Component Integration</li>
       <li>Theme Toggle Implementation</li>
       <li>CUBE CSS Patterns</li>

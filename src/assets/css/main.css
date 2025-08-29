@@ -1,0 +1,7 @@
+/* main.css */
+@layer reset, tokens, layout, components, utilities, themes;
+
+@import "0-critical/reset-and-base.css" layer(reset);
+@import "1-tokens/colors.css" layer(tokens);
+@import "1-tokens/spacing.css" layer(tokens);
+@import "1-tokens/typography.css" layer(tokens);
