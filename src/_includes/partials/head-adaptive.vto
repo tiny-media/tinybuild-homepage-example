@@ -12,7 +12,18 @@
 <script type="module" src="/assets/main.js"></script>
 {{ /if }}
 
-<!-- Theme system script with actual toggle functionality -->
+<!-- Critical theme initialization to prevent FOUC -->
+<script>
+  // Initialize theme immediately to prevent flash
+  (function() {
+    const saved = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (systemDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<!-- Theme system script with toggle functionality -->
 <script>
   // Theme toggle function with local storage support
   function cycleTheme() {
@@ -31,13 +42,9 @@
     });
   }
 
-  // Initialize theme on page load
-  function initTheme() {
-    const saved = localStorage.getItem('theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = saved || (systemDark ? 'dark' : 'light');
-    
-    document.documentElement.setAttribute('data-theme', theme);
+  // Initialize theme toggle buttons when DOM loads
+  function initThemeButtons() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
     
     // Set up theme toggle buttons
     document.querySelectorAll('.theme-toggle').forEach(button => {
@@ -47,6 +54,6 @@
     });
   }
 
-  // Initialize when DOM loads
-  document.addEventListener('DOMContentLoaded', initTheme);
+  // Initialize buttons when DOM loads
+  document.addEventListener('DOMContentLoaded', initThemeButtons);
 </script>
