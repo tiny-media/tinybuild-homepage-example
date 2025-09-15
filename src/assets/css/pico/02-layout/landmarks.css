@@ -1,0 +1,31 @@
+/**
+ * Pico CSS Landmarks
+ *
+ * Semantic HTML landmark elements (body, main, header, footer).
+ * Provides foundational layout structure and spacing.
+ */
+
+/**
+ * Landmarks
+ */
+body {
+	width: 100%;
+	margin: 0;
+}
+
+main {
+	display: block;
+}
+
+body > header,
+body > main,
+body > footer {
+	padding-block: var(--pico-block-spacing-vertical);
+}
+
+/**
+ * Section
+ */
+section {
+	margin-bottom: var(--pico-block-spacing-vertical);
+}

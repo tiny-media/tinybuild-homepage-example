@@ -8,41 +8,120 @@ eleventyNavigation:
 
 {{ layout "layouts/base.vto" }}
 
-<div>
+<header>
   <h1>Examples</h1>
   <p>Code examples and demonstrations of Progressive Islands Template features.</p>
-</div>
+</header>
 
 <section>
-  <div>
-    <h2>Interactive Counter Example</h2>
-    <p>This counter demonstrates progressive islands loading with vanilla JavaScript:</p>
-    
-    <is-land on:visible type="vanilla" component="counter" props='{"initialCount": 0}'>
-      <div>Loading counter...</div>
-    </is-land>
-    
-    <p><strong>Features:</strong></p>
-    <ul>
-      <li>Loads only when scrolled into view</li>
-      <li>Persists count in localStorage</li>
-      <li>Syncs across browser tabs</li>
-      <li>Pure vanilla JavaScript implementation</li>
-    </ul>
-  </div>
+  <h2>Interactive Counter Example</h2>
+  <p>This counter demonstrates progressive islands loading with vanilla JavaScript:</p>
+
+  <is-land on:visible type="vanilla" component="counter" props='{"initialCount": 0}'>
+    <div>Loading counter...</div>
+  </is-land>
+
+  <h3>Features:</h3>
+  <ul>
+    <li>Loads only when scrolled into view</li>
+    <li>Persists count in localStorage</li>
+    <li>Syncs across browser tabs</li>
+    <li>Pure vanilla JavaScript implementation</li>
+  </ul>
 </section>
 
 <section>
-  <div>
-    <h2>More Examples Coming Soon</h2>
-    <p>Additional interactive examples will be added to demonstrate:</p>
-    
-    <ul>
-      <li>Svelte Component Integration</li>
-      <li>Theme Toggle Implementation</li>
-      <li>CUBE CSS Patterns</li>
-      <li>Progressive Enhancement Techniques</li>
-      <li>Performance Optimization Examples</li>
-    </ul>
-  </div>
+  <h2>Pico CSS Demo Elements</h2>
+  <p>These elements showcase how Pico CSS automatically styles semantic HTML with enhanced design tokens:</p>
+
+  <article>
+    <h3>Typography</h3>
+    <p>Regular paragraph with <strong>bold text</strong>, <em>italic text</em>, and a <a href="#">sample link</a>.</p>
+
+    <blockquote>
+      <p>This is a blockquote demonstrating Pico CSS styling with automatic left border and enhanced typography.</p>
+      <footer>— Quote attribution</footer>
+    </blockquote>
+  </article>
+
+  <article>
+    <h3>Code Examples</h3>
+    <p>Inline code: <code>npm run dev</code></p>
+
+    <pre><code>// Code block example
+const example = "Pico CSS styles this automatically";
+console.log(example);</code></pre>
+  </article>
+
+  <article>
+    <h3>Form Elements</h3>
+    <form>
+      <fieldset>
+        <legend>Sample Form</legend>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Your name">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="your@email.com">
+
+        <label for="message">Message:</label>
+        <textarea id="message" rows="4" placeholder="Your message"></textarea>
+
+        <label>
+          <input type="checkbox"> I agree to the terms
+        </label>
+
+        <button type="submit">Send Message</button>
+        <button type="button">Cancel</button>
+      </fieldset>
+    </form>
+  </article>
+
+  <article>
+    <h3>Interactive Elements</h3>
+
+    <details>
+      <summary>Expandable Details</summary>
+      <p>This content is hidden by default and expands when clicked. Pico CSS provides enhanced styling for interactive elements with smooth transitions.</p>
+    </details>
+
+    <p>Progress indicator:</p>
+    <progress value="70" max="100">70%</progress>
+  </article>
 </section>
+
+<section>
+  <h2>Enhanced Components</h2>
+  <p>Examples using our custom design tokens and utility classes:</p>
+
+  <article class="card">
+    <header class="card-header">
+      <h3>Card Component</h3>
+    </header>
+    <p>This card uses our custom component system with design tokens for consistent spacing and shadows.</p>
+    <footer class="card-footer">
+      <span class="badge badge-info">New</span>
+      <span class="badge badge-success">Enhanced</span>
+    </footer>
+  </article>
+
+  <div class="flex items-center justify-between" style="margin: var(--space-md) 0;">
+    <p class="text-lg">Utility classes for layout:</p>
+    <div class="flex items-center" style="gap: var(--space-sm);">
+      <button class="text-sm">Small</button>
+      <button>Regular</button>
+      <button class="text-lg">Large</button>
+    </div>
+  </div>
+
+  <h2>Coming Soon</h2>
+  <ul>
+    <li>Advanced Svelte Component Integration</li>
+    <li>Theme System Deep Dive</li>
+    <li>Custom Design Token Usage</li>
+    <li>Performance Optimization Techniques</li>
+  </ul>
+</section>
+
+{{ /layout }}

@@ -1,0 +1,65 @@
+/**
+ * Pico CSS Accessibility & Interaction Utilities
+ *
+ * Accessibility enhancements, focus management, and reduced motion support.
+ * Ensures inclusive design and proper user interaction feedback.
+ */
+
+/**
+ * Accessibility & User interaction - from lines 2783+ of pico_classless.css
+ * Simplified version focusing on core accessibility features
+ */
+
+/* Focus management */
+:focus {
+	outline: var(--pico-outline-width) solid var(--pico-primary-focus);
+	outline-offset: calc(var(--pico-outline-width) * -1);
+}
+
+:focus:not(:focus-visible) {
+	outline: none;
+}
+
+/* Screen reader only content */
+.sr-only,
+.visually-hidden {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	:root {
+		--pico-border-width: 0.125rem;
+		--pico-outline-width: 0.25rem;
+	}
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Interactive element improvements */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[role="button"][aria-disabled="true"] {
+	cursor: not-allowed;
+	opacity: var(--pico-form-element-disabled-opacity, 0.5);
+}

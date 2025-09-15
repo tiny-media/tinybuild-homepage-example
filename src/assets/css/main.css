@@ -1,7 +1,9 @@
-/* main.css */
-@layer reset, tokens, layout, components, utilities, themes;
+/* Import modular Pico CSS structure for maintainable styling */
+@import "pico-imports.css";
 
-@import "0-critical/reset-and-base.css" layer(reset);
-@import "1-tokens/colors.css" layer(tokens);
-@import "1-tokens/spacing.css" layer(tokens);
-@import "1-tokens/typography.css" layer(tokens);
+/* Import custom design system extensions */
+@import "custom/tokens.css";
+@import "custom/components.css";
+@import "custom/overrides.css";
+
+/* Custom site-specific styles can be added below */

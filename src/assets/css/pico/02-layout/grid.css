@@ -1,0 +1,32 @@
+/**
+ * Pico CSS Grid System
+ *
+ * Minimal CSS Grid implementation with responsive auto-layout columns.
+ * Simple grid system that works without complex class names.
+ */
+
+/**
+ * Grid
+ * Minimal grid system with auto-layout columns
+ */
+.grid {
+	grid-column-gap: var(--pico-grid-column-gap);
+	grid-row-gap: var(--pico-grid-row-gap);
+	display: grid;
+	grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+	.grid {
+		grid-template-columns: repeat(auto-fit, minmax(0%, 1fr));
+	}
+}
+.grid > * {
+	min-width: 0;
+}
+
+/**
+ * Overflow auto
+ */
+.overflow-auto {
+	overflow: auto;
+}

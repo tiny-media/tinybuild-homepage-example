@@ -4,66 +4,49 @@
 <title>{{ title || "Progressive Islands Template" }}</title>
 <meta name="description" content="{{ description || 'Clean starting template for progressive island architecture' }}">
 
-<!-- Preload critical CSS for faster rendering -->
-<link rel="preload" href="/assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/assets/css/main.css"></noscript>
+<!-- Load bolt.css for clean, classless styling -->
+<link rel="stylesheet" href="/assets/css/main.css">
 
 {{ if page.url !== "/" }}
 <!-- Main JS bundle for islands (non-landing pages only) -->
 <script type="module" src="/assets/main.js"></script>
 {{ /if }}
 
-<!-- Basic theme system (no CSS dependencies) -->
+<!-- Theme system script with actual toggle functionality -->
 <script>
-  (function() {
-    let currentTheme = localStorage.getItem('theme') || 'light';
+  // Theme toggle function with local storage support
+  function cycleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme') || 
+                   (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
     
-    function applyTheme(theme) {
-      const html = document.documentElement;
-      if (theme === 'auto') {
-        html.removeAttribute('data-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-        html.style.colorScheme = prefersDark ? 'dark' : 'light';
-      } else {
-        html.setAttribute('data-theme', theme);
-        html.style.colorScheme = theme;
-      }
-      localStorage.setItem('theme', theme);
-    }
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
     
-    function updateButton(button) {
-      const themes = {
-        light: { icon: '☀', label: 'Light theme' },
-        dark: { icon: '☽', label: 'Dark theme' },
-        auto: { icon: '⚙', label: 'Auto theme' }
-      };
-      const theme = themes[currentTheme];
-      button.innerHTML = theme.icon;
-      button.setAttribute('aria-label', `Switch to next theme (current: ${theme.label})`);
-    }
-    
-    function cycleTheme() {
-      const themes = ['light', 'dark', 'auto'];
-      const currentIndex = themes.indexOf(currentTheme);
-      currentTheme = themes[(currentIndex + 1) % themes.length];
-      applyTheme(currentTheme);
-      document.querySelectorAll('.theme-toggle').forEach(updateButton);
-    }
-    
-    // Apply initial theme immediately
-    applyTheme(currentTheme);
-    
-    // Setup when DOM ready
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.theme-toggle').forEach(button => {
-        updateButton(button);
-        button.addEventListener('click', cycleTheme);
-      });
-      
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (currentTheme === 'auto') applyTheme('auto');
-      });
+    // Update button icon
+    document.querySelectorAll('.theme-toggle').forEach(button => {
+      button.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+      button.setAttribute('aria-label', `Switch to ${newTheme === 'dark' ? 'light' : 'dark'} theme`);
     });
-  })();
+  }
+
+  // Initialize theme on page load
+  function initTheme() {
+    const saved = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (systemDark ? 'dark' : 'light');
+    
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Set up theme toggle buttons
+    document.querySelectorAll('.theme-toggle').forEach(button => {
+      button.addEventListener('click', cycleTheme);
+      button.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+      button.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
+    });
+  }
+
+  // Initialize when DOM loads
+  document.addEventListener('DOMContentLoaded', initTheme);
 </script>

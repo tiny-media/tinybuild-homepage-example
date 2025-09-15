@@ -1,0 +1,56 @@
+@charset "UTF-8";
+/*!
+ * Pico CSS Modular Imports ✨ v2.1.1 (https://picocss.com)
+ * Copyright 2019-2025 - Licensed under MIT
+ * 
+ * Organized modular structure for maintainable CSS architecture
+ */
+
+/**
+ * 01. Foundation - Core variables, themes, and reset
+ */
+@import "pico/01-foundation/variables.css";
+@import "pico/01-foundation/themes.css";
+@import "pico/01-foundation/reset.css";
+
+/**
+ * 02. Layout - Structure and grid systems
+ */
+@import "pico/02-layout/landmarks.css";
+@import "pico/02-layout/container.css";
+@import "pico/02-layout/grid.css";
+
+/**
+ * 03. Typography - Text styles and formatting
+ */
+@import "pico/03-typography/base.css";
+@import "pico/03-typography/links.css";
+@import "pico/03-typography/code.css";
+
+/**
+ * 04. Components - UI elements and interactive components
+ */
+@import "pico/04-components/buttons.css";
+@import "pico/04-components/forms.css";
+@import "pico/04-components/tables.css";
+
+/**
+ * 05. Utilities - Helpers and accessibility features
+ */
+@import "pico/05-utilities/accessibility.css";
+
+/**
+ * Note: This modular structure extracts the core functionality from
+ * the monolithic pico_classless.css file. Additional components like:
+ * - Advanced form inputs (checkboxes, radio, range, file, etc.)
+ * - Navigation components
+ * - Modal dialogs
+ * - Accordion/details
+ * - Cards and dropdowns
+ * - Progress indicators
+ * - Tooltips
+ * - Loading states
+ *
+ * Can be extracted and added as additional component files as needed.
+ * Each partial file is self-contained and can be customized independently.
+ */

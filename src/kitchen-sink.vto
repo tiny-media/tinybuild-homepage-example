@@ -1,6 +1,6 @@
 ---
-title: "Kitchen Sink - The CSS System"
-description: "Comprehensive demonstration of all CSS system features, tokens, and components"
+title: "Kitchen Sink - Pico CSS Demo"
+description: "Comprehensive demonstration of Pico CSS styling with modular architecture and design tokens"
 eleventyNavigation:
   key: "Kitchen_Sink"
   order: 4
@@ -8,487 +8,368 @@ eleventyNavigation:
 
 {{ layout "layouts/base.vto" }}
 
-<style>
-  /* Additional utility classes for the kitchen sink */
-  .demo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-lg);
-    margin-block: var(--space-lg);
-  }
-  
-  .demo-card {
-    background: var(--color-surface-elevated);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: var(--space-md);
-  }
-  
-  .color-swatch {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    border: 1px solid var(--color-border);
-    margin-right: var(--space-xs);
-    vertical-align: middle;
-  }
-  
-  .spacing-demo {
-    background: var(--color-surface-sunken);
-    border: 1px dashed var(--color-border-strong);
-    margin: var(--space-xs) 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2rem;
-  }
-  
-  .text-size-demo {
-    margin-block: var(--space-xs);
-    line-height: var(--leading-normal);
-  }
-  
-  .theme-toggle {
-    background: var(--color-primary);
-    color: var(--color-surface);
-    border: none;
-    border-radius: 6px;
-    padding: var(--space-xs) var(--space-md);
-    font-weight: var(--font-medium);
-    cursor: pointer;
-    transition: transform 0.2s;
-    margin: var(--space-xs);
-  }
-  
-  .theme-toggle:hover {
-    transform: translateY(-1px);
-  }
-  
-  .semantic-demo {
-    padding: var(--space-sm);
-    border-radius: 6px;
-    margin: var(--space-xs) 0;
-    border: 1px solid;
-  }
-  
-  .semantic-success {
-    background: color-mix(in oklch, var(--color-success), transparent 85%);
-    border-color: var(--color-success);
-    color: var(--color-success);
-  }
-  
-  .semantic-info {
-    background: color-mix(in oklch, var(--color-info), transparent 85%);
-    border-color: var(--color-info);
-    color: var(--color-info);
-  }
-  
-  .semantic-warning {
-    background: color-mix(in oklch, var(--color-warning), transparent 85%);
-    border-color: var(--color-warning);
-    color: var(--color-warning);
-  }
-  
-  .semantic-error {
-    background: color-mix(in oklch, var(--color-error), transparent 85%);
-    border-color: var(--color-error);
-    color: var(--color-error);
-  }
-</style>
+<header>
+  <h1>Kitchen Sink - Pico CSS Demo</h1>
+  <p>This page demonstrates how <strong>Pico CSS</strong> automatically styles semantic HTML elements with our enhanced modular system, design tokens, and utility classes.</p>
+</header>
 
-<div>
-  <h1>Kitchen Sink - CSS System Showcase</h1>
-  <p>This page demonstrates all available CSS tokens, colors, typography, spacing, and semantic styles in the system.</p>
-  
-  <!-- Theme Switching Demo -->
-  <section>
-    <h2>Theme System</h2>
-    <p>Toggle between light, dark, and auto themes to see the <code>light-dark()</code> function in action.</p>
-    <button class="theme-toggle" onclick="cycleTheme()">Toggle Theme</button>
-    <p><small>Current theme: <span id="current-theme">auto</span></small></p>
-  </section>
-</div>
-
-<div class="demo-grid">
-  <!-- Color Tokens -->
-  <div class="demo-card">
-    <h3>Color Tokens</h3>
-    <h4>Primary & Surface Colors</h4>
-    <p>
-      <span class="color-swatch" style="background: var(--color-primary);"></span>
-      <code>--color-primary</code>
-    </p>
-    <p>
-      <span class="color-swatch" style="background: var(--color-surface);"></span>
-      <code>--color-surface</code>
-    </p>
-    <p>
-      <span class="color-swatch" style="background: var(--color-surface-elevated);"></span>
-      <code>--color-surface-elevated</code>
-    </p>
-    <p>
-      <span class="color-swatch" style="background: var(--color-surface-sunken);"></span>
-      <code>--color-surface-sunken</code>
-    </p>
-    
-    <h4>Text Colors</h4>
-    <p style="color: var(--color-text);">Primary text - <code>--color-text</code></p>
-    <p style="color: var(--color-text-secondary);">Secondary text - <code>--color-text-secondary</code></p>
-    <p style="color: var(--color-text-tertiary);">Tertiary text - <code>--color-text-tertiary</code></p>
-    
-    <h4>UI Elements</h4>
-    <div style="border: 1px solid var(--color-border); padding: var(--space-xs); margin: var(--space-xs) 0;">
-      Border - <code>--color-border</code>
-    </div>
-    <div style="border: 2px solid var(--color-border-strong); padding: var(--space-xs); margin: var(--space-xs) 0;">
-      Strong border - <code>--color-border-strong</code>
-    </div>
-  </div>
-
-  <!-- Semantic Colors -->
-  <div class="demo-card">
-    <h3>Semantic Colors</h3>
-    
-    <div class="semantic-success">
-      <strong>Success</strong> - <code>--color-success</code><br>
-      Used for positive actions and confirmations
-    </div>
-    
-    <div class="semantic-info">
-      <strong>Info</strong> - <code>--color-info</code><br>
-      Used for informational messages and neutral actions
-    </div>
-    
-    <div class="semantic-warning">
-      <strong>Warning</strong> - <code>--color-warning</code><br>
-      Used for caution and important notices
-    </div>
-    
-    <div class="semantic-error">
-      <strong>Error</strong> - <code>--color-error</code><br>
-      Used for errors and destructive actions
-    </div>
-    
-    <h4>Color Swatches</h4>
-    <p>
-      <span class="color-swatch" style="background: var(--color-success);"></span>
-      <span class="color-swatch" style="background: var(--color-info);"></span>
-      <span class="color-swatch" style="background: var(--color-warning);"></span>
-      <span class="color-swatch" style="background: var(--color-error);"></span>
-    </p>
-  </div>
-
-  <!-- Typography Scale -->
-  <div class="demo-card">
-    <h3>Typography Scale</h3>
-    <h4>Font Sizes</h4>
-    
-    <div class="text-size-demo" style="font-size: var(--text-4xl);">
-      4XL Heading - <code>--text-4xl</code>
-    </div>
-    <div class="text-size-demo" style="font-size: var(--text-3xl);">
-      3XL Heading - <code>--text-3xl</code>
-    </div>
-    <div class="text-size-demo" style="font-size: var(--text-2xl);">
-      2XL Heading - <code>--text-2xl</code>
-    </div>
-    <div class="text-size-demo" style="font-size: var(--text-xl);">
-      XL Heading - <code>--text-xl</code>
-    </div>
-    <div class="text-size-demo" style="font-size: var(--text-lg);">
-      Large Text - <code>--text-lg</code>
-    </div>
-    <div class="text-size-demo" style="font-size: var(--text-base);">
-      Base Text - <code>--text-base</code>
-    </div>
-    <div class="text-size-demo" style="font-size: var(--text-sm);">
-      Small Text - <code>--text-sm</code>
-    </div>
-    <div class="text-size-demo" style="font-size: var(--text-xs);">
-      Extra Small - <code>--text-xs</code>
-    </div>
-  </div>
-
-  <!-- Font Families -->
-  <div class="demo-card">
-    <h3>Font Families</h3>
-    
-    <p style="font-family: var(--font-sans);">
-      <strong>Sans Serif</strong> - <code>--font-sans</code><br>
-      System UI font stack for clean, modern text
-    </p>
-    
-    <p style="font-family: var(--font-serif);">
-      <strong>Serif</strong> - <code>--font-serif</code><br>
-      Traditional serif fonts for formal content
-    </p>
-    
-    <p style="font-family: var(--font-mono);">
-      <strong>Monospace</strong> - <code>--font-mono</code><br>
-      Fixed-width fonts for code and technical content
-    </p>
-  </div>
-
-  <!-- Font Weights -->
-  <div class="demo-card">
-    <h3>Font Weights</h3>
-    
-    <p style="font-weight: var(--font-light);">
-      Light - <code>--font-light (300)</code>
-    </p>
-    <p style="font-weight: var(--font-normal);">
-      Normal - <code>--font-normal (400)</code>
-    </p>
-    <p style="font-weight: var(--font-medium);">
-      Medium - <code>--font-medium (500)</code>
-    </p>
-    <p style="font-weight: var(--font-semibold);">
-      Semibold - <code>--font-semibold (600)</code>
-    </p>
-    <p style="font-weight: var(--font-bold);">
-      Bold - <code>--font-bold (700)</code>
-    </p>
-  </div>
-
-  <!-- Line Heights -->
-  <div class="demo-card">
-    <h3>Line Heights</h3>
-    
-    <p style="line-height: var(--leading-tight);">
-      <strong>Tight</strong> - <code>--leading-tight (1.25)</code><br>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
-    </p>
-    
-    <p style="line-height: var(--leading-snug);">
-      <strong>Snug</strong> - <code>--leading-snug (1.375)</code><br>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
-    </p>
-    
-    <p style="line-height: var(--leading-normal);">
-      <strong>Normal</strong> - <code>--leading-normal (1.6)</code><br>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
-    </p>
-    
-    <p style="line-height: var(--leading-relaxed);">
-      <strong>Relaxed</strong> - <code>--leading-relaxed (1.75)</code><br>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
-    </p>
-  </div>
-
-  <!-- Letter Spacing -->
-  <div class="demo-card">
-    <h3>Letter Spacing</h3>
-    
-    <p style="letter-spacing: var(--tracking-tight);">
-      Tight tracking - <code>--tracking-tight</code>
-    </p>
-    <p style="letter-spacing: var(--tracking-normal);">
-      Normal tracking - <code>--tracking-normal</code>
-    </p>
-    <p style="letter-spacing: var(--tracking-wide);">
-      Wide tracking - <code>--tracking-wide</code>
-    </p>
-    <p style="letter-spacing: var(--tracking-wider);">
-      Wider tracking - <code>--tracking-wider</code>
-    </p>
-  </div>
-</div>
-
-<!-- Spacing Tokens -->
 <section>
-  <h2>Spacing Tokens</h2>
-  <p>Fluid spacing system that scales with viewport width using <code>clamp()</code>.</p>
-  
-  <div class="demo-grid">
-    <div class="demo-card">
-      <h3>Spacing Scale</h3>
-      <div class="spacing-demo" style="padding: var(--space-3xs);">
-        3XS - <code>--space-3xs</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-2xs);">
-        2XS - <code>--space-2xs</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-xs);">
-        XS - <code>--space-xs</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-sm);">
-        SM - <code>--space-sm</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-md);">
-        MD - <code>--space-md</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-lg);">
-        LG - <code>--space-lg</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-xl);">
-        XL - <code>--space-xl</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-2xl);">
-        2XL - <code>--space-2xl</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-3xl);">
-        3XL - <code>--space-3xl</code>
-      </div>
-    </div>
-    
-    <div class="demo-card">
-      <h3>Semantic Spacing</h3>
-      <div class="spacing-demo" style="padding: var(--space-gutter);">
-        Gutter - <code>--space-gutter</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-section);">
-        Section - <code>--space-section</code>
-      </div>
-      <div class="spacing-demo" style="padding: var(--space-gap);">
-        Gap - <code>--space-gap</code>
-      </div>
-    </div>
-  </div>
+  <h2>Typography</h2>
+
+  <article>
+    <h3>Headings</h3>
+    <h1>Heading 1 (2.5rem)</h1>
+    <h2>Heading 2 (2rem)</h2>
+    <h3>Heading 3 (1.75rem)</h3>
+    <h4>Heading 4 (1.5rem)</h4>
+    <h5>Heading 5 (1.25rem)</h5>
+    <h6>Heading 6 (1rem)</h6>
+  </article>
+
+  <article>
+    <h3>Text Elements</h3>
+    <p>This is a regular paragraph with <strong>bold text</strong>, <em>italic text</em>, and a <a href="#">sample link</a>. Links are automatically styled with the theme color.</p>
+
+    <p>Here's some inline code: <code>npm run dev</code>, and here's a keyboard shortcut: <kbd>Ctrl+C</kbd>.</p>
+
+    <blockquote>
+      <p>This is a blockquote with automatic left border styling and enhanced typography. Pico CSS provides beautiful semantic styling with improved spacing and visual hierarchy.</p>
+      <footer>— Quote attribution</footer>
+    </blockquote>
+
+    <p>You can also highlight text with <mark>the mark element</mark> for emphasis.</p>
+  </article>
+
+  <article>
+    <h3>Lists</h3>
+    <h4>Unordered List</h4>
+    <ul>
+      <li>First item</li>
+      <li>Second item with a longer description to show line wrapping</li>
+      <li>Third item</li>
+    </ul>
+
+    <h4>Ordered List</h4>
+    <ol>
+      <li>First step</li>
+      <li>Second step</li>
+      <li>Third step</li>
+    </ol>
+
+    <h4>Definition List</h4>
+    <dl>
+      <dt><strong>Pico CSS</strong></dt>
+      <dd>A modern, modular CSS framework with comprehensive theming and design tokens</dd>
+
+      <dt><strong>Progressive Enhancement</strong></dt>
+      <dd>A design philosophy that emphasizes basic functionality first</dd>
+
+      <dt><strong>Design Tokens</strong></dt>
+      <dd>Consistent design values for spacing, typography, colors, and other visual properties</dd>
+    </dl>
+  </article>
 </section>
 
-<!-- Classless HTML Elements -->
 <section>
-  <h2>Classless HTML Elements</h2>
-  <p>These elements use default styling from the reset-and-base system:</p>
-  
-  <div class="demo-grid">
-    <div class="demo-card">
-      <h3>Headings</h3>
-      <h1>Heading 1</h1>
-      <h2>Heading 2</h2>
-      <h3>Heading 3</h3>
-      <h4>Heading 4</h4>
-      <h5>Heading 5</h5>
-      <h6>Heading 6</h6>
-    </div>
-    
-    <div class="demo-card">
-      <h3>Lists</h3>
-      <h4>Unordered List</h4>
+  <h2>Code Examples</h2>
+
+  <article>
+    <h3>Code Blocks</h3>
+    <p>Pico CSS provides enhanced styling for code blocks with improved contrast and readability:</p>
+
+    <pre><code>// JavaScript example
+const message = "Hello, Pico CSS!";
+console.log(message);
+
+// Enhanced styling with better shadows and spacing
+// Clean and readable with proper contrast ratios</code></pre>
+
+    <p>Sample code: <samp>console.log("Sample output")</samp></p>
+  </article>
+</section>
+
+<section>
+  <h2>Form Elements</h2>
+
+  <article>
+    <h3>Complete Form Example</h3>
+    <form>
+      <fieldset>
+        <legend>Contact Form</legend>
+
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" placeholder="Enter your full name" required>
+
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" placeholder="your@email.com" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" placeholder="+1 (555) 123-4567">
+
+        <label for="topic">Topic:</label>
+        <select id="topic" required>
+          <option value="">Select a topic</option>
+          <option value="general">General Inquiry</option>
+          <option value="support">Support</option>
+          <option value="feedback">Feedback</option>
+        </select>
+
+        <label for="message">Message:</label>
+        <textarea id="message" rows="5" placeholder="Enter your message here..." required></textarea>
+
+        <label for="priority">Priority Level:</label>
+        <input type="range" id="priority" min="1" max="5" value="3">
+
+        <label for="color">Favorite Color:</label>
+        <input type="color" id="color" value="#0f6dff">
+
+        <fieldset>
+          <legend>Preferences</legend>
+
+          <label>
+            <input type="checkbox" checked> Subscribe to newsletter
+          </label>
+
+          <label>
+            <input type="checkbox"> SMS notifications
+          </label>
+
+          <label>
+            <input type="radio" name="contact" value="email" checked> Contact via email
+          </label>
+
+          <label>
+            <input type="radio" name="contact" value="phone"> Contact via phone
+          </label>
+        </fieldset>
+
+        <button type="submit">Send Message</button>
+        <button type="reset">Reset Form</button>
+        <button type="button" disabled>Disabled Button</button>
+      </fieldset>
+    </form>
+  </article>
+</section>
+
+<section>
+  <h2>Interactive Elements</h2>
+
+  <article>
+    <h3>Details and Summary</h3>
+    <details>
+      <summary>Click to expand</summary>
+      <p>This content is hidden by default and expands when the summary is clicked. Bolt.css provides clean styling for collapsible content.</p>
+      <p>You can include any HTML content here, including:</p>
       <ul>
-        <li>First item</li>
-        <li>Second item</li>
-        <li>Third item</li>
+        <li>Lists</li>
+        <li>Links: <a href="#">Sample link</a></li>
+        <li>Code: <code>example.function()</code></li>
       </ul>
-      
-      <h4>Ordered List</h4>
-      <ol>
-        <li>First item</li>
-        <li>Second item</li>
-        <li>Third item</li>
-      </ol>
-    </div>
-    
-    <div class="demo-card">
-      <h3>Text Elements</h3>
-      <p>Regular paragraph with <a href="#">a link</a>, <strong>bold text</strong>, and <em>italic text</em>.</p>
-      
-      <blockquote>
-        This is a blockquote with some thoughtful content about the CSS system.
-      </blockquote>
-      
-      <p>Inline code: <code>var(--color-primary)</code></p>
-      
-      <pre><code>/* Code block example */
-.demo {
-  background: var(--color-surface);
-  color: var(--color-text);
-  padding: var(--space-md);
-}</code></pre>
-    </div>
-    
-    <div class="demo-card">
-      <h3>Form Elements</h3>
-      <button>Default Button</button>
-      <br><br>
-      
-      <details>
-        <summary>Expandable Details</summary>
-        <p>This content is hidden by default and can be expanded.</p>
-      </details>
-    </div>
-  </div>
+    </details>
+
+    <details>
+      <summary>Another expandable section</summary>
+      <p>Multiple details elements work perfectly together.</p>
+    </details>
+  </article>
+
+  <article>
+    <h3>Progress Indicators</h3>
+    <p>Loading progress:</p>
+    <progress value="32" max="100">32%</progress>
+
+    <p>Indeterminate progress:</p>
+    <progress>Loading...</progress>
+
+    <p>Meter example:</p>
+    <meter value="6" min="0" max="10">6 out of 10</meter>
+  </article>
 </section>
 
-<!-- Usage Instructions -->
 <section>
-  <h2>How to Use These Tokens</h2>
-  
-  <div class="demo-grid">
-    <div class="demo-card">
-      <h3>In CSS</h3>
-      <pre><code>/* Use tokens directly in CSS */
-.my-component {
-  background: var(--color-surface-elevated);
-  color: var(--color-text);
-  padding: var(--space-md);
-  font-size: var(--text-lg);
-  border-radius: 8px;
-}</code></pre>
-    </div>
-    
-    <div class="demo-card">
-      <h3>Color Mixing</h3>
-      <pre><code>/* Mix colors with transparency */
-.alert {
-  background: color-mix(
-    in oklch, 
-    var(--color-warning), 
-    transparent 85%
-  );
-  border: 1px solid var(--color-warning);
-}</code></pre>
-    </div>
-    
-    <div class="demo-card">
-      <h3>Responsive Design</h3>
-      <pre><code>/* All tokens are fluid and responsive */
-.container {
-  padding: var(--space-gutter);
-  gap: var(--space-gap);
-  font-size: var(--text-base);
-}
+  <h2>Tables</h2>
 
-/* No media queries needed! */</code></pre>
+  <article>
+    <h3>Data Table</h3>
+    <table>
+      <caption>Pico CSS Feature Comparison</caption>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Pico CSS</th>
+          <th>Traditional CSS</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Semantic HTML</td>
+          <td>✅ Yes</td>
+          <td>❌ Classes required</td>
+          <td>Pico CSS styles HTML directly</td>
+        </tr>
+        <tr>
+          <td>Modular Architecture</td>
+          <td>✅ Built-in</td>
+          <td>❌ Manual setup</td>
+          <td>Organized into semantic partials</td>
+        </tr>
+        <tr>
+          <td>Design Tokens</td>
+          <td>✅ Comprehensive</td>
+          <td>❓ Custom implementation</td>
+          <td>Consistent spacing, colors, typography</td>
+        </tr>
+        <tr>
+          <td>Dark Mode</td>
+          <td>✅ Enhanced</td>
+          <td>❌ Manual setup</td>
+          <td>Auto-switching with custom overrides</td>
+        </tr>
+        <tr>
+          <td>Utility Classes</td>
+          <td>✅ Optional</td>
+          <td>❓ Varies</td>
+          <td>Flexible enhancement system</td>
+        </tr>
+        <tr>
+          <td>Customization</td>
+          <td>✅ Design Tokens</td>
+          <td>✅ Full control</td>
+          <td>Token-based customization system</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+</section>
+
+<section>
+  <h2>Media Elements</h2>
+
+  <article>
+    <h3>Images and Media</h3>
+    <figure>
+      <img src="https://picsum.photos/400/200" alt="Sample image" width="400" height="200">
+      <figcaption>Images are automatically responsive and styled with rounded corners</figcaption>
+    </figure>
+
+    <p>Pico CSS automatically makes images responsive and adds enhanced styling with subtle shadows and rounded corners.</p>
+  </article>
+</section>
+
+<section>
+  <h2>Enhanced Components & Design Tokens</h2>
+  
+  <article>
+    <h3>Custom Card Components</h3>
+    <div style="display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+      <article class="card">
+        <header class="card-header">
+          <h4>Card Example</h4>
+        </header>
+        <p>This card demonstrates our custom component system with design tokens for consistent spacing and shadows.</p>
+        <footer class="card-footer">
+          <span class="badge badge-info">Design Token</span>
+          <span class="badge badge-success">Modular</span>
+        </footer>
+      </article>
+      
+      <article class="card">
+        <header class="card-header">
+          <h4>Another Card</h4>
+        </header>
+        <p>Cards use semantic spacing variables like <code>--space-md</code> and shadow tokens like <code>--shadow-base</code>.</p>
+        <footer class="card-footer">
+          <span class="badge badge-warning">Consistent</span>
+          <span class="badge">Styled</span>
+        </footer>
+      </article>
     </div>
+  </article>
+
+  <article>
+    <h3>Utility Classes</h3>
+    <div class="flex items-center justify-between" style="margin-bottom: var(--space-md);">
+      <div>
+        <p class="text-lg">Typography utilities:</p>
+        <p class="text-sm text-success">Small success text</p>
+        <p class="text-base text-warning">Regular warning text</p>
+        <p class="text-xl text-error">Large error text</p>
+      </div>
+      <div class="text-center">
+        <p class="text-2xl">Layout utilities work great with semantic HTML</p>
+        <div class="flex items-center justify-center" style="gap: var(--space-sm); margin-top: var(--space-sm);">
+          <button class="text-sm">Small</button>
+          <button>Regular</button>
+          <button class="text-lg">Large</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article>
+    <h3>Design Token Showcase</h3>
+    <p>Our design token system provides consistent values:</p>
     
-    <div class="demo-card">
-      <h3>Theme Switching</h3>
-      <pre><code>/* Colors automatically switch themes */
-.card {
-  background: var(--color-surface);
-  /* Light: warm off-white */
-  /* Dark: deep brown */
-  /* User preference respected */
-}</code></pre>
+    <h4>Spacing Scale</h4>
+    <div style="display: flex; gap: var(--space-xs); align-items: flex-end; margin-bottom: var(--space-md);">
+      <div style="background: var(--pico-primary); height: var(--space-3xs); width: 40px;"></div>
+      <div style="background: var(--pico-primary); height: var(--space-2xs); width: 40px;"></div>
+      <div style="background: var(--pico-primary); height: var(--space-xs); width: 40px;"></div>
+      <div style="background: var(--pico-primary); height: var(--space-sm); width: 40px;"></div>
+      <div style="background: var(--pico-primary); height: var(--space-md); width: 40px;"></div>
+      <div style="background: var(--pico-primary); height: var(--space-lg); width: 40px;"></div>
     </div>
-  </div>
+    <p><small>Visual representation of spacing scale: 3xs, 2xs, xs, sm, md, lg</small></p>
+
+    <h4>Shadow System</h4>
+    <div class="flex" style="gap: var(--space-md); flex-wrap: wrap;">
+      <div style="padding: var(--space-md); box-shadow: var(--shadow-sm); border-radius: var(--radius-md);">Small shadow</div>
+      <div style="padding: var(--space-md); box-shadow: var(--shadow-base); border-radius: var(--radius-md);">Base shadow</div>
+      <div style="padding: var(--space-md); box-shadow: var(--shadow-md); border-radius: var(--radius-md);">Medium shadow</div>
+      <div style="padding: var(--space-md); box-shadow: var(--shadow-lg); border-radius: var(--radius-md);">Large shadow</div>
+    </div>
+  </article>
+</section>
+
+<section>
+  <h2>Theme Demonstration</h2>
+
+  <article>
+    <h3>Automatic Dark Mode</h3>
+    <p>This page automatically switches between light and dark themes based on your system preference. Try changing your system theme to see it in action!</p>
+
+    <p><strong>Light theme features:</strong></p>
+    <ul>
+      <li>White background with dark text</li>
+      <li>Blue accent colors</li>
+      <li>Light gray borders and backgrounds</li>
+    </ul>
+
+    <p><strong>Dark theme features:</strong></p>
+    <ul>
+      <li>Dark background with light text</li>
+      <li>Lighter blue accent colors</li>
+      <li>Dark gray borders and backgrounds</li>
+    </ul>
+
+    <aside>
+      <p><strong>Note:</strong> Our enhanced theming system includes automatic <code>prefers-color-scheme</code> detection plus manual theme toggles with improved contrast and accessibility features.</p>
+    </aside>
+  </article>
 </section>
 
 <script>
-  // Theme cycling functionality
-  function cycleTheme() {
-    const themes = ['light', 'dark', 'auto'];
-    const currentTheme = document.documentElement.dataset.theme || 'auto';
-    const currentIndex = themes.indexOf(currentTheme);
-    const nextTheme = themes[(currentIndex + 1) % themes.length];
-    
-    if (nextTheme === 'auto') {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.removeItem('theme');
-    } else {
-      document.documentElement.dataset.theme = nextTheme;
-      localStorage.setItem('theme', nextTheme);
-    }
-    
-    // Update the display
-    document.getElementById('current-theme').textContent = nextTheme;
-  }
-  
-  // Initialize theme display
+  // Simple form interaction demo
   document.addEventListener('DOMContentLoaded', function() {
-    const currentTheme = document.documentElement.dataset.theme || 'auto';
-    document.getElementById('current-theme').textContent = currentTheme;
+    const form = document.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Form submitted! (Demo only - no actual submission)');
+      });
+    }
   });
 </script>
+
+{{ /layout }}

@@ -1,13 +1,11 @@
 {{ set navPages = collections.all |> eleventyNavigation }}
 {{ if navPages.length > 0 }}
-  <ul>
-    {{ for entry of navPages }}
-      <li>
-        <a href="{{ entry.url }}" 
-           {{ if entry.url == page.url }}aria-current="page"{{ /if }}>
-          {{ entry.title }}
-        </a>
-      </li>
-    {{ /for }}
-  </ul>
+  {{ for entry of navPages }}
+    <li>
+      <a href="{{ entry.url }}"
+         {{ if entry.url == page.url }}aria-current="page"{{ /if }}>
+        {{ entry.title }}
+      </a>
+    </li>
+  {{ /for }}
 {{ /if }}

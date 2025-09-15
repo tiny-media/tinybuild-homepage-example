@@ -135,6 +135,37 @@ resolve: {
 - `COMPONENT_PATTERNS.md` - Component examples and patterns
 - `ARCHITECTURE_DEEP_DIVE.md` - Detailed technical implementation
 
+## CSS System
+
+**Modular Architecture**: Using [Pico CSS](https://picocss.com) with modular structure for maintainable styling:
+```css
+/* Modular imports for organized CSS architecture */
+@import "pico-imports.css";     /* Core Pico CSS modules */
+@import "custom/tokens.css";    /* Design system tokens */
+@import "custom/components.css"; /* Custom components */
+@import "custom/overrides.css";  /* Site-specific overrides */
+```
+
+**Pico CSS Features**:
+- **Classless CSS**: Semantic HTML styled without classes
+- **Dark Mode Support**: Built-in theme system with CSS custom properties
+- **Modular Structure**: Organized into foundation, layout, typography, components, utilities
+- **Modern Form Elements**: Comprehensive form styling with focus states
+- **Typography**: Responsive type scale with proper hierarchy
+- **Accessibility**: WCAG-compliant with focus management
+
+**Modular Structure** (`src/assets/css/pico/`):
+- `01-foundation/` - Variables, themes, reset
+- `02-layout/` - Landmarks, container, grid
+- `03-typography/` - Base text, links, code
+- `04-components/` - Buttons, forms, tables
+- `05-utilities/` - Accessibility helpers
+
+**Customization** (`src/assets/css/custom/`):
+- `tokens.css` - Design system variables
+- `components.css` - Custom UI components
+- `overrides.css` - Site-specific modifications
+
 ## Common Tasks
 
 **Add Vanilla Component**: Create in `src/assets/js/`, register in `vanillaComponents` in `main.js`, use with `<is-land type="vanilla">` (non-landing pages only)
@@ -143,6 +174,7 @@ resolve: {
 **Debug Performance**: Landing page = pure HTML, other pages = check islands loading
 **Add Navigation**: Add `eleventyNavigation` to page front matter, auto-renders in nav partial
 **Design Tokens**: Modify `src/design-tokens/tokens.json`, regenerate with `bun src/design-tokens/generate-tokens.js`
+**Customize Styles**: Edit files in `src/assets/css/custom/` or modify Pico CSS variables in foundation files
 
 ## Important Constraints
 

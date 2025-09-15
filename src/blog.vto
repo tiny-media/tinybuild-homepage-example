@@ -8,23 +8,68 @@ eleventyNavigation:
 
 {{ layout "layouts/base.vto" }}
 
-<div>
+<header>
   <h1>Blog</h1>
   <p>Articles about the Progressive Islands Template and modern web development techniques.</p>
-</div>
+</header>
 
 <section>
-  <div>
-    <h2>Coming Soon</h2>
-    <p>Blog posts will be added here to explain every aspect of the Progressive Islands Template:</p>
-    
-    <ul>
-      <li>Theme System Implementation with OKLCH</li>
-      <li>CUBE CSS Methodology in Practice</li>
-      <li>Progressive Islands Architecture</li>
-      <li>VentoJS Template Patterns</li>
-      <li>Performance Optimization Techniques</li>
-      <li>Accessibility Best Practices</li>
-    </ul>
-  </div>
+  <h2>Featured Articles</h2>
+
+  <article>
+    <header>
+      <h3>Why Classless CSS Frameworks Matter</h3>
+      <p><small>Published: <time datetime="2025-09-09">September 9, 2025</time></small></p>
+    </header>
+
+    <p>Exploring how <strong>Pico CSS</strong> and other classless frameworks provide clean, semantic HTML styling without the overhead of utility classes or complex CSS architectures.</p>
+
+    <details>
+      <summary>Read more...</summary>
+      <p>Modern CSS frameworks like Pico CSS offer several advantages:</p>
+      <ul>
+        <li><strong>Semantic HTML:</strong> Your markup stays clean and meaningful</li>
+        <li><strong>Modular architecture:</strong> Organized into maintainable partials</li>
+        <li><strong>Comprehensive theming:</strong> Dark/light modes with design tokens</li>
+        <li><strong>Progressive enhancement:</strong> Styles work even with CSS disabled</li>
+        <li><strong>Developer experience:</strong> Easy to customize and extend</li>
+      </ul>
+      <p>This modular approach aligns perfectly with the Progressive Islands architecture, where we prioritize maintainability and scalability.</p>
+    </details>
+  </article>
+
+  <article>
+    <header>
+      <h3>Progressive Islands Architecture Explained</h3>
+      <p><small>Published: <time datetime="2025-09-08">September 8, 2025</time></small></p>
+    </header>
+
+    <p>Understanding how to build fast, accessible websites that enhance progressively with JavaScript islands.</p>
+
+    <blockquote>
+      <p>The best JavaScript is no JavaScript. The second best JavaScript is just enough JavaScript.</p>
+      <footer>— Progressive Enhancement Philosophy</footer>
+    </blockquote>
+  </article>
 </section>
+
+<section>
+  <h2>Coming Soon</h2>
+  <p>More blog posts will be added to cover:</p>
+
+  <dl>
+    <dt><strong>VentoJS Template Patterns</strong></dt>
+    <dd>Best practices for organizing and structuring VentoJS templates</dd>
+
+    <dt><strong>Performance Optimization</strong></dt>
+    <dd>Techniques for achieving perfect Lighthouse scores with static-first architecture</dd>
+
+    <dt><strong>Accessibility by Design</strong></dt>
+    <dd>Building inclusive web experiences with semantic HTML and progressive enhancement</dd>
+
+    <dt><strong>Modern CSS Techniques</strong></dt>
+    <dd>Using CSS custom properties, container queries, and other modern features</dd>
+  </dl>
+</section>
+
+{{ /layout }}

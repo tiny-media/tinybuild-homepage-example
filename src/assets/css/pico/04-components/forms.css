@@ -1,0 +1,88 @@
+/**
+ * Pico CSS Forms
+ *
+ * Form element styling including inputs, selects, textareas, and validation states.
+ * Provides consistent form field appearance and behavior.
+ */
+
+/**
+ * Basic form elements - Extracted from lines 1281+ of pico_classless.css
+ * Note: This is a foundational extraction focusing on core form styles
+ * Full implementation would include all input types and validation states
+ */
+input,
+select,
+textarea {
+	margin: 0;
+	padding: var(--pico-form-element-spacing-vertical)
+		var(--pico-form-element-spacing-horizontal);
+	border: var(--pico-border-width) solid var(--pico-form-element-border-color);
+	border-radius: var(--pico-border-radius);
+	outline: none;
+	background-color: var(--pico-form-element-background-color);
+	color: var(--pico-form-element-color);
+	font-weight: var(--pico-font-weight);
+	font-size: 1rem;
+	line-height: var(--pico-line-height);
+	font-family: inherit;
+	transition:
+		background-color var(--pico-transition),
+		border-color var(--pico-transition),
+		color var(--pico-transition),
+		box-shadow var(--pico-transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+	--pico-form-element-border-color: var(--pico-form-element-active-border-color);
+	background-color: var(--pico-form-element-active-background-color);
+}
+
+/* Placeholder styling */
+input::placeholder,
+textarea::placeholder {
+	color: var(--pico-form-element-placeholder-color);
+	opacity: 1;
+}
+
+/* Disabled states */
+input:disabled,
+select:disabled,
+textarea:disabled {
+	opacity: var(--pico-form-element-disabled-opacity);
+	cursor: not-allowed;
+}
+
+/* Labels */
+label {
+	display: inline-block;
+	margin-bottom: calc(var(--pico-spacing) * 0.25);
+	font-weight: var(--pico-font-weight);
+}
+
+/* Fieldset and legend */
+fieldset {
+	margin: 0;
+	margin-bottom: var(--pico-spacing);
+	padding: 0;
+	border: none;
+}
+
+legend {
+	float: left;
+	width: 100%;
+	margin-bottom: calc(var(--pico-spacing) * 0.5);
+	font-weight: var(--pico-font-weight);
+}
+
+/* This is a simplified version - full implementation would include:
+   - Checkboxes and radio buttons
+   - File inputs
+   - Range inputs
+   - Color inputs
+   - Search inputs
+   - Date/time inputs
+   - Validation states (valid/invalid)
+   - Switch toggles
+*/
