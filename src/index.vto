@@ -9,35 +9,28 @@ eleventyNavigation:
 {{ layout "layouts/base.vto" }}
 
 <header>
-  <hgroup>
-    <h1>Progressive Islands Template</h1>
-    <p>Clean starting point for building modern web applications with static-first architecture</p>
-  </hgroup>
+  <h1>Progressive Islands Template</h1>
+  <p>Clean starting point for building modern web applications with <strong>static-first architecture</strong></p>
 </header>
 
+<main>
 <section>
   <h2>Getting Started</h2>
-  
+
   <article>
-    <header>
-      <h3>1. Development Server</h3>
-    </header>
+    <h3>1. Development Server</h3>
     <pre><code>bun run dev</code></pre>
-    <p>Starts development server at <kbd>localhost:4321</kbd> with hot reload</p>
+    <p>Starts development server at <code>localhost:4321</code> with hot reload</p>
   </article>
 
   <article>
-    <header>
-      <h3>2. Build for Production</h3>
-    </header>
+    <h3>2. Build for Production</h3>
     <pre><code>bun run build</code></pre>
     <p>Creates optimized static build in <code>_site</code> directory</p>
   </article>
 
   <article>
-    <header>
-      <h3>3. Add Interactive Components</h3>
-    </header>
+    <h3>3. Add Interactive Components</h3>
     <pre><code>&lt;is-land on:visible type="vanilla" component="counter"&gt;
   &lt;div&gt;Loading...&lt;/div&gt;
 &lt;/is-land&gt;</code></pre>
@@ -47,19 +40,34 @@ eleventyNavigation:
 
 <section>
   <h2>Template Architecture</h2>
+
   <dl>
     <dt><strong>Static-First</strong></dt>
     <dd>HTML and CSS load first, JavaScript loads progressively for optimal performance</dd>
-    
+
     <dt><strong>Progressive Islands</strong></dt>
     <dd>Add interactivity incrementally with component-based architecture</dd>
-    
+
     <dt><strong>VentoJS Templates</strong></dt>
     <dd>Modern template engine with intuitive syntax and JavaScript integration</dd>
-    
-    <dt><strong>Theme System</strong></dt>
-    <dd>Built-in light/dark/auto theme switching with system preference detection</dd>
+
+    <dt><strong>Pico CSS Styling</strong></dt>
+    <dd>Modern modular CSS system with semantic HTML and comprehensive theming</dd>
   </dl>
 </section>
+
+<section>
+  <h2>Key Features</h2>
+
+  <ul>
+    <li>Zero JavaScript on landing page for perfect static performance</li>
+    <li>Progressive enhancement with component islands</li>
+    <li>Modular Pico CSS system with design tokens and utility classes</li>
+    <li>Comprehensive dark/light theme switching with enhanced styling</li>
+    <li>Clean semantic HTML with optional utility classes for flexibility</li>
+    <li>Modern build pipeline with Bun and Vite</li>
+  </ul>
+</section>
+</main>
 
 {{ /layout }}

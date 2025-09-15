@@ -1,18 +1,16 @@
-<header>
-  <nav>
-    <ul>
-      <li><a href="/" aria-label="Progressive Islands Home"><strong>Progressive Islands</strong></a></li>
-    </ul>
-    {{ include "partials/nav.vto" }}
-    <ul>
-      <li>
+<header class="site-header">
+  <nav class="container">
+    <ul class="nav-list">
+      <li class="nav-brand"><a href="/"><strong>Progressive Islands</strong></a></li>
+      {{ include "partials/nav.vto" }}
+      <li class="nav-theme">
         {{ if (page.url === "/") }}
-          <!-- Landing page: Simple theme toggle (handled by inline script) -->
-          <button class="theme-toggle" aria-label="Toggle theme">☀</button>
+          <!-- Landing page: Simple theme toggle -->
+          <button class="theme-toggle" type="button" aria-label="Switch to light theme">☀️</button>
         {{ else }}
           <!-- Other pages: Island-based theme toggle -->
           <is-land on:interaction type="vanilla" component="theme-toggle">
-            <button class="theme-toggle" aria-label="Toggle theme">☀</button>
+            <button class="theme-toggle" type="button">🎨</button>
           </is-land>
         {{ /if }}
       </li>

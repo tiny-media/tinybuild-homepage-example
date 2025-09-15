@@ -1,0 +1,223 @@
+/**
+ * Pico CSS Overrides
+ * Project-specific overrides and customizations
+ */
+
+/* === PICO VARIABLE OVERRIDES === */
+:root {
+	/* Customize Pico's built-in variables */
+	--pico-font-size: 16px;
+	--pico-line-height: 1.6;
+	--pico-border-radius: var(--radius-md);
+	--pico-spacing: var(--space-sm);
+	--pico-typography-spacing-vertical: var(--space-md);
+}
+
+/* === ENHANCED FOCUS STYLES === */
+:focus-visible {
+	outline: 2px solid var(--pico-primary-focus);
+	outline-offset: 2px;
+	border-radius: var(--radius-sm);
+}
+
+/* === IMPROVED BUTTON STYLES === */
+button,
+[type="submit"],
+[type="button"],
+[type="reset"],
+[role="button"] {
+	transition: all var(--transition-fast);
+	box-shadow: var(--shadow-sm);
+}
+
+button:hover,
+[type="submit"]:hover,
+[type="button"]:hover,
+[type="reset"]:hover,
+[role="button"]:hover {
+	transform: translateY(-1px);
+	box-shadow: var(--shadow-md);
+}
+
+button:active,
+[type="submit"]:active,
+[type="button"]:active,
+[type="reset"]:active,
+[role="button"]:active {
+	transform: translateY(0);
+	box-shadow: var(--shadow-sm);
+}
+
+/* === ENHANCED FORM ELEMENTS === */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(
+		[type="file"]
+	),
+select,
+textarea {
+	transition: all var(--transition-fast);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+	box-shadow: 0 0 0 3px var(--pico-primary-focus);
+}
+
+/* === IMPROVED LINKS === */
+a {
+	transition: color var(--transition-fast);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 3px;
+}
+
+a:hover {
+	text-decoration-color: var(--pico-primary);
+}
+
+/* === ENHANCED TABLES === */
+table {
+	box-shadow: var(--shadow-base);
+}
+
+/* === ENHANCED CODE BLOCKS === */
+pre {
+	background: var(--pico-code-background-color, #f8f9fa);
+	box-shadow: var(--shadow-base);
+	border: 1px solid var(--pico-muted-border-color);
+	border-radius: var(--radius-md);
+	position: relative;
+	overflow-x: auto;
+	padding: var(--space-md);
+	margin: var(--space-md) 0;
+}
+
+pre code {
+	background: transparent;
+	border: none;
+	padding: 0;
+	font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+	font-size: 0.9em;
+	line-height: 1.5;
+	color: var(--pico-code-color, var(--pico-color));
+}
+
+code:not(pre code) {
+	background: var(--pico-muted-border-color);
+	padding: var(--space-3xs) var(--space-2xs);
+	border-radius: var(--radius-sm);
+	font-size: 0.9em;
+	font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+	color: var(--pico-code-color, var(--pico-color));
+}
+
+kbd {
+	background: var(--pico-contrast-background);
+	color: var(--pico-contrast-inverse);
+	padding: var(--space-3xs) var(--space-xs);
+	border-radius: var(--radius-sm);
+	font-size: 0.9em;
+	font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+	border: 1px solid var(--pico-muted-border-color);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Code block dark theme support */
+[data-theme="dark"] pre {
+	background: #1e1e1e;
+	border-color: #333;
+}
+
+[data-theme="dark"] code:not(pre code) {
+	background: #333;
+	color: #e6e6e6;
+}
+
+/* === FULL HD LAYOUT IMPROVEMENTS === */
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 var(--space-lg);
+}
+
+@media (min-width: 1200px) {
+	.container {
+		max-width: 1100px;
+	}
+}
+
+@media (min-width: 1400px) {
+	.container {
+		max-width: 1200px;
+	}
+}
+
+/* Enhanced spacing for larger screens */
+@media (min-width: 1024px) {
+	:root {
+		--pico-typography-spacing-vertical: var(--space-lg);
+	}
+	
+	section {
+		margin-bottom: var(--space-2xl);
+	}
+	
+	header h1 {
+		font-size: var(--text-4xl);
+		line-height: 1.2;
+	}
+}
+
+/* === RESPONSIVE IMPROVEMENTS === */
+@media (max-width: 576px) {
+	:root {
+		--pico-font-size: 14px;
+		--pico-spacing: var(--space-xs);
+	}
+	
+	.container {
+		padding: 0 var(--space-sm);
+	}
+}
+
+/* === ACCESSIBILITY ENHANCEMENTS === */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* === NAVIGATION OVERRIDES === */
+.nav-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.nav-list li {
+	list-style: none;
+}
+
+/* === PRINT STYLES === */
+@media print {
+	button,
+	[type="submit"],
+	[type="button"],
+	[type="reset"],
+	[role="button"] {
+		display: none;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	a::after {
+		content: " (" attr(href) ")";
+		font-size: 0.8em;
+		color: var(--pico-muted-color);
+	}
+}
